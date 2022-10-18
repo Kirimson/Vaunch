@@ -5,7 +5,7 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  let baseConfig = {
+  const baseConfig = {
     publicDir: "public",
     plugins: [vue()],
     resolve: {
@@ -13,9 +13,9 @@ export default defineConfig(({ command, mode }) => {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
+  };
+  if (command === "serve") {
+    baseConfig.publicDir = "public_dev";
   }
-  if (command === 'serve') {
-    baseConfig.publicDir = "public_dev"
-  }
-  return baseConfig
+  return baseConfig;
 });

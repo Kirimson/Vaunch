@@ -47,12 +47,12 @@ export class VaunchRm extends VaunchCommand {
       const fileToDelete: string = filePath[1];
       const folder: VaunchFolder = folders.getFolderByName(folderName);
       if (folder) {
-        let deleted = folder.removeFile(fileToDelete);
-        if (!deleted) failedToDelete.push(filePath.join('/'));
+        const deleted = folder.removeFile(fileToDelete);
+        if (!deleted) failedToDelete.push(filePath.join("/"));
         // After deleting the file, re-organise the file's positions
         // to update them after a deletion
         folder.organiseFiles(folder.getFiles());
-      } else failedToDelete.push(filePath.join('/'));
+      } else failedToDelete.push(filePath.join("/"));
     }
 
     if (failedToDelete.length == 0) {

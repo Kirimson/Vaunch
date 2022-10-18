@@ -10,17 +10,23 @@ const config = useConfigStore();
 const props = defineProps(["folder"]);
 const emit = defineEmits(["showFileOption", "showFolderOption"]);
 
-const passFileOption = (file: VaunchUrlFile, xPos:number, yPos:number, action:null|string=null) => {
-  emit("showFileOption", file, xPos, yPos, action)
-}
+const passFileOption = (
+  file: VaunchUrlFile,
+  xPos: number,
+  yPos: number,
+  action: null | string = null
+) => {
+  emit("showFileOption", file, xPos, yPos, action);
+};
 
-const toggleOptions = (event:any) => {
-  emit('showFolderOption', props.folder, event.clientX, event.clientY);
-}
+const toggleOptions = (event: any) => {
+  emit("showFolderOption", props.folder, event.clientX, event.clientY);
+};
 
-const addFile = () => emit('showFolderOption', props.folder, 0, 0, "add");
-const editFolder = () => emit('showFolderOption', props.folder, 0, 0, "edit");
-const deleteFolder = () => emit('showFolderOption', props.folder, 0, 0, "delete");
+const addFile = () => emit("showFolderOption", props.folder, 0, 0, "add");
+const editFolder = () => emit("showFolderOption", props.folder, 0, 0, "edit");
+const deleteFolder = () =>
+  emit("showFolderOption", props.folder, 0, 0, "delete");
 </script>
 
 <style scoped>
@@ -60,7 +66,10 @@ const deleteFolder = () => emit('showFolderOption', props.folder, 0, 0, "delete"
 </style>
 
 <template>
-  <div class="vaunch-folder vaunch-window" @click.right.prevent.stop="toggleOptions($event)">
+  <div
+    class="vaunch-folder vaunch-window"
+    @click.right.prevent.stop="toggleOptions($event)"
+  >
     <span class="folder-title">
       <div class="folder-title-name">
         <i :class="['fa-' + folder.iconClass, 'fa-' + folder.icon]"></i>

@@ -32,12 +32,12 @@ const sessionConfig = useSessionStore();
 const vaunchInput = ref();
 const folderOption = ref();
 
-let optionFile:VaunchFile = reactive(new VaunchLink("default", "default"));
-let optionFolder:VaunchFolder = reactive(new VaunchFolder("default"));
+let optionFile: VaunchFile = reactive(new VaunchLink("default", "default"));
+let optionFolder: VaunchFolder = reactive(new VaunchFolder("default"));
 const data = reactive({
   optionFile,
   optionFolder,
-  action:"",
+  action: "",
   optionX: 0,
   optionY: 0,
   prefixName: config.prefix.name,
@@ -61,8 +61,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   if (fuzzyFiles.items.length > 0 && config.fuzzy) {
     // Also shift this entry off the history, in case it was a qry file
     sessionConfig.history.shift();
-    let response =
-      fuzzyFiles.items[fuzzyFiles.index].execute(commandArgs);
+    let response = fuzzyFiles.items[fuzzyFiles.index].execute(commandArgs);
     return handleResponse(response);
   }
 
@@ -112,14 +111,14 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   }
   // If everything fails, i.e no default search, just clear the input
   sessionConfig.vaunchInput = "";
-  let noCommandFoundResp:VaunchResponse = {
+  let noCommandFoundResp: VaunchResponse = {
     type: ResponseType.Error,
     message: `Command '${operator}' not found.`,
     name: "execute",
-    filetype: "VaunchSystem"
-  }
+    filetype: "VaunchSystem",
+  };
   return handleResponse(noCommandFoundResp);
-}
+};
 
 const findQryFile = (operator: string): VaunchFile | undefined => {
   if (operator.includes(":")) {
@@ -135,7 +134,7 @@ const findQryFile = (operator: string): VaunchFile | undefined => {
     }
   }
   return undefined;
-}
+};
 
 const fuzzy = (input: string) => {
   if (input.length > 0) {
@@ -148,11 +147,11 @@ const fuzzy = (input: string) => {
     fuzzyFiles.clear();
   }
   fuzzyFiles.index = 0;
-}
+};
 
 const sortByHits = (files: VaunchFile[]) => {
   return files.sort((a, b) => (a.hits < b.hits ? 1 : -1));
-}
+};
 
 const updateFuzzyIndex = (increment: boolean) => {
   if (increment) {
@@ -175,7 +174,7 @@ const updateFuzzyIndex = (increment: boolean) => {
   } else {
     setInputIcon(undefined);
   }
-}
+};
 
 const setIconIfQuery = (input: string) => {
   // Checks if the input string matches a VaunchQuery prefix,
@@ -184,9 +183,9 @@ const setIconIfQuery = (input: string) => {
   if (file) {
     setInputIcon(file);
   }
-}
+};
 
-const setInputIcon = (file: VaunchFile | undefined) =>  {
+const setInputIcon = (file: VaunchFile | undefined) => {
   // Set the prefix icon in VaunchInput. If nothing is passed
   // the icon will stay the same if there are fuzzy files in case
   // VaunchInput thinks it should be reset but fuzzy matches shows otherwise
@@ -197,12 +196,17 @@ const setInputIcon = (file: VaunchFile | undefined) =>  {
     data.prefixName = config.prefix.name;
     data.prefixClass = config.prefix.class;
   }
-}
+};
 
 // TODO: Implement a way to improve opening/closing of context menus.
 // currently these functions are called through a series of emits from child components.
 // this should be able to be re-written to use an exported function, similar to handleResponse()
-const showFileOption = (file:VaunchUrlFile, xPos:number, yPos:number, action:string|null=null) => {
+const showFileOption = (
+  file: VaunchUrlFile,
+  xPos: number,
+  yPos: number,
+  action: string | null = null
+) => {
   // Opens a file's context menu. Sets the target file to display options for, and set the position
   // on screen for the component
   data.optionFile = file;
@@ -214,9 +218,14 @@ const showFileOption = (file:VaunchUrlFile, xPos:number, yPos:number, action:str
   sessionConfig.showFolderOptions = false;
   sessionConfig.showAppOptions = false;
   sessionConfig.showFileOptions = true;
-}
-const showFolderOption = (folder:VaunchFolder, xPos:number, yPos:number, action:string|null=null) => {
-   // Opens a folder's context menu, closing any other open context menu
+};
+const showFolderOption = (
+  folder: VaunchFolder,
+  xPos: number,
+  yPos: number,
+  action: string | null = null
+) => {
+  // Opens a folder's context menu, closing any other open context menu
   data.optionFolder = folder;
   data.optionX = xPos;
   data.optionY = yPos;
@@ -224,8 +233,12 @@ const showFolderOption = (folder:VaunchFolder, xPos:number, yPos:number, action:
   sessionConfig.showFileOptions = false;
   sessionConfig.showAppOptions = false;
   sessionConfig.showFolderOptions = true;
-}
-const showAppOption = (xPos:number, yPos:number, action:string|null=null) => {
+};
+const showAppOption = (
+  xPos: number,
+  yPos: number,
+  action: string | null = null
+) => {
   // Opens the main Vaunch context menu, closing any other open context menu
   data.optionX = xPos;
   data.optionY = yPos;
@@ -233,7 +246,7 @@ const showAppOption = (xPos:number, yPos:number, action:string|null=null) => {
   sessionConfig.showFileOptions = false;
   sessionConfig.showFolderOptions = false;
   sessionConfig.showAppOptions = true;
-}
+};
 </script>
 
 <style>
@@ -313,7 +326,10 @@ main {
 </style>
 
 <template>
-  <main id="main-container" :style="{ 'background-image': 'url(' + config.background + ')' }">
+  <main
+    id="main-container"
+    :style="{ 'background-image': 'url(' + config.background + ')' }"
+  >
     <VaunchInput
       v-on:command="executeCommand"
       v-on:fuzzy="fuzzy"
@@ -345,7 +361,9 @@ main {
         <div
           v-if="config.showGUI"
           id="vaunch-folder-container"
-          @click.right.prevent.self="showAppOption($event.clientX, $event.clientY)"
+          @click.right.prevent.self="
+            showAppOption($event.clientX, $event.clientY)
+          "
         >
           <VaunchGuiFolder
             v-for="folder in folders.sortedItems()"
@@ -359,7 +377,9 @@ main {
       <div class="mobile-only" id="option-buttons-container">
         <div class="app-option-buttons">
           <div class="app-option" @click="showAppOption(0, 0, 'edit')">
-            <span><i class="fa-solid fa-pencil option-icon" />Vaunch Settings</span>
+            <span
+              ><i class="fa-solid fa-pencil option-icon" />Vaunch Settings</span
+            >
           </div>
           <div class="app-option" @click="showAppOption(0, 0, 'add')">
             <span><i class="fa-solid fa-plus option-icon" />Add Folder</span>
@@ -371,8 +391,23 @@ main {
     <VaunchMan v-if="sessionConfig.showHelp" :commands="commands" />
 
     <!-- Context menu components are at the app root to ensure there will be only one open at any one time -->
-    <VaunchFileOption v-if="sessionConfig.showFileOptions" :file="data.optionFile" :x-pos="data.optionX" :y-pos="data.optionY"/>
-    <VaunchFolderOption ref="folderOption" v-if="sessionConfig.showFolderOptions" :folder="data.optionFolder" :x-pos="data.optionX" :y-pos="data.optionY" />
-    <VaunchAppOption v-if="sessionConfig.showAppOptions" :x-pos="data.optionX" :y-pos="data.optionY"/>
+    <VaunchFileOption
+      v-if="sessionConfig.showFileOptions"
+      :file="data.optionFile"
+      :x-pos="data.optionX"
+      :y-pos="data.optionY"
+    />
+    <VaunchFolderOption
+      ref="folderOption"
+      v-if="sessionConfig.showFolderOptions"
+      :folder="data.optionFolder"
+      :x-pos="data.optionX"
+      :y-pos="data.optionY"
+    />
+    <VaunchAppOption
+      v-if="sessionConfig.showAppOptions"
+      :x-pos="data.optionX"
+      :y-pos="data.optionY"
+    />
   </main>
 </template>

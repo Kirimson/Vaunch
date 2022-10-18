@@ -112,7 +112,7 @@ export class VaunchImport extends VaunchCommand {
           if (importFolders) {
             for (const folder of (importData as any).folders) {
               // Set position to -1 to send all imported folders to the end if not overwriting
-              if (!overwrite) folder['position'] = -1;
+              if (!overwrite) folder["position"] = -1;
               const folderToImport: VaunchFolder = VaunchFolder.parse(folder);
               // If this folder doesn't exist, import it. If overwriting, all folders will be gone by now
               if (!folders.getFolderByName(folderToImport.name)) {
@@ -123,7 +123,7 @@ export class VaunchImport extends VaunchCommand {
                 importedComponents.push(`${folderToImport.name} (merged)`);
                 for (const fileToImport of folderToImport.getFiles()) {
                   // Set position to -1 to send all imported files to the end if not overwriting
-                  if (!overwrite) fileToImport['position'] = -1;
+                  if (!overwrite) fileToImport["position"] = -1;
                   const existingFolder: VaunchFolder = folders.getFolderByName(
                     folderToImport.name
                   );

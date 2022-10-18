@@ -16,7 +16,7 @@ export abstract class VaunchCommand extends VaunchFile {
     this.manual = new VaunchManual(longDescription, parameter, examples);
   }
 
-  hasArgs():boolean {
+  hasArgs(): boolean {
     return this.manual.parameters.length > 0;
   }
 

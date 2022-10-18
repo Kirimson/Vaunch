@@ -8,7 +8,7 @@ import { focusVaunchInput } from "@/utilities/inputUtils";
 
 const config = useConfigStore();
 const sessionConfig = useSessionStore();
-const props = defineProps(["file", "isFuzzy"])
+const props = defineProps(["file", "isFuzzy"]);
 const emit = defineEmits(["showFileOption"]);
 
 const execute = (file: VaunchUrlFile, args: string[]) => {
@@ -17,14 +17,14 @@ const execute = (file: VaunchUrlFile, args: string[]) => {
     sessionConfig.vaunchInput = response.message;
     focusVaunchInput();
   }
-}
+};
 
 const toggleOptions = (event: any) => {
-  emit('showFileOption', props.file, event.clientX, event.clientY)
-}
+  emit("showFileOption", props.file, event.clientX, event.clientY);
+};
 
-const editFile = () => emit('showFileOption', props.file, 0, 0, "edit");
-const deleteFile = () => emit('showFileOption', props.file, 0, 0, "delete");
+const editFile = () => emit("showFileOption", props.file, 0, 0, "edit");
+const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
 </script>
 
 <style scoped>
@@ -62,12 +62,19 @@ const deleteFile = () => emit('showFileOption', props.file, 0, 0, "delete");
 </style>
 
 <template>
-  <div :key="file.fileName" class="file vaunch-window" @click.exact="execute(file, [])"
-    @click.ctrl="execute(file, ['_blank'])" @click.middle.exact="execute(file, ['_blank'])"
-    @click.right.prevent.stop="toggleOptions($event)" :id="props.file.parent.name + '-' + file.getIdSafeName()">
+  <div
+    :key="file.fileName"
+    class="file vaunch-window"
+    @click.exact="execute(file, [])"
+    @click.ctrl="execute(file, ['_blank'])"
+    @click.middle.exact="execute(file, ['_blank'])"
+    @click.right.prevent.stop.exact="toggleOptions($event)"
+    :id="props.file.parent.name + '-' + file.getIdSafeName()"
+  >
     <div :class="{ fuzzyInfo: isFuzzy }">
       <i :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'file-icon']"></i>
-      <span v-if="isFuzzy" class="filename">{{ file.getParentName(config.titleCase) }}:
+      <span v-if="isFuzzy" class="filename"
+        >{{ file.getParentName(config.titleCase) }}:
       </span>
       <span v-if="config.titleCase" :class="{ filename: !isFuzzy }">
         {{ file.titleCase() }}
@@ -82,6 +89,10 @@ const deleteFile = () => emit('showFileOption', props.file, 0, 0, "delete");
       <i class="fa-solid fa-pencil" @click.stop="editFile" />
       <i class="fa-solid fa-trash" @click.stop="deleteFile" />
     </div>
-    <VaunchTooltip v-if="!isFuzzy" :tip-for="props.file.parent.name + '-' + file.getIdSafeName()" :tip-file="file" />
+    <VaunchTooltip
+      v-if="!isFuzzy"
+      :tip-for="props.file.parent.name + '-' + file.getIdSafeName()"
+      :tip-file="file"
+    />
   </div>
 </template>

@@ -9,9 +9,9 @@ import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
-const props = defineProps(['folder'])
+const props = defineProps(["folder"]);
 
-const emit = defineEmits(['closeAdd'])
+const emit = defineEmits(["closeAdd"]);
 const config = useConfigStore();
 
 const newName = ref();
@@ -27,75 +27,88 @@ const state = reactive({
 });
 const setFileType = (event: any) => {
   state.fileType = event.target.value;
-}
+};
 
 const closeWindow = () => {
-  emit('closeAdd');
-}
+  emit("closeAdd");
+};
 
-function missingFieldResponse(fields:string[]) {
+function missingFieldResponse(fields: string[]) {
   let plural = fields.length > 1;
   return handleResponse({
     type: ResponseType.Error,
-    message: `Missing required field${plural? 's':''}: ${fields.join(", ")}`,
+    message: `Missing required field${plural ? "s" : ""}: ${fields.join(", ")}`,
     filetype: "VaunchSystem",
     name: "touch",
-  })
+  });
 }
 
 const createFile = () => {
-
   // Ensure required fields are set
-  let missingFields:string[] = [];
-  if (newName.value.value == "") missingFields.push("Name")
-  if (state.fileType == "qry" && newPrefix.value.value == "") missingFields.push("Prefix")
-  if (newContent.value.value == "") missingFields.push("Content")
+  let missingFields: string[] = [];
+  if (newName.value.value == "") missingFields.push("Name");
+  if (state.fileType == "qry" && newPrefix.value.value == "")
+    missingFields.push("Prefix");
+  if (newContent.value.value == "") missingFields.push("Content");
   if (missingFields.length > 0) return missingFieldResponse(missingFields);
 
   // Ensure that the file ends with .<extension> and is in good filename format
   // eg replacing spaces with underscores, and lower case etc...
-  let baseName:string = (newName.value.value as string).toLowerCase()
-                                                       .replace(/\s+/g, '_');
-  let fileName:string = baseName + (baseName.endsWith(`.${state.fileType}`) ? '' : `.${state.fileType}`)
+  let baseName: string = (newName.value.value as string)
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+  let fileName: string =
+    baseName +
+    (baseName.endsWith(`.${state.fileType}`) ? "" : `.${state.fileType}`);
 
   // After checks have passed, touch the file, prefixing the file's folder
   let touch = new VaunchTouch();
-  let filePath = `${props.folder.name}/${fileName}`
-  let content:string = newContent.value.value
+  let filePath = `${props.folder.name}/${fileName}`;
+  let content: string = newContent.value.value;
   if (state.fileType == "lnk") {
-    let response:VaunchResponse = touch.execute([filePath, content])
+    let response: VaunchResponse = touch.execute([filePath, content]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   } else if (state.fileType == "qry") {
-    let prefix:string = newPrefix.value.value
-    let response:VaunchResponse = touch.execute([filePath, prefix, content])
+    let prefix: string = newPrefix.value.value;
+    let response: VaunchResponse = touch.execute([filePath, prefix, content]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // If the file was made successfully, perform all other customisation for the file
   // Edit the icon of the file
-  if (newIcon.value.value != "" || newIconClass.value.value != "" ) {
+  if (newIcon.value.value != "" || newIconClass.value.value != "") {
     let setIcon = new VaunchSetIcon();
-    let response: VaunchResponse = setIcon.execute([filePath, newIcon.value.value.toLowerCase(), newIconClass.value.value.toLowerCase()])
+    let response: VaunchResponse = setIcon.execute([
+      filePath,
+      newIcon.value.value.toLowerCase(),
+      newIconClass.value.value.toLowerCase(),
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // Edit the description of the file
   if (newDescription.value.value != "") {
     let setDesc = new VaunchSetDescription();
-    let response: VaunchResponse = setDesc.execute([filePath, newDescription.value.value])
+    let response: VaunchResponse = setDesc.execute([
+      filePath,
+      newDescription.value.value,
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // If the file position is set, run set-pos
   if (newPos.value.value) {
     let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([filePath, newPos.value.value.toLowerCase()])
+    let response: VaunchResponse = setPos.execute([
+      filePath,
+      newPos.value.value.toLowerCase(),
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // Once the file is created, close the window
   closeWindow();
-}
+};
 </script>
 
 <style scoped>
@@ -184,24 +197,33 @@ const createFile = () => {
 </style>
 
 <template>
-  <VaunchWindow :title="folder.titleCase() +': Create File'" 
-    :icon="folder.icon" :icon-class="folder.iconClass" v-on:close-window="closeWindow">
+  <VaunchWindow
+    :title="folder.titleCase() + ': Create File'"
+    :icon="folder.icon"
+    :icon-class="folder.iconClass"
+    v-on:close-window="closeWindow"
+  >
     <div id="edit-container">
       <form id="edit-form" @submit.prevent="createFile">
         <div class="edit-attributes">
-
           <div class="edit-segment">
             <h2>File Type</h2>
             <div class="edit-attr">
               <p>
-                Link File: A simple link to a hardcoded site, e.g 'https://example.com'
+                Link File: A simple link to a hardcoded site, e.g
+                'https://example.com'
               </p>
               <p>
-                Query File: A dynamic link to a site based on your input when running.
-                Replaces '${}' or ${1}, ${2} etc... with provided arguments
+                Query File: A dynamic link to a site based on your input when
+                running. Replaces '${}' or ${1}, ${2} etc... with provided
+                arguments
               </p>
               <div class="edit-input-container">
-                <label class="edit-label" :for="folder.getIdSafeName() + '-type'">File Type: </label>
+                <label
+                  class="edit-label"
+                  :for="folder.getIdSafeName() + '-type'"
+                  >File Type:
+                </label>
                 <select @change="setFileType($event)">
                   <option value="lnk">Link (.lnk)</option>
                   <option value="qry">Query (.qry)</option>
@@ -219,7 +241,14 @@ const createFile = () => {
                 <span>Set the name of the file</span>
                 <div class="edit-input-container">
                   <label class="edit-label" for="new-filename">Name: </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newName" class="edit-input" type="text" id="new-filename" />
+                  <input
+                    autocapitalize="none"
+                    autocomplete="off"
+                    ref="newName"
+                    class="edit-input"
+                    type="text"
+                    id="new-filename"
+                  />
                 </div>
               </div>
 
@@ -227,15 +256,31 @@ const createFile = () => {
                 <span>Set the prefix used for the file</span>
                 <div class="edit-input-container">
                   <label class="edit-label" for="new-prefix">Prefix: </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newPrefix" class="edit-input" type="text" id="new-prefix" />
+                  <input
+                    autocapitalize="none"
+                    autocomplete="off"
+                    ref="newPrefix"
+                    class="edit-input"
+                    type="text"
+                    id="new-prefix"
+                  />
                 </div>
               </div>
 
               <div class="edit-attr">
                 <span>Set the link content of the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-content">Destination: </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newContent" class="edit-input" type="text" id="new-content" />
+                  <label class="edit-label" for="new-content"
+                    >Destination:
+                  </label>
+                  <input
+                    autocapitalize="none"
+                    autocomplete="off"
+                    ref="newContent"
+                    class="edit-input"
+                    type="text"
+                    id="new-content"
+                  />
                 </div>
               </div>
             </div>
@@ -247,23 +292,43 @@ const createFile = () => {
               <div class="edit-attr">
                 <span>Edit the position of the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-position">Position: </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newPos" class="edit-input" type="text"
-                    id="new-position" value="" />
+                  <label class="edit-label" for="new-position"
+                    >Position:
+                  </label>
+                  <input
+                    autocapitalize="none"
+                    autocomplete="off"
+                    ref="newPos"
+                    class="edit-input"
+                    type="text"
+                    id="new-position"
+                    value=""
+                  />
                 </div>
               </div>
               <div class="edit-attr">
                 <span>Edit the icon used for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-name">Icon Name: </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newIcon" class="edit-input" type="text"
-                    id="new-icon-name" value="file" />
+                  <label class="edit-label" for="new-icon-name"
+                    >Icon Name:
+                  </label>
+                  <input
+                    autocapitalize="none"
+                    autocomplete="off"
+                    ref="newIcon"
+                    class="edit-input"
+                    type="text"
+                    id="new-icon-name"
+                    value="file"
+                  />
                 </div>
               </div>
               <div class="edit-attr">
                 <span>Edit the icon class for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-class">Icon Class: </label>
+                  <label class="edit-label" for="new-icon-class"
+                    >Icon Class:
+                  </label>
                   <select ref="newIconClass" id="new-icon-class">
                     <option value="solid">Solid</option>
                     <option value="brands">Brands</option>
@@ -273,15 +338,22 @@ const createFile = () => {
               <div class="edit-attr">
                 <span>Edit the description for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-description">File Description: </label>
-                  <input autocomplete="off" ref="newDescription" class="edit-input" type="text"
-                    id="new-description" />
+                  <label class="edit-label" for="new-description"
+                    >File Description:
+                  </label>
+                  <input
+                    autocomplete="off"
+                    ref="newDescription"
+                    class="edit-input"
+                    type="text"
+                    id="new-description"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
-          <input style="display:none" type="submit" />
+          <input style="display: none" type="submit" />
         </div>
       </form>
     </div>

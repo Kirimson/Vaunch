@@ -184,7 +184,7 @@ export class VaunchSetColor extends VaunchCommand {
         changedComponents.push(`Highlight colour to ${newHighlightColor}`);
       }
     }
-  
+
     return this.makeResponse(
       ResponseType.Success,
       `Edited colour scheme: ${changedComponents.join(", ")}`

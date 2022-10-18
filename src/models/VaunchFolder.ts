@@ -10,7 +10,12 @@ export class VaunchFolder {
   iconClass: string;
   position: number;
 
-  constructor(name: string, icon = "folder", iconClass = "solid", position = -1) {
+  constructor(
+    name: string,
+    icon = "folder",
+    iconClass = "solid",
+    position = -1
+  ) {
     this.name = name;
     this.files = new Map<string, VaunchFile>();
     this.icon = icon;
@@ -21,7 +26,7 @@ export class VaunchFolder {
   public addFile(newFile: VaunchFile): boolean {
     if (this.getFile(newFile.fileName)) return false;
     // Set the new file's position to last
-    const nextPos:number = this.getFiles().length + 1;
+    const nextPos: number = this.getFiles().length + 1;
     newFile.position = nextPos;
     this.files.set(newFile.fileName, newFile);
     return true;
@@ -55,55 +60,58 @@ export class VaunchFolder {
   }
 
   sortFiles(): VaunchFile[] {
-    let sortable:VaunchFile[] = [];
-    let unsorted:VaunchFile[] = [];
+    let sortable: VaunchFile[] = [];
+    const unsorted: VaunchFile[] = [];
     // Separate out sortable and un-sortable folders
-    (this.getFiles() as VaunchFile[]).forEach((x:VaunchFile) => (x.position != -1 ? sortable : unsorted).push(x));
+    (this.getFiles() as VaunchFile[]).forEach((x: VaunchFile) =>
+      (x.position != -1 ? sortable : unsorted).push(x)
+    );
     // Sort the sortable folders by their position value
-    sortable = sortable.sort((a, b) => ((a as VaunchFile).position > (b as VaunchFile).position ? 1 : -1));
-    let final = [...sortable, ...unsorted]
+    sortable = sortable.sort((a, b) =>
+      (a as VaunchFile).position > (b as VaunchFile).position ? 1 : -1
+    );
+    const final = [...sortable, ...unsorted];
     return final;
   }
 
-  organiseFiles(semiSortedFiles:VaunchFile[]) {
+  organiseFiles(semiSortedFiles: VaunchFile[]) {
     // To br ran on semi-sorted arrays, with where items are sorted,
     // but positions may not be in sequence with each other
-    for( let [index, file] of semiSortedFiles.entries() ) {
-      file.position = index+1;
+    for (const [index, file] of semiSortedFiles.entries()) {
+      file.position = index + 1;
     }
   }
 
-  setFilePosition(fileName:string, position:number):boolean {
+  setFilePosition(fileName: string, position: number): boolean {
     // Set the folder's position
-    let currentFile:VaunchFile|undefined = this.getFile(fileName);
-    if (currentFile){
-
-      let positionGoingDown = (position > currentFile.position && currentFile.position != -1);
+    const currentFile: VaunchFile | undefined = this.getFile(fileName);
+    if (currentFile) {
+      const positionGoingDown =
+        position > currentFile.position && currentFile.position != -1;
       currentFile.position = position;
       if (position == -1) return true;
-      
-      this.fixOrder(fileName, currentFile.position, positionGoingDown);
 
-    } else return false
+      this.fixOrder(fileName, currentFile.position, positionGoingDown);
+    } else return false;
     // After setting the position, set each folder's position to a 'sensible' order
-    let sortOfSorted = this.sortFiles();
+    const sortOfSorted = this.sortFiles();
     this.organiseFiles(sortOfSorted);
-    return true
+    return true;
   }
 
-  fixOrder(filename:string, position:number, movingDown:boolean):void {
-      // Recurse through all other folders, if they have this folder's new position, shift it back
-      for (let file of (this.getFiles() as VaunchFile[])) {
-        if (file.fileName != filename && file.position == position) {
-          if (movingDown) {
-            file.position = file.position - 1;
-            return this.fixOrder(file.fileName, position-1, movingDown);
-          } else {
-            file.position = file.position + 1;
-            return this.fixOrder(file.fileName, position+1, movingDown);
-          }
+  fixOrder(filename: string, position: number, movingDown: boolean): void {
+    // Recurse through all other folders, if they have this folder's new position, shift it back
+    for (const file of this.getFiles() as VaunchFile[]) {
+      if (file.fileName != filename && file.position == position) {
+        if (movingDown) {
+          file.position = file.position - 1;
+          return this.fixOrder(file.fileName, position - 1, movingDown);
+        } else {
+          file.position = file.position + 1;
+          return this.fixOrder(file.fileName, position + 1, movingDown);
         }
       }
+    }
   }
 
   searchFile(search: string, types: string[] = []): VaunchFile[] {
@@ -151,7 +159,12 @@ export class VaunchFolder {
   // Parse a VaunchFolder from serialized JSON data
   // Also creates VaunchFiles that belong to the folder
   static parse(data: any): VaunchFolder {
-    const folder = new VaunchFolder(data.name, data.icon, data.iconClass, data.position);
+    const folder = new VaunchFolder(
+      data.name,
+      data.icon,
+      data.iconClass,
+      data.position
+    );
     for (const fileData of data.files) {
       let file: VaunchFile | undefined = undefined;
       if (fileData.type == "VaunchLink") {

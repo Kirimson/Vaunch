@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from "vue";
 
-const props = defineProps([
-  "title",
-  "icon",
-  "iconClass",
-  "small"
-])
+const props = defineProps(["title", "icon", "iconClass", "small"]);
 
-const emit = defineEmits(['closeWindow'])
+const emit = defineEmits(["closeWindow"]);
 
 const vaunchWindow = ref();
 onMounted(() => {
-  vaunchWindow.value.focus()
-})
+  vaunchWindow.value.focus();
+});
 
 const closeWindow = () => {
-  emit('closeWindow');
-}
-
+  emit("closeWindow");
+};
 </script>
 
 <style scoped>
@@ -39,7 +33,7 @@ const closeWindow = () => {
 
 .window-inner {
   display: flex;
-  flex-direction: column;;
+  flex-direction: column;
   overflow-y: auto;
   height: 100%;
 }
@@ -61,26 +55,38 @@ const closeWindow = () => {
   height: 20vh;
   width: 25vw;
 }
-
 </style>
 
 <template>
-<div :class="{'popup-window':true, 'vaunch-window':true, 'vaunch-solid-bg':true, 'popup-window-small':props.small}"
-  ref="vaunchWindow"
-  v-click-away="closeWindow"
-  tabindex="0"
-  @keydown.esc="closeWindow">
-  <span ref="titlebar" class="window-title folder-title greyscale-title">
-    <span><i :class="['fa-'+ (props.iconClass ? props.iconClass : 'solid'), 'fa-'+props.icon]"></i></span>
-    <span class="window-title-text">{{ props.title }}</span>
-    <span v-on:click="closeWindow" class="window-close">
-    <i class="fa-solid fa-close"></i>
+  <div
+    :class="{
+      'popup-window': true,
+      'vaunch-window': true,
+      'vaunch-solid-bg': true,
+      'popup-window-small': props.small,
+    }"
+    ref="vaunchWindow"
+    v-click-away="closeWindow"
+    tabindex="0"
+    @keydown.esc="closeWindow"
+  >
+    <span ref="titlebar" class="window-title folder-title greyscale-title">
+      <span
+        ><i
+          :class="[
+            'fa-' + (props.iconClass ? props.iconClass : 'solid'),
+            'fa-' + props.icon,
+          ]"
+        ></i
+      ></span>
+      <span class="window-title-text">{{ props.title }}</span>
+      <span v-on:click="closeWindow" class="window-close">
+        <i class="fa-solid fa-close"></i>
+      </span>
     </span>
-  </span>
 
-  <div class="window-inner">
-    <slot></slot>
+    <div class="window-inner">
+      <slot></slot>
+    </div>
   </div>
-
-</div>
 </template>

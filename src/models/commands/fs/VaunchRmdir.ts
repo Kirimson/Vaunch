@@ -57,7 +57,7 @@ export class VaunchRmdir extends VaunchCommand {
       args.shift();
     }
     const failedToDelete: string[] = [];
-    const notEmpty:string[] = [];
+    const notEmpty: string[] = [];
     args.forEach((toDelete) => {
       // Strip slashes from folder names, if running from autocompleted value
       toDelete = toDelete.replace("/", "");

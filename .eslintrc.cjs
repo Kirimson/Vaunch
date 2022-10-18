@@ -12,11 +12,4 @@ module.exports = {
   env: {
     "vue/setup-compiler-macros": true,
   },
-  "vue/html-closing-bracket-newline": [
-    "error",
-    {
-      singleline: "never",
-      multiline: "always",
-    },
-  ],
 };
