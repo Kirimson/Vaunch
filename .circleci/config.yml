@@ -10,8 +10,11 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
+          command: npm run setup
+          name: Download Dependencies
+      - run:
           command: npm run build
-          name: Build app
+          name: Build App
       - persist_to_workspace:
           root: ~/dist
           paths:
