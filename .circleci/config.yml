@@ -15,6 +15,7 @@ jobs:
           command: npm run lint
           name: Lint App
   deploy: # this can be any name you choose
+    resource_class: small
     executor: heroku/default
     steps:
       - checkout
