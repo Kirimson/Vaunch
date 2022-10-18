@@ -4,6 +4,7 @@ orbs:
 
 jobs:
   build_app:
+    resource_class: small
     executor: node/default
     steps:
       - checkout
@@ -16,7 +17,7 @@ jobs:
           command: npm run build
           name: Build App
       - persist_to_workspace:
-          root: ~/dist
+          root: ./dist
           paths:
             - .
 workflows:
