@@ -14,20 +14,10 @@ jobs:
       - run:
           command: npm run lint
           name: Lint App
-      - when:
-          condition:
-            or:
-              - equal: [ master, << pipeline.git.branch >> ]
-          steps:
-            - persist_to_workspace:
-                root: ~/project
-                paths:
-                  - .
   deploy: # this can be any name you choose
     executor: heroku/default
     steps:
-      - attach_workspace:
-          at: ~/project
+      - checkout
       - heroku/deploy-via-git:
           force: true
 workflows:
