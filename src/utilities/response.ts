@@ -2,7 +2,7 @@ import { type VaunchResponse, ResponseType } from "@/models/VaunchResponse";
 import { useSessionStore } from "@/stores/sessionState";
 
 export function handleResponse(response: VaunchResponse) {
-  let sessionConfig = useSessionStore();
+  const sessionConfig = useSessionStore();
   let newInputValue = "";
 
   switch (response.type) {
@@ -19,6 +19,6 @@ export function handleResponse(response: VaunchResponse) {
   }
 
   sessionConfig.currentResponse = response;
-  let newInput: string = newInputValue ? newInputValue : "";
+  const newInput: string = newInputValue ? newInputValue : "";
   sessionConfig.vaunchInput = newInput;
 }

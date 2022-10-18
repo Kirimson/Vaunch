@@ -14,7 +14,7 @@ export class VaunchLink extends VaunchUrlFile {
     iconClass = "solid",
     hits = 0,
     description = "",
-    position=-1
+    position = -1
   ) {
     if (!name.endsWith(".lnk")) {
       name = name + ".lnk";

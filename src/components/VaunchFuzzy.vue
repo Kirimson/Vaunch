@@ -4,13 +4,13 @@ import { useSessionStore } from "@/stores/sessionState";
 import { ref, watch } from "vue";
 import VaunchGuiFile from "./VaunchGuiFile.vue";
 
-const props = defineProps(["fuzzyMatches", "currentIndex"])
+const props = defineProps(["fuzzyMatches", "currentIndex"]);
 const config = useConfigStore();
 const files = ref();
 
 const getCurrentIndex = () => props.currentIndex;
 
-watch(getCurrentIndex, (newIndex:number) => {
+watch(getCurrentIndex, (newIndex: number) => {
   let fileElement = files.value as typeof VaunchGuiFile[];
   let elem: HTMLElement = fileElement[newIndex].$el as HTMLElement;
   let parent: HTMLElement | null = elem.parentElement;

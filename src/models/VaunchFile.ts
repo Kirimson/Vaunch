@@ -11,9 +11,15 @@ export abstract class VaunchFile {
   extension = "";
   description = "";
   filetype = "VaunchFile";
-  position:number;
+  position: number;
 
-  constructor(name: string, icon = "file", iconClass = "solid", hits = 0, position=-1) {
+  constructor(
+    name: string,
+    icon = "file",
+    iconClass = "solid",
+    hits = 0,
+    position = -1
+  ) {
     this.fileName = name;
     this.aliases = [];
     this.content = "";

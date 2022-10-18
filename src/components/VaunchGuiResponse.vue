@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useSessionStore } from "@/stores/sessionState";
 
-defineProps(["response"])
+defineProps(["response"]);
 const sessionConfig = useSessionStore();
 
 const responseWindow = ref();
@@ -10,7 +10,7 @@ const responseWindow = ref();
 onMounted(() => {
   // Fade out and dismiss the window after three seconds
   setTimeout(dismiss, 3000);
-})
+});
 
 const dismiss = () => {
   let responseWindowEle: HTMLElement = responseWindow.value as HTMLElement;
@@ -18,7 +18,7 @@ const dismiss = () => {
   responseWindowEle.addEventListener("transitionend", function () {
     sessionConfig.showResponse = false;
   });
-}
+};
 </script>
 
 <style scoped>
@@ -47,9 +47,11 @@ const dismiss = () => {
 <template>
   <div class="response-window-container" ref="responseWindow">
     <div class="vaunch-window" id="response-window">
-      <span
-        class="folder-title">
-        <i v-if="response.type == 'error'" class="fa-solid fa-circle-exclamation"></i>
+      <span class="folder-title">
+        <i
+          v-if="response.type == 'error'"
+          class="fa-solid fa-circle-exclamation"
+        ></i>
         <span v-if="response.type == 'error'" id="man-title-text">Error</span>
         <i v-if="response.type == 'info'" class="fa-solid fa-circle-info"></i>
         <span v-if="response.type == 'info'" id="man-title-text">Info</span>

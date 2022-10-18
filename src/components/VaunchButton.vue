@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useConfigStore } from '@/stores/config';
+import { useConfigStore } from "@/stores/config";
 
-const props = defineProps(["text","icon"])
+const props = defineProps(["text", "icon"]);
 const config = useConfigStore();
 </script>
 
@@ -29,12 +29,14 @@ const config = useConfigStore();
   background: v-bind("config.color.highlight");
   cursor: pointer;
 }
-
 </style>
 
 <template>
-<div class="vaunch-button">
-  <i v-if="props.icon" :class="['vaunch-button-icon', 'fa-solid', 'fa-'+props.icon]"></i>
-  <span class="vaunch-button-text">{{ props.text }}</span>
-</div>
+  <div class="vaunch-button">
+    <i
+      v-if="props.icon"
+      :class="['vaunch-button-icon', 'fa-solid', 'fa-' + props.icon]"
+    ></i>
+    <span class="vaunch-button-text">{{ props.text }}</span>
+  </div>
 </template>

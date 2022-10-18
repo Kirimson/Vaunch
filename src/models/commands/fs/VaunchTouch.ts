@@ -93,7 +93,7 @@ export class VaunchTouch extends VaunchCommand {
       if (newFile) {
         // Set the file icon if a custom icon was provided
         if (iconName) newFile.setIcon(iconName, iconClass);
-        let fileMade = folder.addFile(newFile);
+        const fileMade = folder.addFile(newFile);
         if (!fileMade) {
           return this.makeResponse(
             ResponseType.Error,

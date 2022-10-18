@@ -7,7 +7,7 @@ import { handleResponse } from "@/utilities/response";
 
 const config = useConfigStore();
 const data = reactive({
-  commandInput:""
+  commandInput: "",
 });
 
 const props = defineProps(["file", "parentFolderName", "isFuzzy"]);
@@ -15,14 +15,14 @@ const props = defineProps(["file", "parentFolderName", "isFuzzy"]);
 const commandInputBox = ref();
 const hasArgs = props.file.hasArgs();
 
-const execute = (file:VaunchCommand, args:string[]) => {
+const execute = (file: VaunchCommand, args: string[]) => {
   let response = file.execute(args);
   handleResponse(response);
   // Clear the input for this command after executing
   if (hasArgs) {
     (commandInputBox.value as HTMLInputElement).value = "";
   }
-}
+};
 
 const handleClick = (file: VaunchCommand, args: string[]) => {
   if (hasArgs) {
@@ -30,12 +30,10 @@ const handleClick = (file: VaunchCommand, args: string[]) => {
   } else {
     execute(file, args);
   }
-}
-
+};
 </script>
 
 <style scoped>
-
 .command-file {
   min-width: 95%;
   max-width: 95%;

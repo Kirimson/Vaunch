@@ -13,14 +13,14 @@ const config = useConfigStore();
 const data = reactive({
   searchInput: "",
   matches: 0,
-})
+});
 
 const manualItems = ref();
 
 const closeWindow = () => {
   sessionConfig.helpCommand = "";
   sessionConfig.showHelp = false;
-}
+};
 
 onMounted(() => {
   if (sessionConfig.helpCommand) {
@@ -28,10 +28,10 @@ onMounted(() => {
   }
 });
 
-function arrayIncludesSubStr(list:string[], subString:string):boolean {
-  let match = list.find(entry => {
+function arrayIncludesSubStr(list: string[], subString: string): boolean {
+  let match = list.find((entry) => {
     return entry.includes(subString);
-  })
+  });
   // If a match was found, return true
   return match !== undefined;
 }
@@ -96,27 +96,31 @@ watch(getSearchInput, (val: string) => {
 </style>
 
 <template>
-<VaunchWindow :title="'Help'" :icon="'info'" v-on:close-window="closeWindow">
-<div id="help-container">
-  <div id="search-container">
-    <div id="search-box">
-      <label id="manual-search-label" for="manual-search-input">Search:</label>
-      <input
-        id="manual-search-input"
-        type="text"
-        v-model="data.searchInput"/>
+  <VaunchWindow :title="'Help'" :icon="'info'" v-on:close-window="closeWindow">
+    <div id="help-container">
+      <div id="search-container">
+        <div id="search-box">
+          <label id="manual-search-label" for="manual-search-input"
+            >Search:</label
+          >
+          <input
+            id="manual-search-input"
+            type="text"
+            v-model="data.searchInput"
+          />
+        </div>
+        <div v-if="data.matches != 0 || data.searchInput != ''">
+          Matches: {{ data.matches }}
+        </div>
+      </div>
+      <div class="manual-container">
+        <VaunchManualEntry
+          v-for="command in commands"
+          :command="command"
+          :key="command.fileName"
+          ref="manualItems"
+        />
+      </div>
     </div>
-    <div v-if="data.matches != 0 || data.searchInput != ''">
-      Matches: {{ data.matches }}
-    </div>
-  </div>
-  <div class="manual-container">
-    <VaunchManualEntry
-      v-for="command in commands"
-      :command="command"
-      :key="command.fileName"
-      ref="manualItems"/>
-  </div>
-</div>
-</VaunchWindow>
+  </VaunchWindow>
 </template>

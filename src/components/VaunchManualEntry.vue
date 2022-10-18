@@ -3,10 +3,11 @@ import type { VaunchManual } from "@/models/VaunchManual";
 import { reactive } from "vue";
 
 const props = defineProps(["command"]);
+// eslint-disable-next-line vue/no-setup-props-destructure
 const command = props.command;
-defineExpose({command})
+defineExpose({ command });
 
-const manual:VaunchManual = reactive({...props.command.manual});
+const manual: VaunchManual = reactive({ ...props.command.manual });
 </script>
 
 <style scoped>

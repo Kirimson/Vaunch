@@ -16,7 +16,7 @@ export class VaunchQuery extends VaunchUrlFile {
     iconClass = "solid",
     hits = 0,
     description = "",
-    position=-1
+    position = -1
   ) {
     if (!name.endsWith(".qry")) {
       name = name + ".qry";

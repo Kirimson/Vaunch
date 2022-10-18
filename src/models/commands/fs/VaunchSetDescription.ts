@@ -57,7 +57,7 @@ export class VaunchSetDescription extends VaunchCommand {
           `The file ${fullPath} does not exist`
         );
       }
-      
+
       return this.makeResponse(
         ResponseType.Success,
         `Edited description of file ${filePath}`

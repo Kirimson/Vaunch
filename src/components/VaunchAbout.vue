@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import VaunchWindow from './VaunchWindow.vue';
-import VaunchButton from './VaunchButton.vue';
+import VaunchWindow from "./VaunchWindow.vue";
+import VaunchButton from "./VaunchButton.vue";
 
 const appVersion = import.meta.env.VITE_APP_VERSION;
 const appBuildDate = import.meta.env.VITE_APP_BUILD_DATE;
 
-const emit = defineEmits(['closeWindow'])
+const emit = defineEmits(["closeWindow"]);
 </script>
 
 <style scoped>
@@ -21,7 +21,6 @@ const emit = defineEmits(['closeWindow'])
   flex-direction: column;
   flex: 1;
 }
-
 
 .confirm-buttons {
   display: flex;
@@ -42,8 +41,12 @@ const emit = defineEmits(['closeWindow'])
 </style>
 
 <template>
-  <VaunchWindow :small="true" title="About Vaunch" icon="question-circle"
-    v-on:close-window="emit('closeWindow')">
+  <VaunchWindow
+    :small="true"
+    title="About Vaunch"
+    icon="question-circle"
+    v-on:close-window="emit('closeWindow')"
+  >
     <div id="about-container">
       <div id="about-text">
         <div id="build-info">
@@ -51,11 +54,15 @@ const emit = defineEmits(['closeWindow'])
             Vaunch version: {{ appVersion ? appVersion : "Version not found" }}
           </span>
           <span>
-            Build date: {{ appBuildDate ? appBuildDate : "Build date not found" }}
+            Build date:
+            {{ appBuildDate ? appBuildDate : "Build date not found" }}
           </span>
         </div>
         <span>
-          View source code on <a id="source-link" href="https://github.com/kirimson/Vaunch">Github</a>
+          View source code on
+          <a id="source-link" href="https://github.com/kirimson/Vaunch"
+            >Github</a
+          >
         </span>
       </div>
       <div class="confirm-buttons">

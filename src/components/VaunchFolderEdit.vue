@@ -9,85 +9,102 @@ import { handleResponse } from "@/utilities/response";
 import { VaunchMv } from "@/models/commands/fs/VaunchMv";
 import { VaunchMkdir } from "@/models/commands/fs/VaunchMkdir";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
-const props = defineProps(['folder', 'addNew'])
+const props = defineProps(["folder", "addNew"]);
 
-const emit = defineEmits(['closeEdit'])
+const emit = defineEmits(["closeEdit"]);
 const config = useConfigStore();
 
 const newName = ref();
 const newPos = ref();
 const newIcon = ref();
 const newIconClass = ref();
-const selectedClass = !props.addNew ? props.folder.iconClass : 'solid';
+const selectedClass = !props.addNew ? props.folder.iconClass : "solid";
 
 const closeWindow = () => {
-  emit('closeEdit');
-}
+  emit("closeEdit");
+};
 
 const createFolder = () => {
   // Create the folder
   let mkdir = new VaunchMkdir();
 
-  let newFolderName = (newName.value.value as string).toLowerCase()
-                                                     .replace(/\s+/g, '_');
-  let response:VaunchResponse = mkdir.execute([newFolderName])
+  let newFolderName = (newName.value.value as string)
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+  let response: VaunchResponse = mkdir.execute([newFolderName]);
   if (response.type == ResponseType.Error) return handleResponse(response);
 
   // Set the folder icon
   let setIcon = new VaunchSetIcon();
-  response = setIcon.execute([newFolderName, newIcon.value.value, newIconClass.value.value])
+  response = setIcon.execute([
+    newFolderName,
+    newIcon.value.value,
+    newIconClass.value.value,
+  ]);
   if (response.type == ResponseType.Error) return handleResponse(response);
 
-  
   // If the folder position is set, run set-pos
   if (newPos.value.value) {
     let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([newFolderName, newPos.value.value.toLowerCase()])
+    let response: VaunchResponse = setPos.execute([
+      newFolderName,
+      newPos.value.value.toLowerCase(),
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
-
   // Once the folder is made, close the window
   closeWindow();
-}
+};
 
 const updateFolder = () => {
   // .value.value is used here to get the .value of the reference,
   // a HTMLInputElement, which itself has a .value property
-  let folderPath:string = props.folder.name;
+  let folderPath: string = props.folder.name;
 
   // Edit the icon of the folder
-  if (newIcon.value.value != props.folder.icon || newIconClass.value.value != props.folder.iconClass) {
+  if (
+    newIcon.value.value != props.folder.icon ||
+    newIconClass.value.value != props.folder.iconClass
+  ) {
     let setIcon = new VaunchSetIcon();
-    let response: VaunchResponse = setIcon.execute([folderPath, newIcon.value.value.toLowerCase(), newIconClass.value.value.toLowerCase()])
+    let response: VaunchResponse = setIcon.execute([
+      folderPath,
+      newIcon.value.value.toLowerCase(),
+      newIconClass.value.value.toLowerCase(),
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
-  
+
   // If the folder position has changed, run set-pos
   if (newPos.value.value != props.folder.position) {
     let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([folderPath, newPos.value.value.toLowerCase()])
+    let response: VaunchResponse = setPos.execute([
+      folderPath,
+      newPos.value.value.toLowerCase(),
+    ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // If the name of the folder has changed, attempt to move it
   // Do this last so the originalPath variable can be used for all other commands
   if (newName.value.value != props.folder.name) {
-    let newFolderName = (newName.value.value as string).toLowerCase()
-                                                    .replace(/\s+/g, '_');
+    let newFolderName = (newName.value.value as string)
+      .toLowerCase()
+      .replace(/\s+/g, "_");
     let mv = new VaunchMv();
     let response: VaunchResponse = mv.execute([folderPath, newFolderName]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
   // Once all edits are made, close the window
   closeWindow();
-}
+};
 
 const enterSubmit = () => {
   if (props.addNew) {
     createFolder();
   } else updateFolder();
-}
+};
 </script>
 
 <style scoped>
@@ -160,60 +177,140 @@ const enterSubmit = () => {
 </style>
 
 <template>
-  <VaunchWindow :title="(folder ? `Edit - ${folder.titleCase()}` : 'New Folder')" :icon="'pencil'" v-on:close-window="closeWindow">
+  <VaunchWindow
+    :title="folder ? `Edit - ${folder.titleCase()}` : 'New Folder'"
+    :icon="'pencil'"
+    v-on:close-window="closeWindow"
+  >
     <div id="edit-container">
       <div class="edit-attributes">
         <form id="edit-form" @submit.prevent="enterSubmit">
-
           <div class="edit-segment">
             <h2>Folder Properties</h2>
 
             <div class="edit-attr">
               <span>Name of the folder</span>
               <div class="edit-input-container">
-                <label class="edit-label" :for="(props.addNew ? 'new' : folder.getIdSafeName()) + '-foldername'">Name: </label>
-                <input autocapitalize="none" autocomplete="off" ref="newName" class="edit-input" type="text"
-                  :id="(props.addNew ? 'new' : folder.getIdSafeName()) + '-foldername'" :value="!props.addNew ? folder.name : ''" />
+                <label
+                  class="edit-label"
+                  :for="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-foldername'
+                  "
+                  >Name:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newName"
+                  class="edit-input"
+                  type="text"
+                  :id="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-foldername'
+                  "
+                  :value="!props.addNew ? folder.name : ''"
+                />
               </div>
             </div>
 
             <div class="edit-attr">
-              <span>Position of the folder, with 1 representing the first folder. Can also use 'top', 'middle', or 'bottom'</span>
+              <span
+                >Position of the folder, with 1 representing the first folder.
+                Can also use 'top', 'middle', or 'bottom'</span
+              >
               <div class="edit-input-container">
-                <label class="edit-label" :for="(props.addNew ? 'new' : folder.getIdSafeName()) + '-position'">Position: </label>
-                <input autocapitalize="none" autocomplete="off" ref="newPos" class="edit-input" type="text"
-                  :id="(props.addNew ? 'new' : folder.getIdSafeName()) + '-position'" :value="!props.addNew ? folder.position : ''" />
+                <label
+                  class="edit-label"
+                  :for="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-position'
+                  "
+                  >Position:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newPos"
+                  class="edit-input"
+                  type="text"
+                  :id="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-position'
+                  "
+                  :value="!props.addNew ? folder.position : ''"
+                />
               </div>
             </div>
 
             <div class="edit-attr">
               <span>Icon used for the folder</span>
               <div class="edit-input-container">
-                <label class="edit-label" :for="(props.addNew ? 'new' : folder.getIdSafeName()) + '-icon'">Icon: </label>
-                <input autocapitalize="none" autocomplete="off" ref="newIcon" class="edit-input" type="text"
-                  :id="(props.addNew ? 'new' : folder.getIdSafeName()) + '-icon'" :value="!props.addNew ? folder.icon : 'folder'" />
+                <label
+                  class="edit-label"
+                  :for="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) + '-icon'
+                  "
+                  >Icon:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newIcon"
+                  class="edit-input"
+                  type="text"
+                  :id="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) + '-icon'
+                  "
+                  :value="!props.addNew ? folder.icon : 'folder'"
+                />
               </div>
             </div>
 
             <div class="edit-attr">
               <span>Icon class for the folder</span>
               <div class="edit-input-container">
-                <label class="edit-label" :for="(props.addNew ? 'new' : folder.getIdSafeName()) + '-icon-class'">Icon Class: </label>
-                <select autocapitalize="none" v-model="selectedClass" ref="newIconClass" :id="(props.addNew ? 'new' : folder.getIdSafeName()) + '-icon-class'">
+                <label
+                  class="edit-label"
+                  :for="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-icon-class'
+                  "
+                  >Icon Class:
+                </label>
+                <select
+                  autocapitalize="none"
+                  v-model="selectedClass"
+                  ref="newIconClass"
+                  :id="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-icon-class'
+                  "
+                >
                   <option value="solid">Solid</option>
                   <option value="brands">Brands</option>
                 </select>
               </div>
             </div>
           </div>
-          <input style="display:none" type="submit" />
+          <input style="display: none" type="submit" />
         </form>
       </div>
     </div>
     <div class="edit-buttons">
       <div>
-        <VaunchButton v-if="!props.addNew" icon="save" text="Save" @click="updateFolder" />
-        <VaunchButton v-if="props.addNew" icon="add" text="Create" @click="createFolder" />
+        <VaunchButton
+          v-if="!props.addNew"
+          icon="save"
+          text="Save"
+          @click="updateFolder"
+        />
+        <VaunchButton
+          v-if="props.addNew"
+          icon="add"
+          text="Create"
+          @click="createFolder"
+        />
       </div>
       <div>
         <VaunchButton icon="close" text="Close" @click="closeWindow" />

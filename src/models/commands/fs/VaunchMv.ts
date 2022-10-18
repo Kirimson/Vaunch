@@ -78,9 +78,9 @@ export class VaunchMv extends VaunchCommand {
     // Remove the folder from the store, rename it, then add it back in
     // This is to update the underlying Maps key so we still get the folder with O(1)
     if (!fileToMove && folder) {
-
       // Check if a folder with that name already exists
-      let existingFolder:VaunchFolder = folders.getFolderByName(newFolderDest);
+      const existingFolder: VaunchFolder =
+        folders.getFolderByName(newFolderDest);
       if (existingFolder) {
         return this.makeResponse(
           ResponseType.Error,

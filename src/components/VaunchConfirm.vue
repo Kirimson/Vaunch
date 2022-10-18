@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import VaunchWindow from './VaunchWindow.vue';
-import VaunchButton from './VaunchButton.vue';
+import VaunchWindow from "./VaunchWindow.vue";
+import VaunchButton from "./VaunchButton.vue";
 
-const props = defineProps(["askText","askLines","title","icon"])
+const props = defineProps(["askText", "askLines", "title", "icon"]);
 
-const emit = defineEmits(["closeWindow", "answerYes", "answerNo"])
-
+const emit = defineEmits(["closeWindow", "answerYes", "answerNo"]);
 </script>
 
 <style scoped>
@@ -32,13 +31,18 @@ const emit = defineEmits(["closeWindow", "answerYes", "answerNo"])
 </style>
 
 <template>
-  <VaunchWindow :small="true" :title="title" :icon="icon" v-on:close-window="emit('closeWindow')">
+  <VaunchWindow
+    :small="true"
+    :title="title"
+    :icon="icon"
+    v-on:close-window="emit('closeWindow')"
+  >
     <div class="confirm-container">
       <div v-if="props.askText" class="confirm-text">
         {{ askText }}
       </div>
       <div v-if="props.askLines" class="confirm-text">
-        <span v-for="line in props.askLines">{{ line }}</span>
+        <span v-for="line in props.askLines" :key="line">{{ line }}</span>
       </div>
       <div class="confirm-buttons">
         <div>
@@ -50,5 +54,4 @@ const emit = defineEmits(["closeWindow", "answerYes", "answerNo"])
       </div>
     </div>
   </VaunchWindow>
-
 </template>
