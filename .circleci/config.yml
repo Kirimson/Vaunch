@@ -4,7 +4,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  build_app:
+  lint_app:
     resource_class: small
     executor: node/default
     steps:
@@ -12,30 +12,27 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Setup build time environment variables
-          command: |
-            echo 'export VITE_APP_VERSION=$(echo $CIRCLE_SHA1 | head -c -7)' >> "$BASH_ENV"
-            echo 'export VITE_APP_BUILD_DATE=$(date -u "+%Y-%m-%d %H:%M UTC")' >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - run:
           command: npm run lint
           name: Lint App
-      - run:
-          command: npm run build
-          name: Build App
   deploy:
     resource_class: small
     executor: heroku/default
     steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run build
+          name: Build App
       - heroku/deploy-via-git:
           force: true
 workflows:
   vaunch:
     jobs:
-      - build_app
+      - lint_app
       - deploy:
           requires:
-            - build_app # only deploy if the build_and_test job has completed
+            - lint_app # only deploy if the build_and_test job has completed
           filters:
             branches:
               only: master # only deploy when on master
