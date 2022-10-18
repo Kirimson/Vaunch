@@ -12,7 +12,7 @@ const fontAwesomeUnzippedFile: string = "fontawesome";
 const destFilePath: string = path.join(zipPath, fontAwesomeUnzippedFile);
 const currPath: string = path.join(zipPath, "fontawesome-free-6.2.0-web")
 
-if (!fs.statSync(destFilePath).isDirectory()) {
+if (!fs.existsSync(destFilePath)) {
     const file = fs.createWriteStream(fontAwesomeFilePath);
     https.get(url, function (response) {
         response.pipe(file);
