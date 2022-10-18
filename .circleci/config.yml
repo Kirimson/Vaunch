@@ -16,10 +16,12 @@ jobs:
       - run:
           command: npm run build
           name: Build App
-      - persist_to_workspace:
-          root: ./dist
-          paths:
-            - .
+      - run:
+          name: Compress Built Project
+          command: tar -cvzf vaunch.tar dist
+      - store_artifacts: 
+          path: vaunch.tar
+          destination: vaunch_build
 workflows:
   vaunch:
     jobs:
