@@ -12,9 +12,6 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run setup
-          name: Download Dependencies
-      - run:
           name: Setup build time environment variables
           command: |
             echo 'export VITE_APP_VERSION=$(echo $CIRCLE_SHA1 | head -c -7)' >> "$BASH_ENV"
