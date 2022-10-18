@@ -27,7 +27,8 @@ jobs:
           root: ~/project
           paths:
             - .
-  deploy: # this can be any name you choose
+  deploy:
+    resource_class: small
     executor: heroku/default
     steps:
       - attach_workspace:
