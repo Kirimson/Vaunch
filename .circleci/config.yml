@@ -23,10 +23,16 @@ jobs:
       - run:
           command: npm run build
           name: Build App
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
   deploy:
     resource_class: small
     executor: heroku/default
     steps:
+      - attach_workspace:
+          at: ~/project
       - heroku/deploy-via-git:
           force: true
 workflows:
