@@ -10,19 +10,21 @@ const fontAwesomeFile: string = "fontawesome.zip";
 const fontAwesomeFilePath: string = path.join(zipPath, fontAwesomeFile);
 const fontAwesomeUnzippedFile: string = "fontawesome";
 const destFilePath: string = path.join(zipPath, fontAwesomeUnzippedFile);
-const file = fs.createWriteStream(fontAwesomeFilePath);
 const currPath: string = path.join(zipPath, "fontawesome-free-6.2.0-web")
 
-https.get(url, function (response) {
-    response.pipe(file);
-    file.on("finish", () => {
-        file.close();
-        console.log("Download Completed");
-        decompress(fontAwesomeFilePath, zipPath).then(() => {
-            fs.rename(currPath, destFilePath, () => {
-                console.log("Download unzipped")
-                fs.unlinkSync(fontAwesomeFilePath);
+if (!fs.statSync(destFilePath).isDirectory()) {
+    const file = fs.createWriteStream(fontAwesomeFilePath);
+    https.get(url, function (response) {
+        response.pipe(file);
+        file.on("finish", () => {
+            file.close();
+            console.log("Download Completed");
+            decompress(fontAwesomeFilePath, zipPath).then(() => {
+                fs.rename(currPath, destFilePath, () => {
+                    console.log("Download unzipped")
+                    fs.unlinkSync(fontAwesomeFilePath);
+                })
             })
-        })
+        });
     });
-});
+} else console.log("Assets already exist")
