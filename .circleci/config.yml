@@ -32,7 +32,7 @@ workflows:
       - lint_app
       - deploy:
           requires:
-            - build_app # only deploy if the build_and_test job has completed
+            - lint_app # only deploy if the build_and_test job has completed
           filters:
             branches:
               only: master # only deploy when on master
