@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+  heroku: circleci/heroku@1.2.6
+
+jobs:
+  build_app:
+    resource_class: small
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run setup
+          name: Download Dependencies
+      - run:
+          name: Setup build time environment variables
+          command: |
+            echo 'export VITE_APP_VERSION=$(echo $CIRCLE_SHA1 | head -c -7)' >> "$BASH_ENV"
+            echo 'export VITE_APP_BUILD_DATE=$(date -u "+%Y-%m-%d %H:%M UTC")' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - run:
+          command: npm run build
+          name: Build App
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  deploy: # this can be any name you choose
+    executor: heroku/default
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - heroku/deploy-via-git:
+          force: true
+workflows:
+  vaunch:
+    jobs:
+      - build_app
+      - deploy:
+          requires:
+            - build_app # only deploy if the build_and_test job has completed
+          filters:
+            branches:
+              only: master # only deploy when on master
