@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
+  heroku: circleci/heroku@1.2.6
 
 jobs:
   build_app:
@@ -22,13 +23,24 @@ jobs:
       - run:
           command: npm run build
           name: Build App
-      - run:
-          name: Compress Built Project
-          command: tar -cvzf vaunch.tar dist
-      - store_artifacts: 
-          path: vaunch.tar
-          destination: vaunch_build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  deploy: # this can be any name you choose
+    executor: heroku/default
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - heroku/deploy-via-git:
+          force: true
 workflows:
   vaunch:
     jobs:
       - build_app
+      - deploy:
+          requires:
+            - build_app # only deploy if the build_and_test job has completed
+          filters:
+            branches:
+              only: master # only deploy when on master
