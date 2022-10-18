@@ -14,11 +14,14 @@ jobs:
           command: npm run setup
           name: Download Dependencies
       - run:
+          name: Setup build time environment variables
+          command: |
+            echo 'export VITE_APP_VERSION=$(echo $CIRCLE_SHA1 | head -c -7)' >> "$BASH_ENV"
+            echo 'export VITE_APP_BUILD_DATE=$(date -u +'%Y-%m-%d %H:%M UTC')' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - run:
           command: npm run build
           name: Build App
-          environment:
-            VITE_APP_VERSION: $(echo $CIRCLE_SHA1 | head -c -7)
-            VITE_APP_BUILD_DATE: $(date -u +'%Y-%m-%d %H:%M UTC')
       - run:
           name: Compress Built Project
           command: tar -cvzf vaunch.tar dist
