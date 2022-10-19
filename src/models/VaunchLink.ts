@@ -75,6 +75,7 @@ export class VaunchLink extends VaunchUrlFile {
   }
 
   setName(newName: string) {
+    newName = newName.replace(/\s/g, "_");
     if (!newName.endsWith(".lnk")) {
       this.fileName = newName + ".lnk";
     } else this.fileName = newName;
