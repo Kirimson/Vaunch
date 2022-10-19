@@ -14,6 +14,16 @@ jobs:
       - run:
           command: npm run lint
           name: Lint App
+  test_app:
+    resource_class: small
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run test
+          name: Test App
   deploy: # this can be any name you choose
     resource_class: small
     executor: heroku/default
@@ -25,9 +35,11 @@ workflows:
   vaunch:
     jobs:
       - lint_app
+      - test_app
       - deploy:
           requires:
-            - lint_app # only deploy if the build_and_test job has completed
+            - lint_app
+            - test_app
           filters:
             branches:
               only: master # only deploy when on master
