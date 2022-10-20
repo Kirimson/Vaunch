@@ -1,7 +1,7 @@
 import { test, describe, expect, beforeEach } from "vitest";
-import { VaunchFolder } from "./VaunchFolder";
-import { VaunchLink } from "./VaunchLink";
-import { ResponseType } from "./VaunchResponse";
+import { VaunchFolder } from "../models/VaunchFolder";
+import { VaunchLink } from "../models/VaunchLink";
+import { ResponseType } from "../models/VaunchResponse";
 
 const parent = new VaunchFolder("test");
 let file: VaunchLink;
@@ -33,12 +33,16 @@ describe("file", () => {
     });
   });
 
-  describe("given an valid URL", () => {
+  describe("given an invalid URL", () => {
     test("file execution", () => {
+      const badLink = "badLink";
+      file.edit([badLink]);
       file.execute(["_blank"]);
       const response = file.execute([]);
-      expect(response.type).toBe(ResponseType.Success);
-      expect(response.message).toBe("Navigating to: http://example.com/");
+      expect(response.type).toBe(ResponseType.Error);
+      expect(response.message).toBe(
+        `Failed to execute file. Attempted URL was: ${badLink}`
+      );
     });
   });
 
