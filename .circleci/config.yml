@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
-  snyk: snyk/snyk@1.2.3
 
 jobs:
   lint_app:
@@ -15,7 +14,6 @@ jobs:
       - run:
           command: npm run lint
           name: Lint App
-      - snyk/scan
   test_app:
     resource_class: small
     executor: node/default
