@@ -85,7 +85,7 @@ watch(getInput, (val: string) => {
             fileName,
             folder.getFiles(),
             false
-          ).map((file: any) => folderName + "/" + file);
+          ).map((file: string) => folderName + "/" + file);
           matches.push(...fileMatches);
         }
       }
