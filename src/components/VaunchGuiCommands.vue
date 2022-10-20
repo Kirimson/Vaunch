@@ -22,7 +22,7 @@ const config = useConfigStore();
 <template>
   <div class="vaunch-command-folder vaunch-window">
     <span class="folder-title">
-      <i class="fa-solid fa-cog"></i>
+      <i class="fa-solid fa-terminal"></i>
       <span>Commands</span>
     </span>
     <div class="file-container commands-container">

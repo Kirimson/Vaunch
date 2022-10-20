@@ -127,7 +127,7 @@ export class VaunchSetColor extends VaunchCommand {
     return contrast < 255 / 2 ? "white" : "black";
   }
 
-  private calcAutocompleteColor(newTextColor: string): any {
+  private calcAutocompleteColor(newTextColor: string): string {
     const rgb = this.getRgbColor(newTextColor);
     const rgbRaw = this.getRgbValue(rgb);
     const hsl = this.rgbToHsl(rgbRaw[0], rgbRaw[1], rgbRaw[2]);
