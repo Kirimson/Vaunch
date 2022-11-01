@@ -309,6 +309,10 @@ main {
   cursor: pointer;
 }
 
+#main-container {
+  background-position: center;
+}
+
 /* Scrollbar theming */
 ::-webkit-scrollbar {
   width: 3px;
