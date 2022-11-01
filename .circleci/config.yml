@@ -24,22 +24,8 @@ jobs:
       - run:
           command: npm run test
           name: Test App
-  deploy: # this can be any name you choose
-    resource_class: small
-    executor: heroku/default
-    steps:
-      - checkout
-      - heroku/deploy-via-git:
-          force: true
 workflows:
   vaunch:
     jobs:
       - lint_app
       - test_app
-      - deploy:
-          requires:
-            - lint_app
-            - test_app
-          filters:
-            branches:
-              only: master # only deploy when on master
