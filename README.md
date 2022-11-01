@@ -1,4 +1,8 @@
-<h1><img src="public/favicon.svg" width="25" height="25"> Vaunch</h1>
+<h1 align="center"><img src="public/favicon.svg" width="25" height="25"> Vaunch</h1>
+
+<p align="center">
+<a href="https://dl.circleci.com/status-badge/redirect/gh/Kirimson/Vaunch/tree/master" ><img src="https://dl.circleci.com/status-badge/img/gh/Kirimson/Vaunch/tree/master.svg?style=svg" ></a>
+</p>
 
 A command-driven, customisable start-page.
 
