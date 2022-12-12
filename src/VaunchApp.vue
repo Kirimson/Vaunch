@@ -102,7 +102,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
     let file: VaunchFile | undefined = folders.getFileByPath(defaultFile);
     // If the default file is not a filepath, check if it's just the prefix
     if (!file) {
-      file = findQryFile(defaultFile);
+      file = findQryFile(defaultFile, false);
     }
     // If a default file was found, execute it with the commandArgs, returning the response to vaunchInput
     if (file) {
@@ -120,8 +120,11 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   return handleResponse(noCommandFoundResp);
 };
 
-const findQryFile = (operator: string): VaunchFile | undefined => {
-  if (!operator.includes(":")) return undefined;
+const findQryFile = (
+  operator: string,
+  requireColon = true
+): VaunchFile | undefined => {
+  if (!operator.includes(":") && requireColon) return undefined;
 
   operator = operator.split(":")[0];
   for (let folder of folders.items as VaunchFolder[]) {
