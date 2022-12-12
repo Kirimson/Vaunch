@@ -121,9 +121,9 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
 };
 
 const findQryFile = (operator: string): VaunchFile | undefined => {
-  if (operator.includes(":")) {
-    operator = operator.split(":")[0];
-  }
+  if (!operator.includes(":")) return undefined;
+
+  operator = operator.split(":")[0];
   for (let folder of folders.items as VaunchFolder[]) {
     for (let file of folder.getFiles()) {
       if (file.filetype == "VaunchQuery") {
@@ -263,9 +263,11 @@ main {
   background: v-bind("config.color.window");
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
+
 ::selection {
   background: v-bind("config.color.highlight");
 }
+
 .vaunch-solid-bg {
   background: v-bind("config.color.windowOpaque") !important;
 }
@@ -313,10 +315,12 @@ main {
 ::-webkit-scrollbar {
   width: 3px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: v-bind("config.color.text");
   border-radius: 2px;
 }
+
 @-moz-document url-prefix() {
   main {
     scrollbar-color: v-bind("config.color.text") v-bind("config.color.window");
