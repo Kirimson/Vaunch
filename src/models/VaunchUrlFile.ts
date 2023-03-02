@@ -39,7 +39,7 @@ export abstract class VaunchUrlFile extends VaunchFile {
 
       // Now with https:// prepended, run an additional URL test against the string
       const fullUrlTest =
-        /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=()]*)$/g;
+        /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=()']*)$/g;
       if (fullUrlTest.test(url)) {
         return new URL(url);
       } else return undefined;
