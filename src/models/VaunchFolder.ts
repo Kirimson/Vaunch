@@ -59,6 +59,10 @@ export class VaunchFolder {
     return Array.from(this.files.values());
   }
 
+  setFiles(newFiles:VaunchFile[]) {
+    this.files = newFiles
+  }
+
   searchFile(search: string, types: string[] = []): VaunchFile[] {
     const matches: VaunchFile[] = [];
     for (const file of this.files) {

@@ -17,26 +17,9 @@ const files = computed<VaunchLink[]>({
     return props.folder.getFiles();
   },
   set(value) {
-    console.log(value);
+    props.folder.setFiles(value);
   }
 });
-// const dragFile = ref("");
-// const newFilePos = ref(0);
-
-// const endEvent = () => {
-//   return
-// }
-
-// const moveEvent = (evt:any) => {
-//   dragFile.value = evt.draggedContext.element.fileName
-//   newFilePos.value = evt.relatedContext.element.position
-//   console.log(dragFile.value)
-//   console.log(newFilePos.value)
-// }
-
-// watch(props.folder, (newFolder: VaunchFolder) => {
-//   files.value = newFolder.getFiles();
-// });
 
 const passFileOption = (
   file: VaunchUrlFile,
