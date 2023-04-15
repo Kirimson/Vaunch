@@ -1,9 +1,5 @@
 <h1 align="center"><img src="public/favicon.svg" width="25" height="25"> Vaunch</h1>
 
-<p align="center">
-<a href="https://dl.circleci.com/status-badge/redirect/gh/Kirimson/Vaunch/tree/master" ><img src="https://dl.circleci.com/status-badge/img/gh/Kirimson/Vaunch/tree/master.svg?style=svg" ></a>
-</p>
-
 A command-driven, customisable start-page.
 
 Vaunch can be accessed at: https://vaunch.kirimson.com, or you can host it yourself. See [Setting Up](#setting-up) for more information on how to self-host Vaunch
@@ -11,12 +7,13 @@ Vaunch can be accessed at: https://vaunch.kirimson.com, or you can host it yours
 ## Features
 
 - Folders to organise your links however you want
+- Drag and drop for reordering files and folders
 - Linux-esc commands to interact with Vaunch
 - 'Link' files to go to a specified site, like a bookmark
 - 'Query' files to go to customised URLs based on your input, e.g using a search engine, or navigating to a specific Github repository
 - Customisable:
     - Icons for both files and folders can be set, using the free [Font Awesome](https://fontawesome.com/) icon set
-    - GUI elements can be hidden, for more minimalist design 
+    - GUI elements can be hidden, for more minimalist designs
     - Can change the window, text, and text-highlight colour
 - Everything is local
     - All data is stored locally in your browser's Local Storage. None of your configuration is stored on a remote server.
@@ -28,7 +25,7 @@ Vaunch can be accessed at: https://vaunch.kirimson.com, or you can host it yours
     - Add/Edit/Delete files
     - Add/Edit/Delete folders
     - Edit Vaunch configuration
-    - Import/Export Vaunch configuration     
+    - Import/Export Vaunch configuration
 
 ## Usage
 
