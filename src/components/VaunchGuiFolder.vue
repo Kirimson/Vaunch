@@ -3,12 +3,33 @@ import { useConfigStore } from "@/stores/config";
 
 import VaunchGuiFile from "./VaunchGuiFile.vue";
 import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
-import { useSessionStore } from "@/stores/sessionState";
+import draggable from 'vuedraggable'
+import { ref, watch } from 'vue'
+import type { VaunchFolder } from "@/models/VaunchFolder";
 
 const config = useConfigStore();
 
 const props = defineProps(["folder"]);
 const emit = defineEmits(["showFileOption", "showFolderOption"]);
+
+const files = ref(props.folder.getFiles());
+// const dragFile = ref("");
+// const newFilePos = ref(0);
+
+// const endEvent = () => {
+//   return
+// }
+
+// const moveEvent = (evt:any) => {
+//   dragFile.value = evt.draggedContext.element.fileName
+//   newFilePos.value = evt.relatedContext.element.position
+//   console.log(dragFile.value)
+//   console.log(newFilePos.value)
+// }
+
+watch(props.folder, (newFolder: VaunchFolder) => {
+  files.value = newFolder.getFiles();
+});
 
 const passFileOption = (
   file: VaunchUrlFile,
@@ -82,14 +103,15 @@ const deleteFolder = () =>
         <i class="fa-solid fa-trash" @click="deleteFolder" />
       </div>
     </span>
-    <div v-if="folder.getFiles().length > 0" class="file-container">
-      <VaunchGuiFile
-        v-on:show-file-option="passFileOption"
-        v-for="file in folder.sortFiles()"
-        :file="file"
-        :key="file.fileName"
-        :parent-folder-name="folder.name"
-      />
-    </div>
+    <draggable :list="files" class="file-container" item-key="position">
+      <template #item="{element}">
+        <VaunchGuiFile
+          v-on:show-file-option="passFileOption"
+          :file="element"
+          :key="element.fileName"
+          :parent-folder-name="folder.name"
+        />
+      </template>
+    </draggable>
   </div>
 </template>

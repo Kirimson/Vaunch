@@ -377,7 +377,7 @@ main {
           "
         >
           <VaunchGuiFolder
-            v-for="folder in folders.sortedItems()"
+            v-for="folder in folders.items"
             :key="folder.name"
             v-on:show-file-option="showFileOption"
             v-on:show-folder-option="showFolderOption"

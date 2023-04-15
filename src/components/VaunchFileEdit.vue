@@ -9,7 +9,6 @@ import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription";
 import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
-import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 const props = defineProps(["file"]);
 
 const emit = defineEmits(["closeEdit"]);
@@ -75,16 +74,6 @@ const saveFile = () => {
     let response: VaunchResponse = setDesc.execute([
       originalPath,
       newDescription.value.value,
-    ]);
-    if (response.type == ResponseType.Error) return handleResponse(response);
-  }
-
-  // If the file position has changed, run set-pos
-  if (newPos.value.value != props.file.position) {
-    let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([
-      originalPath,
-      newPos.value.value.toLowerCase(),
     ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
@@ -284,25 +273,6 @@ const saveFile = () => {
 
           <div class="edit-segment">
             <h2>File Customisation</h2>
-            <div class="edit-attr">
-              <span>Edit the position of the file</span>
-              <div class="edit-input-container">
-                <label
-                  class="edit-label"
-                  :for="file.getIdSafeName() + '-position'"
-                  >Position:
-                </label>
-                <input
-                  autocapitalize="none"
-                  autocomplete="off"
-                  ref="newPos"
-                  class="edit-input"
-                  type="text"
-                  :id="file.getIdSafeName() + '-position'"
-                  :value="file.position"
-                />
-              </div>
-            </div>
             <div class="edit-attr">
               <span>Edit the icon used for the file</span>
               <div class="edit-input-container">
