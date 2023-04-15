@@ -8,7 +8,6 @@ import { type VaunchResponse, ResponseType } from "@/models/VaunchResponse";
 import { handleResponse } from "@/utilities/response";
 import { VaunchMv } from "@/models/commands/fs/VaunchMv";
 import { VaunchMkdir } from "@/models/commands/fs/VaunchMkdir";
-import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 const props = defineProps(["folder", "addNew"]);
 
 const emit = defineEmits(["closeEdit"]);
@@ -43,16 +42,6 @@ const createFolder = () => {
   ]);
   if (response.type == ResponseType.Error) return handleResponse(response);
 
-  // If the folder position is set, run set-pos
-  if (newPos.value.value) {
-    let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([
-      newFolderName,
-      newPos.value.value.toLowerCase(),
-    ]);
-    if (response.type == ResponseType.Error) return handleResponse(response);
-  }
-
   // Once the folder is made, close the window
   closeWindow();
 };
@@ -72,16 +61,6 @@ const updateFolder = () => {
       folderPath,
       newIcon.value.value.toLowerCase(),
       newIconClass.value.value.toLowerCase(),
-    ]);
-    if (response.type == ResponseType.Error) return handleResponse(response);
-  }
-
-  // If the folder position has changed, run set-pos
-  if (newPos.value.value != props.folder.position) {
-    let setPos = new VaunchSetPosition();
-    let response: VaunchResponse = setPos.execute([
-      folderPath,
-      newPos.value.value.toLowerCase(),
     ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
@@ -210,35 +189,6 @@ const enterSubmit = () => {
                     '-foldername'
                   "
                   :value="!props.addNew ? folder.name : ''"
-                />
-              </div>
-            </div>
-
-            <div class="edit-attr">
-              <span
-                >Position of the folder, with 1 representing the first folder.
-                Can also use 'top', 'middle', or 'bottom'</span
-              >
-              <div class="edit-input-container">
-                <label
-                  class="edit-label"
-                  :for="
-                    (props.addNew ? 'new' : folder.getIdSafeName()) +
-                    '-position'
-                  "
-                  >Position:
-                </label>
-                <input
-                  autocapitalize="none"
-                  autocomplete="off"
-                  ref="newPos"
-                  class="edit-input"
-                  type="text"
-                  :id="
-                    (props.addNew ? 'new' : folder.getIdSafeName()) +
-                    '-position'
-                  "
-                  :value="!props.addNew ? folder.position : ''"
                 />
               </div>
             </div>

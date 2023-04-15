@@ -57,3 +57,6 @@ onMounted(() => {
   }
 }
 </style>
+<template>
+  <div></div>
+</template>
