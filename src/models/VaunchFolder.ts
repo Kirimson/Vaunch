@@ -83,9 +83,13 @@ export class VaunchFolder {
     return matches;
   }
 
-  removeFile(toDelete: string) {
+  removeFile(toDelete: string):boolean {
     const fileToDelete = this.files.filter((file) => file.fileName == toDelete)
-    fileToDelete.forEach(file => this.files.splice(this.files.findIndex(n => n === file), 1))
+    if (fileToDelete.length > 0) {
+      fileToDelete.forEach(file => this.files.splice(this.files.findIndex(n => n === file), 1))
+      return true
+    }
+    return false
   }
 
   setIcon(icon: string, iconClass: string): void {

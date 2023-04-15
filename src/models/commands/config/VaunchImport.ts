@@ -141,8 +141,6 @@ export class VaunchImport extends VaunchCommand {
         });
       }
     });
-    // After importing re-organise the folders so all positions definitely match up
-    folders.organisePosition(folders.items);
     return this.makeResponse(
       ResponseType.Success,
       `Imported Vaunch components: ${importedComponents.join(", ")}`
