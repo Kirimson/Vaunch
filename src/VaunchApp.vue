@@ -7,7 +7,8 @@ import { useConfigStore } from "@/stores/config";
 import { useFolderStore } from "@/stores/folder";
 import { VaunchFolder } from "./models/VaunchFolder";
 import type { VaunchFile } from "./models/VaunchFile";
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
+import draggable from 'vuedraggable'
 import { useFuzzyStore } from "./stores/fuzzy";
 import VaunchFuzzy from "./components/VaunchFuzzy.vue";
 import VaunchGuiCommands from "./components/VaunchGuiCommands.vue";
@@ -43,6 +44,16 @@ const data = reactive({
   prefixName: config.prefix.name,
   prefixClass: config.prefix.class,
 });
+
+const folderList = computed<VaunchFolder[]>({
+  get():VaunchFolder[] {
+    return folders.items
+  },
+  set(value) {
+    folders.setFolders(value);
+    console.log(value)
+  }
+})
 
 const executeCommand = (commandArgs: string[], newTab = false) => {
   // Before all else, push this command to Vaunch's history
@@ -369,21 +380,24 @@ main {
           <VaunchGuiCommands />
         </div>
 
-        <div
+        <draggable
           v-if="config.showGUI"
           id="vaunch-folder-container"
           @click.right.prevent.self="
             showAppOption($event.clientX, $event.clientY)
           "
+          v-model="folderList"
         >
+        <template #item="{element}">
           <VaunchGuiFolder
-            v-for="folder in folders.items"
-            :key="folder.name"
+            :key="element.name"
             v-on:show-file-option="showFileOption"
             v-on:show-folder-option="showFolderOption"
-            :folder="folder"
+            :folder="element"
           />
-        </div>
+        </template>
+        </draggable>
+
       </div>
       <div class="mobile-only" id="option-buttons-container">
         <div class="app-option-buttons">

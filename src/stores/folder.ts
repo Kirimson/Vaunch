@@ -71,6 +71,14 @@ export const useFolderStore: StoreDefinition = defineStore({
       newFolder.position = nextPos;
       this.rawFolders.set(name, newFolder);
     },
+    // Replaces the current list of folders, ideally only used when re-ordering folders
+    setFolders(folders: VaunchFolder[]) {
+      const newMap = new Map<string, VaunchFolder>();
+      folders.forEach(folder => {
+        newMap.set(folder.name, folder)
+      });
+      this.rawFolders = newMap;
+    },
     insert(folder: VaunchFolder) {
       this.rawFolders.set(folder.name, folder);
     },
