@@ -5,7 +5,7 @@ import { VaunchUrlFile } from "./VaunchUrlFile";
 
 export class VaunchFolder {
   name: string;
-  files: Map<string, VaunchFile>;
+  files: VaunchFile[];
   icon: string;
   iconClass: string;
   position: number;
@@ -17,7 +17,7 @@ export class VaunchFolder {
     position = -1
   ) {
     this.name = name;
-    this.files = new Map<string, VaunchFile>();
+    this.files = [];
     this.icon = icon;
     this.iconClass = iconClass;
     this.position = position;
@@ -28,7 +28,7 @@ export class VaunchFolder {
     // Set the new file's position to last
     const nextPos: number = this.getFiles().length + 1;
     newFile.position = nextPos;
-    this.files.set(newFile.fileName, newFile);
+    this.files.push(newFile);
     return true;
   }
 
@@ -48,7 +48,7 @@ export class VaunchFolder {
   }
 
   getFile(fileName: string): VaunchUrlFile | undefined {
-    const file = this.files.get(fileName);
+    const file = this.files.find((file) => {file.fileName == fileName});
     if (file instanceof VaunchUrlFile) {
       return file;
     }
@@ -61,8 +61,8 @@ export class VaunchFolder {
 
   searchFile(search: string, types: string[] = []): VaunchFile[] {
     const matches: VaunchFile[] = [];
-    for (const [fileName, file] of this.files.entries()) {
-      if (fileName.includes(search)) {
+    for (const file of this.files) {
+      if (file.fileName.includes(search)) {
         if (types.includes(file.filetype)) {
           matches.push(file);
         } else if (types.length == 0) {
@@ -79,8 +79,9 @@ export class VaunchFolder {
     return matches;
   }
 
-  removeFile(toDelete: string): boolean {
-    return this.files.delete(toDelete);
+  removeFile(toDelete: string) {
+    const fileToDelete = this.files.filter((file) => file.fileName == toDelete)
+    fileToDelete.forEach(file => this.files.splice(this.files.findIndex(n => n === file), 1))
   }
 
   setIcon(icon: string, iconClass: string): void {
