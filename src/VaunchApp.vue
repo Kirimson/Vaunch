@@ -260,6 +260,10 @@ const showAppOption = (
   sessionConfig.showFolderOptions = false;
   sessionConfig.showAppOptions = true;
 };
+
+const dragOptions = ref({
+  animation: 300,
+});
 </script>
 
 <style>
@@ -378,25 +382,27 @@ main {
         <div v-if="config.showCommands" id="commands-container">
           <VaunchGuiCommands />
         </div>
-
-        <draggable
-          id="vaunch-folder-container"
-          @click.right.prevent.self="
-            showAppOption($event.clientX, $event.clientY)
-          "
-          v-model="folderList"
-          delay="200"
-          :delayOnTouchOnly="true"
-        >
-        <template #item="{element}">
-          <VaunchGuiFolder
-            :key="element.name"
-            v-on:show-file-option="showFileOption"
-            v-on:show-folder-option="showFolderOption"
-            :folder="element"
-          />
-        </template>
-        </draggable>
+        <TransitionGroup>
+          <draggable
+            id="vaunch-folder-container"
+            @click.right.prevent.self="
+              showAppOption($event.clientX, $event.clientY)
+            "
+            v-model="folderList"
+            delay="200"
+            :delayOnTouchOnly="true"
+            v-bind="dragOptions"
+          >
+          <template #item="{element}">
+            <VaunchGuiFolder
+              :key="element.name"
+              v-on:show-file-option="showFileOption"
+              v-on:show-folder-option="showFolderOption"
+              :folder="element"
+            />
+          </template>
+          </draggable>
+        </TransitionGroup>
 
       </div>
       <div class="mobile-only" id="option-buttons-container">
