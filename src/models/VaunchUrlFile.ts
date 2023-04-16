@@ -77,8 +77,4 @@ export abstract class VaunchUrlFile extends VaunchFile {
   getFilePath(): string {
     return `${this.parent?.name}/${this.fileName}`;
   }
-
-  findPosition():number {
-    return this.parent?.findFilePosition(this.fileName) || 0
-  }
 }

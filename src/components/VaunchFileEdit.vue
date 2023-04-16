@@ -10,10 +10,13 @@ import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription"
 import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
+import { useFolderStore } from "@/stores/folder";
+import type { VaunchFolder } from "@/models/VaunchFolder";
 const props = defineProps(["file", "folderName"]);
 
 const emit = defineEmits(["closeEdit"]);
 const config = useConfigStore();
+const folders = useFolderStore()
 
 const newName = ref();
 const newFolder = ref();
@@ -81,7 +84,8 @@ const saveFile = () => {
 
   // If a position has been set, update the position of the file
   // Adding one to get "human" position rather than positional index
-  if (newPos.value.value != props.file.findPosition() + 1) {
+  const parentFolder:VaunchFolder = folders.getFolderByName(props.folderName)
+  if (newPos.value.value != parentFolder.findFilePosition(props.file.fileName) + 1) {
     const setPos = new VaunchSetPosition();
     let response = setPos.execute([originalPath, newPos.value.value])
     if (response.type == ResponseType.Error) return handleResponse(response);
@@ -298,7 +302,7 @@ const saveFile = () => {
                   class="edit-input"
                   type="text"
                   id="new-position"
-                  :value="file.findPosition() + 1"
+                  :value="folders.getFolderByName(props.folderName).findFilePosition(props.file.fileName) + 1"
                 />
               </div>
             </div>
