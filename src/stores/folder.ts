@@ -97,5 +97,8 @@ export const useFolderStore: StoreDefinition = defineStore({
       }
       return matchingFiles;
     },
+    findPosition(folderName: string) {
+      return this.rawFolders.findIndex(folder => folder.name == folderName)
+    }
   },
 });

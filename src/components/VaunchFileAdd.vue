@@ -8,6 +8,7 @@ import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription"
 import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
+import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 const props = defineProps(["folder"]);
 
 const emit = defineEmits(["closeAdd"]);
@@ -92,6 +93,13 @@ const createFile = () => {
       filePath,
       newDescription.value.value,
     ]);
+    if (response.type == ResponseType.Error) return handleResponse(response);
+  }
+
+  // If a position has been set, update the position of the file
+  if (newPos.value.value != '') {
+    const setPos = new VaunchSetPosition();
+    let response = setPos.execute([filePath, newPos.value.value])
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
@@ -277,6 +285,25 @@ const createFile = () => {
             <div class="edit-segment">
               <h2 v-if="state.fileType == 'lnk'">Link File Customisation</h2>
               <h2 v-if="state.fileType == 'qry'">Query File Customisation</h2>
+
+              <div class="edit-attr">
+              <span>Set the position of the folder</span>
+              <div class="edit-input-container">
+                <label
+                  class="edit-label"
+                  for="new-position"
+                  >Position:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newPos"
+                  class="edit-input"
+                  type="text"
+                  id="new-position"
+                />
+              </div>
+            </div>
 
               <div class="edit-attr">
                 <span>Edit the icon used for the file</span>

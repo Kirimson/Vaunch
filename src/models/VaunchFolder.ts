@@ -90,6 +90,10 @@ export class VaunchFolder {
     this.iconClass = iconClass;
   }
 
+  findFilePosition(fileName: string):number {
+    return this.files.findIndex(files => files.fileName == fileName)
+  }
+
   info(): any {
     const fileInfo: any[] = [];
     this.getFiles().forEach((file) => fileInfo.push(file.info()));
