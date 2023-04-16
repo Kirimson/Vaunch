@@ -3,15 +3,18 @@ import VaunchWindow from "./VaunchWindow.vue";
 import VaunchButton from "./VaunchButton.vue";
 import { ref } from "vue";
 import { useConfigStore } from "@/stores/config";
+import { useFolderStore } from "@/stores/folder";
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { type VaunchResponse, ResponseType } from "@/models/VaunchResponse";
 import { handleResponse } from "@/utilities/response";
 import { VaunchMv } from "@/models/commands/fs/VaunchMv";
 import { VaunchMkdir } from "@/models/commands/fs/VaunchMkdir";
+import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 const props = defineProps(["folder", "addNew"]);
 
 const emit = defineEmits(["closeEdit"]);
 const config = useConfigStore();
+const folders = useFolderStore();
 
 const newName = ref();
 const newPos = ref();
@@ -42,6 +45,13 @@ const createFolder = () => {
   ]);
   if (response.type == ResponseType.Error) return handleResponse(response);
 
+  // If a position has been set, update the position of the folder
+  if (newPos.value.value != '') {
+    const setPos = new VaunchSetPosition();
+    let response = setPos.execute([newFolderName, newPos.value.value])
+    if (response.type == ResponseType.Error) return handleResponse(response);
+  }
+
   // Once the folder is made, close the window
   closeWindow();
 };
@@ -62,6 +72,13 @@ const updateFolder = () => {
       newIcon.value.value.toLowerCase(),
       newIconClass.value.value.toLowerCase(),
     ]);
+    if (response.type == ResponseType.Error) return handleResponse(response);
+  }
+
+  // If a new position has been set, update the position of the folder
+  if (newPos.value.value != folders.findPosition(props.folder.name) + 1) {
+    const setPos = new VaunchSetPosition();
+    let response = setPos.execute([folderPath, newPos.value.value])
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
@@ -189,6 +206,32 @@ const enterSubmit = () => {
                     '-foldername'
                   "
                   :value="!props.addNew ? folder.name : ''"
+                />
+              </div>
+            </div>
+
+            <div class="edit-attr">
+              <span>{{(props.addNew ? 'Set' : 'Change')}} the position of the folder</span>
+              <div class="edit-input-container">
+                <label
+                  class="edit-label"
+                  :for="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-position'
+                  "
+                  >Position:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newPos"
+                  class="edit-input"
+                  type="text"
+                  :id="
+                    (props.addNew ? 'new' : folder.getIdSafeName()) +
+                    '-position'
+                  "
+                  :value="!props.addNew ? (folders.findPosition(props.folder.name) + 1) : ''"
                 />
               </div>
             </div>
