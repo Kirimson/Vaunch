@@ -16,6 +16,7 @@ import { VaunchRmdir } from "@/models/commands/fs/VaunchRmdir";
 import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription";
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
+import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 
 // Load in all available commands into Vaunch
 export const commands = [
@@ -32,6 +33,7 @@ export const commands = [
   new VaunchToggleFuzzy(),
   new VaunchToggleCase(),
   new VaunchToggleCommands(),
+  new VaunchSetPosition(),
   new VaunchSetColor(),
   new VaunchSetDefaultSearch(),
   new VaunchExport(),
