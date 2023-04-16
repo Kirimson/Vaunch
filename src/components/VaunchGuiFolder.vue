@@ -93,7 +93,9 @@ const deleteFolder = () =>
         <i class="fa-solid fa-trash" @click="deleteFolder" />
       </div>
     </span>
-    <draggable v-model="files" class="file-container">
+    <draggable v-model="files" class="file-container"
+      delay="200"
+      :delayOnTouchOnly="true" >
       <template #item="{element}">
         <VaunchGuiFile
           v-on:show-file-option="passFileOption"

@@ -387,6 +387,8 @@ main {
             showAppOption($event.clientX, $event.clientY)
           "
           v-model="folderList"
+          delay="200"
+          :delayOnTouchOnly="true"
         >
         <template #item="{element}">
           <VaunchGuiFolder
