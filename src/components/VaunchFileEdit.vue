@@ -10,10 +10,13 @@ import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription"
 import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
-const props = defineProps(["file"]);
+import { useFolderStore } from "@/stores/folder";
+import type { VaunchFolder } from "@/models/VaunchFolder";
+const props = defineProps(["file", "folderName"]);
 
 const emit = defineEmits(["closeEdit"]);
 const config = useConfigStore();
+const folders = useFolderStore()
 
 const newName = ref();
 const newFolder = ref();
@@ -34,7 +37,7 @@ const saveFile = () => {
   // .value.value is used here to get the .value of the reference,
   // a HTMLInputElement, which itself has a .value property
 
-  let originalPath = props.file.getFilePath();
+  let originalPath = `${props.folderName}/${props.file.fileName}`;
 
   // Edit the content of the file, if prefix is present, it is a query file
   // and should be the firs arg after the filename
@@ -81,7 +84,8 @@ const saveFile = () => {
 
   // If a position has been set, update the position of the file
   // Adding one to get "human" position rather than positional index
-  if (newPos.value.value != props.file.findPosition() + 1) {
+  const parentFolder:VaunchFolder = folders.getFolderByName(props.folderName)
+  if (newPos.value.value != parentFolder.findFilePosition(props.file.fileName) + 1) {
     const setPos = new VaunchSetPosition();
     let response = setPos.execute([originalPath, newPos.value.value])
     if (response.type == ResponseType.Error) return handleResponse(response);
@@ -93,7 +97,7 @@ const saveFile = () => {
     .toLowerCase()
     .replace(/\s+/g, "_");
   if (
-    newFolderName != props.file.parent.name ||
+    newFolderName != props.folderName ||
     newName.value.value != props.file.fileName
   ) {
     // Ensure that the file ends with .<extension> and is in good filename format
@@ -234,7 +238,7 @@ const saveFile = () => {
                   class="edit-input"
                   type="text"
                   :id="file.getIdSafeName() + '-filename'"
-                  :value="file.parent.name"
+                  :value="props.folderName"
                 />
               </div>
             </div>
@@ -298,7 +302,7 @@ const saveFile = () => {
                   class="edit-input"
                   type="text"
                   id="new-position"
-                  :value="file.findPosition() + 1"
+                  :value="folders.getFolderByName(props.folderName).findFilePosition(props.file.fileName) + 1"
                 />
               </div>
             </div>

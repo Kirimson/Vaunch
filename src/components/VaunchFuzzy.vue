@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useConfigStore } from "@/stores/config";
-import { useSessionStore } from "@/stores/sessionState";
+import { useFolderStore } from "@/stores/folder";
 import { ref, watch } from "vue";
 import VaunchGuiFile from "./VaunchGuiFile.vue";
 
 const props = defineProps(["fuzzyMatches", "currentIndex"]);
 const config = useConfigStore();
 const files = ref();
+const folders = useFolderStore()
 
 const getCurrentIndex = () => props.currentIndex;
 
@@ -84,11 +85,11 @@ watch(getCurrentIndex, (newIndex: number) => {
     <div class="file-container" id="fuzzy-file-container">
       <VaunchGuiFile
         ref="files"
-        :class="{ highlight: file === fuzzyMatches[currentIndex] }"
-        v-for="file in fuzzyMatches"
-        :key="file.fileName"
-        :file="file"
-        :parent-folder-name="'fuzzy'"
+        :class="{ highlight: fuzzyEntry === fuzzyMatches[currentIndex] }"
+        v-for="fuzzyEntry in fuzzyMatches"
+        :key="fuzzyEntry.file.fileName"
+        :file="fuzzyEntry.file"
+        :parent-folder-name="folders.getFolderByName(fuzzyEntry.folder).titleCase()"
         :is-fuzzy="true"
       />
     </div>

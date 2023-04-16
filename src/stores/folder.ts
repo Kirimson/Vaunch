@@ -91,9 +91,10 @@ export const useFolderStore: StoreDefinition = defineStore({
       this.rawFolders = new Array<VaunchFolder>();
     },
     findFiles(search: string, types: string[] = []) {
-      const matchingFiles: VaunchFile[] = [];
+      const matchingFiles: Array<{'file':VaunchFile, 'folder':string}> = new Array<{'file':VaunchFile, 'folder':string}>();
       for (const folder of this.rawFolders.values()) {
-        matchingFiles.push(...folder.searchFile(search, types));
+        const matches = folder.searchFile(search, types)
+        matches.forEach(match => matchingFiles.push({'file':match, 'folder': folder.name}))
       }
       return matchingFiles;
     },

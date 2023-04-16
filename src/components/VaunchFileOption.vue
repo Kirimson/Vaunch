@@ -8,7 +8,7 @@ import { useSessionStore } from "@/stores/sessionState";
 import { focusVaunchInput } from "@/utilities/inputUtils";
 import VaunchOption from "./VaunchOption.vue";
 
-const props = defineProps(["file", "xPos", "yPos"]);
+const props = defineProps(["file", "folderName", "xPos", "yPos"]);
 const optionContainer = ref();
 const sessionConfig = useSessionStore();
 
@@ -26,7 +26,7 @@ onMounted(() => {
 
 const deleteFile = () => {
   let rm = new VaunchRm();
-  let filePath = `${props.file.getParentName()}/${props.file.fileName}`;
+  let filePath = `${props.folderName}/${props.file.fileName}`;
   rm.execute([filePath]);
   sessionConfig.showFileOptions = false;
 };
@@ -118,6 +118,7 @@ const setWindow = (window: string, show: boolean) => {
       <VaunchFileEdit
         v-if="state.showEdit"
         :file="file"
+        :folder-name="props.folderName"
         v-on:close-edit="setWindow('edit', false)"
       />
       <VaunchConfirm

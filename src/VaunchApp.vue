@@ -37,6 +37,7 @@ let optionFile: VaunchFile = reactive(new VaunchLink("default", "default"));
 let optionFolder: VaunchFolder = reactive(new VaunchFolder("default"));
 const data = reactive({
   optionFile,
+  optionFileFolder: "",
   optionFolder,
   action: "",
   optionX: 0,
@@ -71,7 +72,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   if (fuzzyFiles.items.length > 0 && config.fuzzy) {
     // Also shift this entry off the history, in case it was a qry file
     sessionConfig.history.shift();
-    let response = fuzzyFiles.items[fuzzyFiles.index].execute(commandArgs);
+    let response = fuzzyFiles.items[fuzzyFiles.index].file.execute(commandArgs);
     return handleResponse(response);
   }
 
@@ -153,17 +154,17 @@ const fuzzy = (input: string) => {
   if (input.length > 0) {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
-    let matches: VaunchFile[] = folders.findFiles(input);
+    let matches = folders.findFiles(input);
     fuzzyFiles.setFuzzy(sortByHits(matches));
-    if (config.fuzzy) setInputIcon(matches[0]);
+    if (config.fuzzy) setInputIcon(matches[0].file);
   } else {
     fuzzyFiles.clear();
   }
   fuzzyFiles.index = 0;
 };
 
-const sortByHits = (files: VaunchFile[]) => {
-  return files.sort((a, b) => (a.hits < b.hits ? 1 : -1));
+const sortByHits = (files: Array<{'file':VaunchFile, 'folder':string}>) => {
+  return files.sort((a, b) => (a.file.hits < b.file.hits ? 1 : -1));
 };
 
 const updateFuzzyIndex = (increment: boolean) => {
@@ -183,7 +184,7 @@ const updateFuzzyIndex = (increment: boolean) => {
   // After updating the fuzzy index, set the input prompt icon to the selected file's icon
   // Otherwise, set it to the default
   if (fuzzyFiles.items[fuzzyFiles.index]) {
-    setInputIcon(fuzzyFiles.items[fuzzyFiles.index]);
+    setInputIcon(fuzzyFiles.items[fuzzyFiles.index].file);
   } else {
     setInputIcon(undefined);
   }
@@ -216,6 +217,7 @@ const setInputIcon = (file: VaunchFile | undefined) => {
 // this should be able to be re-written to use an exported function, similar to handleResponse()
 const showFileOption = (
   file: VaunchUrlFile,
+  folderName: string,
   xPos: number,
   yPos: number,
   action: string | null = null
@@ -223,6 +225,7 @@ const showFileOption = (
   // Opens a file's context menu. Sets the target file to display options for, and set the position
   // on screen for the component
   data.optionFile = file;
+  data.optionFileFolder = folderName;
   data.optionX = xPos;
   data.optionY = yPos;
   if (action) sessionConfig.action = action;
@@ -392,13 +395,14 @@ main {
             delay="200"
             :delayOnTouchOnly="true"
             v-bind="dragOptions"
+            item-key="name"
           >
-          <template #item="{element}">
+          <template #item="{element: folder}">
             <VaunchGuiFolder
-              :key="element.name"
+              :key="folder.name"
               v-on:show-file-option="showFileOption"
               v-on:show-folder-option="showFolderOption"
-              :folder="element"
+              :folder="folder"
             />
           </template>
           </draggable>
@@ -425,6 +429,7 @@ main {
     <VaunchFileOption
       v-if="sessionConfig.showFileOptions"
       :file="data.optionFile"
+      :folder-name="data.optionFileFolder"
       :x-pos="data.optionX"
       :y-pos="data.optionY"
     />

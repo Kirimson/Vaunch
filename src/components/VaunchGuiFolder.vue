@@ -27,7 +27,7 @@ const passFileOption = (
   yPos: number,
   action: null | string = null
 ) => {
-  emit("showFileOption", file, xPos, yPos, action);
+  emit("showFileOption", file, props.folder.name, xPos, yPos, action);
 };
 
 const toggleOptions = (event: any) => {
@@ -102,12 +102,14 @@ const deleteFolder = () =>
         delay="200"
         :delayOnTouchOnly="true"
         v-bind="dragOptions"
+        group="vaunch-folder"
+        :item-key="folder.name"
       >
-      <template #item="{element}">
+      <template #item="{element: file}">
         <VaunchGuiFile
         v-on:show-file-option="passFileOption"
-        :file="element"
-        :key="element.fileName"
+        :file="file"
+        :key="file.fileName"
         :parent-folder-name="folder.name"
         />
       </template>
