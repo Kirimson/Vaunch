@@ -58,6 +58,10 @@ const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
   .file {
     width: 100%;
   }
+
+  .fileMain {
+    flex-grow: 1;
+  }
 }
 </style>
 
@@ -71,7 +75,7 @@ const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
     @click.right.prevent.stop.exact="toggleOptions($event)"
     :id="props.file.parent.name + '-' + file.getIdSafeName()"
   >
-    <div :class="{ fuzzyInfo: isFuzzy }">
+    <div :class="{ fuzzyInfo: isFuzzy, fileMain: true }">
       <i :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'file-icon']"></i>
       <span v-if="isFuzzy" class="filename"
         >{{ file.getParentName(config.titleCase) }}:
