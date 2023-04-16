@@ -395,13 +395,14 @@ main {
             delay="200"
             :delayOnTouchOnly="true"
             v-bind="dragOptions"
+            item-key="name"
           >
-          <template #item="{element}">
+          <template #item="{element: folder}">
             <VaunchGuiFolder
-              :key="element.name"
+              :key="folder.name"
               v-on:show-file-option="showFileOption"
               v-on:show-folder-option="showFolderOption"
-              :folder="element"
+              :folder="folder"
             />
           </template>
           </draggable>

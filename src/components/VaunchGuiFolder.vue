@@ -103,12 +103,13 @@ const deleteFolder = () =>
         :delayOnTouchOnly="true"
         v-bind="dragOptions"
         group="vaunch-folder"
+        :item-key="folder.name"
       >
-      <template #item="{element}">
+      <template #item="{element: file}">
         <VaunchGuiFile
         v-on:show-file-option="passFileOption"
-        :file="element"
-        :key="element.fileName"
+        :file="file"
+        :key="file.fileName"
         :parent-folder-name="folder.name"
         />
       </template>
