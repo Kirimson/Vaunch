@@ -26,7 +26,7 @@ onMounted(() => {
 
 const deleteFile = () => {
   let rm = new VaunchRm();
-  let filePath = `${props.file.getParentName()}/${props.file.fileName}`;
+  let filePath = `${props.folderName}/${props.file.fileName}`;
   rm.execute([filePath]);
   sessionConfig.showFileOptions = false;
 };

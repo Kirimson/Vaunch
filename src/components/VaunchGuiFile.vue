@@ -8,7 +8,7 @@ import { focusVaunchInput } from "@/utilities/inputUtils";
 
 const config = useConfigStore();
 const sessionConfig = useSessionStore();
-const props = defineProps(["file", "isFuzzy"]);
+const props = defineProps(["file", "isFuzzy", "parentFolderName"]);
 const emit = defineEmits(["showFileOption"]);
 
 const execute = (file: VaunchUrlFile, args: string[]) => {
@@ -78,7 +78,7 @@ const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
     <div :class="{ fuzzyInfo: isFuzzy, fileMain: true }">
       <i :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'file-icon']"></i>
       <span v-if="isFuzzy" class="filename"
-        >{{ file.getParentName(config.titleCase) }}:
+        >{{ props.parentFolderName }}:
       </span>
       <span v-if="config.titleCase" :class="{ filename: !isFuzzy }">
         {{ file.titleCase() }}

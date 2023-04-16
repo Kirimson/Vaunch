@@ -5,13 +5,13 @@ export const useFuzzyStore = defineStore("fuzzy", {
   // Store to hold currently matched files from the fuzzy finder
   state: () => {
     return {
-      items: [] as VaunchFile[],
+      items: [] as Array<{'file':VaunchFile, 'folder':string}>,
       index: 0,
     };
   },
   actions: {
     // Sets the list of found files
-    setFuzzy(files: VaunchFile[]) {
+    setFuzzy(files: Array<{'file':VaunchFile, 'folder':string}>) {
       this.items = files;
     },
     // Clears the list of found files

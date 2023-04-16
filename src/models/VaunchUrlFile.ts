@@ -47,16 +47,6 @@ export abstract class VaunchUrlFile extends VaunchFile {
     }
   }
 
-  protected getParentName(titleCase = false): string {
-    // Returns the parent folder for this file
-    if (this.parent) {
-      if (titleCase) {
-        return this.parent.titleCase();
-      }
-      return this.parent.name;
-    } else return "";
-  }
-
   getCorrectURL(): string {
     // Returns a url representation of this file's content
     const linkUrl: URL | undefined = this.createUrl();

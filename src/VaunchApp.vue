@@ -72,7 +72,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   if (fuzzyFiles.items.length > 0 && config.fuzzy) {
     // Also shift this entry off the history, in case it was a qry file
     sessionConfig.history.shift();
-    let response = fuzzyFiles.items[fuzzyFiles.index].execute(commandArgs);
+    let response = fuzzyFiles.items[fuzzyFiles.index].file.execute(commandArgs);
     return handleResponse(response);
   }
 
@@ -154,17 +154,17 @@ const fuzzy = (input: string) => {
   if (input.length > 0) {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
-    let matches: VaunchFile[] = folders.findFiles(input);
+    let matches = folders.findFiles(input);
     fuzzyFiles.setFuzzy(sortByHits(matches));
-    if (config.fuzzy) setInputIcon(matches[0]);
+    if (config.fuzzy) setInputIcon(matches[0].file);
   } else {
     fuzzyFiles.clear();
   }
   fuzzyFiles.index = 0;
 };
 
-const sortByHits = (files: VaunchFile[]) => {
-  return files.sort((a, b) => (a.hits < b.hits ? 1 : -1));
+const sortByHits = (files: Array<{'file':VaunchFile, 'folder':string}>) => {
+  return files.sort((a, b) => (a.file.hits < b.file.hits ? 1 : -1));
 };
 
 const updateFuzzyIndex = (increment: boolean) => {
@@ -184,7 +184,7 @@ const updateFuzzyIndex = (increment: boolean) => {
   // After updating the fuzzy index, set the input prompt icon to the selected file's icon
   // Otherwise, set it to the default
   if (fuzzyFiles.items[fuzzyFiles.index]) {
-    setInputIcon(fuzzyFiles.items[fuzzyFiles.index]);
+    setInputIcon(fuzzyFiles.items[fuzzyFiles.index].file);
   } else {
     setInputIcon(undefined);
   }
