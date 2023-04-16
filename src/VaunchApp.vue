@@ -47,11 +47,9 @@ const data = reactive({
 
 const folderList = computed<VaunchFolder[]>({
   get():VaunchFolder[] {
-    console.log(folders.rawFolders);
     return folders.rawFolders;
   },
   set(value) {
-    console.log(value);
     folders.setFolders(value);
   }
 })
