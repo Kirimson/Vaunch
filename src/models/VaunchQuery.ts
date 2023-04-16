@@ -15,13 +15,12 @@ export class VaunchQuery extends VaunchUrlFile {
     icon = "magnifying-glass",
     iconClass = "solid",
     hits = 0,
-    description = "",
-    position = -1
+    description = ""
   ) {
     if (!name.endsWith(".qry")) {
       name = name + ".qry";
     }
-    super(name, parent, icon, iconClass, hits, description, position);
+    super(name, parent, icon, iconClass, hits, description);
     this.prefix = prefix.replace(":", "");
     this.content = content;
   }
@@ -92,8 +91,7 @@ export class VaunchQuery extends VaunchUrlFile {
       iconClass: this.iconClass,
       type: this.filetype,
       hits: this.hits,
-      description: this.description,
-      position: this.position,
+      description: this.description
     };
   }
 

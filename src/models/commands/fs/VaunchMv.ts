@@ -3,7 +3,7 @@ import type { VaunchFile } from "@/models/VaunchFile";
 import type { VaunchFolder } from "@/models/VaunchFolder";
 import type { Parameter, Example } from "@/models/VaunchManual";
 import { ResponseType, type VaunchResponse } from "@/models/VaunchResponse";
-import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
+import { VaunchUrlFile } from "@/models/VaunchUrlFile";
 import { useFolderStore } from "@/stores/folder";
 
 export class VaunchMv extends VaunchCommand {
@@ -61,7 +61,7 @@ export class VaunchMv extends VaunchCommand {
     const fileToMove: string = sourcePath[1];
 
     const destPath = dest.split("/");
-    const newFolderDest: string = destPath[0];
+    const newFolderName: string = destPath[0];
     let newFileName: string = destPath[1];
 
     // Always need a folder, so get it now
@@ -75,30 +75,27 @@ export class VaunchMv extends VaunchCommand {
     }
 
     // If no source file was supplied, we're moving a folder
-    // Remove the folder from the store, rename it, then add it back in
-    // This is to update the underlying Maps key so we still get the folder with O(1)
     if (!fileToMove && folder) {
       // Check if a folder with that name already exists
       const existingFolder: VaunchFolder =
-        folders.getFolderByName(newFolderDest);
+        folders.getFolderByName(newFolderName);
       if (existingFolder) {
         return this.makeResponse(
           ResponseType.Error,
-          `Destination folder '${newFolderDest}' already exists`
+          `Destination folder '${newFolderName}' already exists`
         );
       }
-      folders.remove(folderToMove);
-      folder.name = newFolderDest;
-      folders.insert(folder);
+      // Update the name of this folder
+      folder.name = newFolderName;
       return this.makeResponse(
         ResponseType.Success,
-        `Renamed folder ${folderToMove} to ${newFolderDest}`
+        `Renamed folder ${folderToMove} to ${newFolderName}`
       );
     }
 
     // If a source file was supplied, we're moving a file
-    const file: VaunchUrlFile | undefined = folder.getFile(fileToMove);
-    if (file) {
+    const file: VaunchFile | undefined = folder.getFile(fileToMove);
+    if (file instanceof VaunchUrlFile) {
       // If no new filename is provided, set it to the same as the file
       if (!newFileName) newFileName = file.fileName;
       // Get the current file's extension and add it if the new name doesn't include it
@@ -107,7 +104,7 @@ export class VaunchMv extends VaunchCommand {
       }
 
       // Get the new folder, and only continue if it exists
-      const newFolder: VaunchFolder = folders.getFolderByName(newFolderDest);
+      const newFolder: VaunchFolder = folders.getFolderByName(newFolderName);
       if (newFolder) {
         // If the new folder contains a file with the same name, return info that the dest file already exists
         if (newFolder.getFile(newFileName)) {
@@ -118,7 +115,8 @@ export class VaunchMv extends VaunchCommand {
         }
 
         // Change the name, remove the file from the current folder, then add it to the new folder
-        // If the folder hasn't, this essentially does the same as the folder move to update the Map's key
+        // If the folder hasn't changed, this just removes and the re-adds to the same folder
+        // which handles both cases
         file.setName(newFileName);
         folder.removeFile(fileToMove);
         newFolder.addFile(file);
@@ -126,7 +124,7 @@ export class VaunchMv extends VaunchCommand {
       } else {
         return this.makeResponse(
           ResponseType.Error,
-          `The folder ${newFolderDest} does not exist`
+          `The folder ${newFolderName} does not exist`
         );
       }
       return this.makeResponse(
