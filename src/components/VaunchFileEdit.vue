@@ -10,7 +10,7 @@ import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription"
 import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
-const props = defineProps(["file"]);
+const props = defineProps(["file", "folderName"]);
 
 const emit = defineEmits(["closeEdit"]);
 const config = useConfigStore();
@@ -93,7 +93,7 @@ const saveFile = () => {
     .toLowerCase()
     .replace(/\s+/g, "_");
   if (
-    newFolderName != props.file.parent.name ||
+    newFolderName != props.folderName ||
     newName.value.value != props.file.fileName
   ) {
     // Ensure that the file ends with .<extension> and is in good filename format
@@ -234,7 +234,7 @@ const saveFile = () => {
                   class="edit-input"
                   type="text"
                   :id="file.getIdSafeName() + '-filename'"
-                  :value="file.parent.name"
+                  :value="props.folderName"
                 />
               </div>
             </div>

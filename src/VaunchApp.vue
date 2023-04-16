@@ -37,6 +37,7 @@ let optionFile: VaunchFile = reactive(new VaunchLink("default", "default"));
 let optionFolder: VaunchFolder = reactive(new VaunchFolder("default"));
 const data = reactive({
   optionFile,
+  optionFileFolder: "",
   optionFolder,
   action: "",
   optionX: 0,
@@ -216,6 +217,7 @@ const setInputIcon = (file: VaunchFile | undefined) => {
 // this should be able to be re-written to use an exported function, similar to handleResponse()
 const showFileOption = (
   file: VaunchUrlFile,
+  folderName: string,
   xPos: number,
   yPos: number,
   action: string | null = null
@@ -223,6 +225,7 @@ const showFileOption = (
   // Opens a file's context menu. Sets the target file to display options for, and set the position
   // on screen for the component
   data.optionFile = file;
+  data.optionFileFolder = folderName;
   data.optionX = xPos;
   data.optionY = yPos;
   if (action) sessionConfig.action = action;
@@ -425,6 +428,7 @@ main {
     <VaunchFileOption
       v-if="sessionConfig.showFileOptions"
       :file="data.optionFile"
+      :folder-name="data.optionFileFolder"
       :x-pos="data.optionX"
       :y-pos="data.optionY"
     />

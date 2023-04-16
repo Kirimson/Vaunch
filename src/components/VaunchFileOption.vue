@@ -8,7 +8,7 @@ import { useSessionStore } from "@/stores/sessionState";
 import { focusVaunchInput } from "@/utilities/inputUtils";
 import VaunchOption from "./VaunchOption.vue";
 
-const props = defineProps(["file", "xPos", "yPos"]);
+const props = defineProps(["file", "folderName", "xPos", "yPos"]);
 const optionContainer = ref();
 const sessionConfig = useSessionStore();
 
@@ -118,6 +118,7 @@ const setWindow = (window: string, show: boolean) => {
       <VaunchFileEdit
         v-if="state.showEdit"
         :file="file"
+        :folder-name="props.folderName"
         v-on:close-edit="setWindow('edit', false)"
       />
       <VaunchConfirm
