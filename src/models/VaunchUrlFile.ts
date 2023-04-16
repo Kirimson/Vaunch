@@ -63,8 +63,4 @@ export abstract class VaunchUrlFile extends VaunchFile {
     if (linkUrl) return true;
     return false;
   }
-
-  getFilePath(): string {
-    return `${this.parent?.name}/${this.fileName}`;
-  }
 }

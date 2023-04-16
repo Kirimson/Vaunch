@@ -37,7 +37,7 @@ const saveFile = () => {
   // .value.value is used here to get the .value of the reference,
   // a HTMLInputElement, which itself has a .value property
 
-  let originalPath = props.file.getFilePath();
+  let originalPath = `${props.folderName}/${props.file.fileName}`;
 
   // Edit the content of the file, if prefix is present, it is a query file
   // and should be the firs arg after the filename
