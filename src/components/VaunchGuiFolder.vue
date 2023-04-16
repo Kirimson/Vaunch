@@ -4,7 +4,7 @@ import { useConfigStore } from "@/stores/config";
 import VaunchGuiFile from "./VaunchGuiFile.vue";
 import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
 import draggable from 'vuedraggable'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { VaunchLink } from "@/models/VaunchLink";
 
 const config = useConfigStore();
@@ -33,6 +33,10 @@ const passFileOption = (
 const toggleOptions = (event: any) => {
   emit("showFolderOption", props.folder, event.clientX, event.clientY);
 };
+
+const dragOptions = ref({
+  animation: 300,
+});
 
 const addFile = () => emit("showFolderOption", props.folder, 0, 0, "add");
 const editFolder = () => emit("showFolderOption", props.folder, 0, 0, "edit");
@@ -93,17 +97,21 @@ const deleteFolder = () =>
         <i class="fa-solid fa-trash" @click="deleteFolder" />
       </div>
     </span>
-    <draggable v-model="files" class="file-container"
-      delay="200"
-      :delayOnTouchOnly="true" >
+    <TransitionGroup>
+      <draggable v-model="files" class="file-container"
+        delay="200"
+        :delayOnTouchOnly="true"
+        v-bind="dragOptions"
+      >
       <template #item="{element}">
         <VaunchGuiFile
-          v-on:show-file-option="passFileOption"
-          :file="element"
-          :key="element.fileName"
-          :parent-folder-name="folder.name"
+        v-on:show-file-option="passFileOption"
+        :file="element"
+        :key="element.fileName"
+        :parent-folder-name="folder.name"
         />
       </template>
     </draggable>
+  </TransitionGroup>
   </div>
 </template>
