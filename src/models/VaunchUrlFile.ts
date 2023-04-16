@@ -11,10 +11,9 @@ export abstract class VaunchUrlFile extends VaunchFile {
     icon: string,
     iconClass: string,
     hits = 0,
-    description = "",
-    position = -1
+    description = ""
   ) {
-    super(name, icon, iconClass, hits, position);
+    super(name, icon, iconClass, hits);
     this.description = description;
     if (parent) {
       this.parent = parent;

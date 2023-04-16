@@ -1,33 +1,26 @@
-import type { VaunchFile } from "./VaunchFile";
+import { VaunchFile } from "./VaunchFile";
 import { VaunchLink } from "./VaunchLink";
 import { VaunchQuery } from "./VaunchQuery";
-import { VaunchUrlFile } from "./VaunchUrlFile";
 
 export class VaunchFolder {
   name: string;
   files: VaunchFile[];
   icon: string;
   iconClass: string;
-  position: number;
 
   constructor(
     name: string,
     icon = "folder",
     iconClass = "solid",
-    position = -1
   ) {
     this.name = name;
     this.files = [];
     this.icon = icon;
     this.iconClass = iconClass;
-    this.position = position;
   }
 
   public addFile(newFile: VaunchFile): boolean {
     if (this.getFile(newFile.fileName)) return false;
-    // Set the new file's position to last
-    const nextPos: number = this.getFiles().length + 1;
-    newFile.position = nextPos;
     this.files.push(newFile);
     return true;
   }
@@ -47,9 +40,9 @@ export class VaunchFolder {
       .join(" ");
   }
 
-  getFile(fileName: string): VaunchUrlFile | undefined {
-    const file = this.files.find((file) => {file.fileName == fileName});
-    if (file instanceof VaunchUrlFile) {
+  getFile(fileName: string): VaunchFile | undefined {
+    const file = this.files.find(file => file.fileName == fileName);
+    if (file instanceof VaunchFile) {
       return file;
     }
     return undefined;
@@ -105,7 +98,6 @@ export class VaunchFolder {
       icon: this.icon,
       iconClass: this.iconClass,
       files: fileInfo,
-      position: this.position,
     };
     return data;
   }
@@ -117,7 +109,6 @@ export class VaunchFolder {
       data.name,
       data.icon,
       data.iconClass,
-      data.position
     );
     for (const fileData of data.files) {
       let file: VaunchFile | undefined = undefined;
@@ -129,8 +120,7 @@ export class VaunchFolder {
           fileData.icon,
           fileData.iconClass,
           fileData.hits,
-          fileData.description,
-          fileData.position
+          fileData.description
         );
       } else if (fileData.type == "VaunchQuery") {
         file = new VaunchQuery(
@@ -141,8 +131,7 @@ export class VaunchFolder {
           fileData.icon,
           fileData.iconClass,
           fileData.hits,
-          fileData.description,
-          fileData.position
+          fileData.description
         );
       }
       if (file != undefined) folder.addFile(file);

@@ -47,11 +47,12 @@ const data = reactive({
 
 const folderList = computed<VaunchFolder[]>({
   get():VaunchFolder[] {
-    return folders.items
+    console.log(folders.rawFolders);
+    return folders.rawFolders;
   },
   set(value) {
+    console.log(value);
     folders.setFolders(value);
-    console.log(value)
   }
 })
 
@@ -381,7 +382,6 @@ main {
         </div>
 
         <draggable
-          v-if="config.showGUI"
           id="vaunch-folder-container"
           @click.right.prevent.self="
             showAppOption($event.clientX, $event.clientY)

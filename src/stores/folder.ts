@@ -9,7 +9,7 @@ export const useFolderStore: StoreDefinition = defineStore({
   state: () => ({
     rawFolders: useStorage(
       "folders",
-      new Map<string, VaunchFolder>(),
+      new Array<VaunchFolder>(),
       undefined,
       {
         // Pinia was unable to read/write folders and their files successfully
@@ -17,47 +17,47 @@ export const useFolderStore: StoreDefinition = defineStore({
         // serialiser to convert folders to a JSON representation that can be
         // stored within localstorage
         serializer: {
-          read(v: any) {
+          read(v: string) {
             // Parse the read JSON from localstorage
             const rawData = JSON.parse(v);
             // Create a new map to return, matching the type of rawFolders
-            const map = new Map<string, VaunchFolder>();
+            const arr = new Array<VaunchFolder>();
             for (const folder of rawData) {
               // Parse each JSON representation as a VaunchFolder, and add it to the map
               // using the folder name as the map key
               const vaunchFolder = VaunchFolder.parse(folder);
-              map.set(vaunchFolder.name, vaunchFolder);
+              arr.push(vaunchFolder);
             }
-            return map;
+            return arr;
           },
-          write(v: Map<string, VaunchFolder>) {
+          write(v: Array<VaunchFolder>) {
             // Convert all folders into a JSON compatible format and return the JSON string to store
             const storeData: any[] = [];
             for (const folder of v) {
               // VaunchFolder.info() returns a JS Object representing the folder and its files
-              storeData.push(folder[1].info());
+              storeData.push(folder.info());
             }
             return JSON.stringify(storeData);
           },
         },
       }
     ),
-  }),
+  })
+  ,
   getters: {
     // Returns a simple array of all folders, without map keys
-    items: (state: { rawFolders: any }) =>
-      Array.from(state.rawFolders.values()),
+    items: (state: { rawFolders: Array<VaunchFolder> }):VaunchFolder[] => state.rawFolders,
     // Returns all names of folders
-    folderNames: (state: { rawFolders: Map<string, VaunchFolder> }) =>
-      Array.from(state.rawFolders.keys()),
+    folderNames: (state: { rawFolders: Array<VaunchFolder> }) =>
+      state.rawFolders.map(folder => folder.name),
     // Returns a VaunchFolder given a folder name
-    getFolderByName: (state: { rawFolders: any }) => {
-      return (folderName: string) => state.rawFolders.get(folderName);
+    getFolderByName: (state: { rawFolders: Array<VaunchFolder> }) => {
+      return (folderName: string) => state.rawFolders.find(folder => folder.name == folderName);
     },
     // Gets a file within a folder, given a filepath, e.g example/site.lnk
-    getFileByPath: (state: { rawFolders: any }) => {
+    getFileByPath: (state: { rawFolders: Array<VaunchFolder> }) => {
       return (path: string) =>
-        (state.rawFolders.get(path.split("/")[0]) as VaunchFolder)?.getFile(
+        (state.rawFolders.find(folder => folder.name == path.split("/")[0]))?.getFile(
           path.split("/")[1]
         );
     },
@@ -65,28 +65,30 @@ export const useFolderStore: StoreDefinition = defineStore({
   actions: {
     // Adds a new folder to the folder store
     add(name: string) {
-      // Get the next logical position for this folder to set its position
-      const nextPos: number = this.rawFolders.size + 1;
       const newFolder = new VaunchFolder(name);
-      newFolder.position = nextPos;
-      this.rawFolders.set(name, newFolder);
+      this.rawFolders.push(newFolder);
     },
     // Replaces the current list of folders, ideally only used when re-ordering folders
     setFolders(folders: VaunchFolder[]) {
-      const newMap = new Map<string, VaunchFolder>();
+      const newArr = new Array<VaunchFolder>();
       folders.forEach(folder => {
-        newMap.set(folder.name, folder)
+        newArr.push(folder)
       });
-      this.rawFolders = newMap;
+      this.rawFolders = newArr;
     },
     insert(folder: VaunchFolder) {
-      this.rawFolders.set(folder.name, folder);
+      this.rawFolders.push(folder);
     },
     remove(toDelete: string) {
-      this.rawFolders.delete(toDelete);
+      const folderToDelete = this.rawFolders.filter(folder => folder.name == toDelete)
+      if (folderToDelete.length > 0) {
+        folderToDelete.forEach(file => this.rawFolders.splice(this.rawFolders.findIndex(n => n === file), 1))
+        return true
+      }
+      return false
     },
     removeAll() {
-      this.rawFolders = new Map<string, VaunchFolder>();
+      this.rawFolders = new Array<VaunchFolder>();
     },
     findFiles(search: string, types: string[] = []) {
       const matchingFiles: VaunchFile[] = [];

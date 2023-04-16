@@ -11,14 +11,12 @@ export abstract class VaunchFile {
   extension = "";
   description = "";
   filetype = "VaunchFile";
-  position: number;
 
   constructor(
     name: string,
     icon = "file",
     iconClass = "solid",
     hits = 0,
-    position = -1
   ) {
     this.fileName = name;
     this.aliases = [];
@@ -26,7 +24,6 @@ export abstract class VaunchFile {
     this.icon = icon;
     this.iconClass = iconClass;
     this.hits = hits;
-    this.position = position;
   }
 
   titleCase(): string {
