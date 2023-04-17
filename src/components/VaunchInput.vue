@@ -304,7 +304,7 @@ const getCommonStartString = (matches: string[]) => {
           'fa-3x',
         ]"
       ></i>
-      <div id="input-wrapper">
+      <div id="input-wrapper" @click.right.prevent.stop>
         <input
           id="vaunch-input"
           type="text"

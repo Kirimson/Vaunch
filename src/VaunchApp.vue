@@ -356,6 +356,9 @@ main {
   <main
     id="main-container"
     :style="{ 'background-image': 'url(' + config.background + ')' }"
+    @click.right.prevent="
+              showAppOption($event.clientX, $event.clientY)
+            "
   >
     <VaunchInput
       v-on:command="executeCommand"
@@ -387,9 +390,6 @@ main {
         <TransitionGroup>
           <draggable
             id="vaunch-folder-container"
-            @click.right.prevent.self="
-              showAppOption($event.clientX, $event.clientY)
-            "
             v-model="folderList"
             delay="200"
             :delayOnTouchOnly="true"
