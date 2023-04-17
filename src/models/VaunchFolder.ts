@@ -100,7 +100,6 @@ export class VaunchFolder {
         file = new VaunchLink(
           fileData.fileName,
           fileData.content,
-          folder,
           fileData.icon,
           fileData.iconClass,
           fileData.hits,
@@ -111,7 +110,6 @@ export class VaunchFolder {
           fileData.fileName,
           fileData.prefix,
           fileData.content,
-          folder,
           fileData.icon,
           fileData.iconClass,
           fileData.hits,

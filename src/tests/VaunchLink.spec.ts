@@ -1,21 +1,17 @@
 import { test, describe, expect, beforeEach } from "vitest";
-import { VaunchFolder } from "../models/VaunchFolder";
 import { VaunchLink } from "../models/VaunchLink";
 import { ResponseType } from "../models/VaunchResponse";
 
-const parent = new VaunchFolder("test");
 let file: VaunchLink;
 
 beforeEach(() => {
   file = new VaunchLink(
     "test_file",
     "http://example.com",
-    parent,
     "vuejs",
     "brands",
     100,
-    "Test File",
-    1
+    "Test File"
   );
 });
 
