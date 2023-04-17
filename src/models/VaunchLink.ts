@@ -1,4 +1,3 @@
-import type { VaunchFolder } from "./VaunchFolder";
 import { ResponseType, type VaunchResponse } from "./VaunchResponse";
 import { VaunchUrlFile } from "./VaunchUrlFile";
 
@@ -9,7 +8,6 @@ export class VaunchLink extends VaunchUrlFile {
   constructor(
     name: string,
     content: string,
-    parent: VaunchFolder | undefined = undefined,
     icon = "file",
     iconClass = "solid",
     hits = 0,
@@ -18,7 +16,7 @@ export class VaunchLink extends VaunchUrlFile {
     if (!name.endsWith(".lnk")) {
       name = name + ".lnk";
     }
-    super(name, parent, icon, iconClass, hits, description);
+    super(name, icon, iconClass, hits, description);
     this.content = content;
   }
 

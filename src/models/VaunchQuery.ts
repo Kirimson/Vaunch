@@ -1,4 +1,3 @@
-import type { VaunchFolder } from "./VaunchFolder";
 import { ResponseType, type VaunchResponse } from "./VaunchResponse";
 import { VaunchUrlFile } from "./VaunchUrlFile";
 
@@ -11,7 +10,6 @@ export class VaunchQuery extends VaunchUrlFile {
     name: string,
     prefix: string,
     content: string,
-    parent: VaunchFolder,
     icon = "magnifying-glass",
     iconClass = "solid",
     hits = 0,
@@ -20,7 +18,7 @@ export class VaunchQuery extends VaunchUrlFile {
     if (!name.endsWith(".qry")) {
       name = name + ".qry";
     }
-    super(name, parent, icon, iconClass, hits, description);
+    super(name, icon, iconClass, hits, description);
     this.prefix = prefix.replace(":", "");
     this.content = content;
   }

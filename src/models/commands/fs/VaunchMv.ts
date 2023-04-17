@@ -120,7 +120,6 @@ export class VaunchMv extends VaunchCommand {
         file.setName(newFileName);
         folder.removeFile(fileToMove);
         newFolder.addFile(file);
-        file.parent = newFolder;
       } else {
         return this.makeResponse(
           ResponseType.Error,

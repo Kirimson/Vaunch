@@ -1,13 +1,10 @@
 import { VaunchFile } from "./VaunchFile";
-import type { VaunchFolder } from "./VaunchFolder";
 
 export abstract class VaunchUrlFile extends VaunchFile {
-  parent: VaunchFolder | undefined;
   filetype = "VaunchUrlFile";
 
   constructor(
     name: string,
-    parent: VaunchFolder | undefined,
     icon: string,
     iconClass: string,
     hits = 0,
@@ -15,10 +12,6 @@ export abstract class VaunchUrlFile extends VaunchFile {
   ) {
     super(name, icon, iconClass, hits);
     this.description = description;
-    if (parent) {
-      this.parent = parent;
-      this.aliases.push(`${this.parent.name}/${this.fileName}`);
-    }
   }
 
   protected prependHttps(urlString: string): string {
