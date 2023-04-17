@@ -56,26 +56,6 @@ export class VaunchFolder {
     this.files = newFiles
   }
 
-  searchFile(search: string, types: string[] = []): VaunchFile[] {
-    const matches: VaunchFile[] = [];
-    for (const file of this.files) {
-      if (file.fileName.includes(search)) {
-        if (types.includes(file.filetype)) {
-          matches.push(file);
-        } else if (types.length == 0) {
-          matches.push(file);
-        }
-      } else if (file.namesStartWith(search)) {
-        if (types.includes(file.filetype)) {
-          matches.push(file);
-        } else if (types.length == 0) {
-          matches.push(file);
-        }
-      }
-    }
-    return matches;
-  }
-
   removeFile(toDelete: string):boolean {
     const fileToDelete = this.files.filter((file) => file.fileName == toDelete)
     if (fileToDelete.length > 0) {
