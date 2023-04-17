@@ -75,7 +75,7 @@ export abstract class VaunchFile {
   }
 
   getIdSafeName(): string {
-    return this.fileName.replace(".", "-");
+    return this.fileName.replaceAll(".", "-");
   }
 
   getDescription(): string {
