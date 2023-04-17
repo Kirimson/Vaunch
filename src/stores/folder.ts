@@ -1,3 +1,5 @@
+import Fuse from 'fuse.js'
+
 import { defineStore, type StoreDefinition } from "pinia";
 import { useStorage } from "@vueuse/core";
 
@@ -90,13 +92,20 @@ export const useFolderStore: StoreDefinition = defineStore({
     removeAll() {
       this.rawFolders = new Array<VaunchFolder>();
     },
-    findFiles(search: string, types: string[] = []) {
-      const matchingFiles: Array<{'file':VaunchFile, 'folder':string}> = new Array<{'file':VaunchFile, 'folder':string}>();
+    findFiles(search: string) {
+      const masterList:{'file':VaunchFile, 'folder':string}[] = []
       for (const folder of this.rawFolders.values()) {
-        const matches = folder.searchFile(search, types)
-        matches.forEach(match => matchingFiles.push({'file':match, 'folder': folder.name}))
+        folder.files.forEach(file => masterList.push({'file': file,'folder':folder.name}))
       }
-      return matchingFiles;
+
+      const options:Fuse.IFuseOptions<{file: VaunchFile,folder: string}> = {
+        includeScore: true,
+        threshold: 0.5,
+        useExtendedSearch: true,
+        keys: ['file.fileName', 'file.description', 'file.prefix', 'folder'],
+      }
+      const fuse = new Fuse(masterList, options);
+      return fuse.search(search).map(result => result.item);
     },
     findPosition(folderName: string) {
       return this.rawFolders.findIndex(folder => folder.name == folderName)

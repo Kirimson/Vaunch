@@ -156,7 +156,7 @@ const fuzzy = (input: string) => {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
     let matches = folders.findFiles(input);
-    fuzzyFiles.setFuzzy(sortByHits(matches));
+    fuzzyFiles.setFuzzy(matches);
     if (config.fuzzy) {
       if (matches[0]) {
         setInputIcon(matches[0].file);
@@ -164,10 +164,6 @@ const fuzzy = (input: string) => {
     }
   }
   fuzzyFiles.index = 0;
-};
-
-const sortByHits = (files: Array<{'file':VaunchFile, 'folder':string}>) => {
-  return files.sort((a, b) => (a.file.hits < b.file.hits ? 1 : -1));
 };
 
 const updateFuzzyIndex = (increment: boolean) => {
