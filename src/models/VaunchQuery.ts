@@ -27,7 +27,7 @@ export class VaunchQuery extends VaunchUrlFile {
 
   getDescription(): string {
     if (this.description) return `${this.prefix}: ${this.description}`;
-    return `Search: ${this.prefix}: ${this.content}`;
+    return `${this.prefix}: Search ${this.content}`;
   }
 
   getNames(): string[] {
