@@ -295,7 +295,7 @@ const getCommonStartString = (matches: string[]) => {
 
 <template>
   <div id="vaunch-input-container">
-    <div class="vaunch-window" id="input-inner">
+    <div class="vaunch-window" id="input-inner" @click.right.prevent.stop>
       <i
         :class="[
           'fa-' + prefixClass,
@@ -304,7 +304,7 @@ const getCommonStartString = (matches: string[]) => {
           'fa-3x',
         ]"
       ></i>
-      <div id="input-wrapper" @click.right.prevent.stop>
+      <div id="input-wrapper">
         <input
           id="vaunch-input"
           type="text"
