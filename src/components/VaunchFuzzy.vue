@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { VaunchFile } from "@/models/VaunchFile";
 import { useConfigStore } from "@/stores/config";
 import { useFolderStore } from "@/stores/folder";
 import { ref, watch } from "vue";
@@ -13,8 +14,22 @@ const getCurrentIndex = () => props.currentIndex;
 
 watch(getCurrentIndex, (newIndex: number) => {
   let fileElement = files.value as typeof VaunchGuiFile[];
-  let elem: HTMLElement = fileElement[newIndex].$el as HTMLElement;
+
+  // Get the selected filename from the fizzy matches
+  // This is the only source of truth with array ordering.
+  // fileElement itself is a ref with a list of elements, but for some reason
+  // when changing back and forth between input values it messes ordering up???
+  // Either way, fileElement[newIndex] is a false prophet and does not always work
+  const selectedFile = props.fuzzyMatches[newIndex];
+  const selectedIdName = `${selectedFile.folder}-${selectedFile.file.getIdSafeName()}`
+
+  // For some reason unknown to me, mapping to .$el seems the 'best' way to
+  // get a simple list of these HTMLElements (the only type that has offsetTop)
+  const elements = fileElement.map((elem) => elem.$el)
+  // Find the correct element based on the newly selected filename
+  let elem = (elements.find((elem) => elem.id == selectedIdName) as HTMLElement)
   let parent: HTMLElement | null = elem.parentElement;
+  // parentElement can be null, so we need to wrap this in an if so ts is happy
   if (parent) {
     let topPos = elem.offsetTop - parent.offsetTop;
     parent.scroll({

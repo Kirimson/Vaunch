@@ -151,6 +151,7 @@ const findQryFile = (
 };
 
 const fuzzy = (input: string) => {
+  fuzzyFiles.clear();
   if (input.length > 0) {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
@@ -161,8 +162,6 @@ const fuzzy = (input: string) => {
         setInputIcon(matches[0].file);
       } else setInputIcon(undefined);
     }
-  } else {
-    fuzzyFiles.clear();
   }
   fuzzyFiles.index = 0;
 };
