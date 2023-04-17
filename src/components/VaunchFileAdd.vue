@@ -318,7 +318,7 @@ const createFile = () => {
                     class="edit-input"
                     type="text"
                     id="new-icon-name"
-                    value="file"
+                    :value="state.fileType == 'lnk' ? 'file' : 'magnifying-glass'"
                   />
                 </div>
               </div>
