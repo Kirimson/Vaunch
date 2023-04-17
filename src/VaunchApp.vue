@@ -156,7 +156,11 @@ const fuzzy = (input: string) => {
     const folders = useFolderStore();
     let matches = folders.findFiles(input);
     fuzzyFiles.setFuzzy(sortByHits(matches));
-    if (config.fuzzy) setInputIcon(matches[0].file);
+    if (config.fuzzy) {
+      if (matches[0]) {
+        setInputIcon(matches[0].file);
+      } else setInputIcon(undefined);
+    }
   } else {
     fuzzyFiles.clear();
   }
