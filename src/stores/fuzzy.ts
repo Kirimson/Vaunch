@@ -17,6 +17,7 @@ export const useFuzzyStore = defineStore("fuzzy", {
     // Clears the list of found files
     clear() {
       this.items = [];
+      this.index = 0;
     },
   },
 });

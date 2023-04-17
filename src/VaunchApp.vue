@@ -151,14 +151,17 @@ const findQryFile = (
 };
 
 const fuzzy = (input: string) => {
+  fuzzyFiles.clear();
   if (input.length > 0) {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
     let matches = folders.findFiles(input);
     fuzzyFiles.setFuzzy(sortByHits(matches));
-    if (config.fuzzy) setInputIcon(matches[0].file);
-  } else {
-    fuzzyFiles.clear();
+    if (config.fuzzy) {
+      if (matches[0]) {
+        setInputIcon(matches[0].file);
+      } else setInputIcon(undefined);
+    }
   }
   fuzzyFiles.index = 0;
 };
