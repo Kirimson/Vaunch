@@ -1,4 +1,4 @@
-import { test, describe, expect, beforeEach } from "vitest";
+import { test, describe, expect, beforeEach, vi } from "vitest";
 import { VaunchLink } from "../models/VaunchLink";
 import { ResponseType } from "../models/VaunchResponse";
 
@@ -7,7 +7,7 @@ let file: VaunchLink;
 beforeEach(() => {
   file = new VaunchLink(
     "test_file",
-    "http://example.com",
+    "http://example.com", 
     "vuejs",
     "brands",
     100,

@@ -5,7 +5,6 @@ import { setActivePinia, createPinia } from "pinia";
 
 import VaunchGuiFile from "@/components/VaunchGuiFile.vue";
 import { VaunchLink } from "@/models/VaunchLink";
-import { VaunchFolder } from "@/models/VaunchFolder";
 
 describe("given a Vaunch File component", () => {
   // Setup Pinia as this component depends on pinia stores
@@ -13,12 +12,12 @@ describe("given a Vaunch File component", () => {
     setActivePinia(createPinia());
   });
 
-  const folder = new VaunchFolder("test");
-  const file = new VaunchLink("test_file.lnk", "https://example.com", folder);
+  const file = new VaunchLink("test_file.lnk", "https://example.com");
   test("filename is correct", () => {
     const wrapper = mount(VaunchGuiFile, {
       props: {
         file: file,
+        parentFolderName: 'test'
       },
     });
     expect(wrapper.find(".filename").text()).toEqual(file.titleCase());
