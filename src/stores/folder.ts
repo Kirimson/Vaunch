@@ -107,6 +107,17 @@ export const useFolderStore: StoreDefinition = defineStore({
       const fuse = new Fuse(masterList, options);
       return fuse.search(search).map(result => result.item);
     },
+    findQryFile(operator:string, requireColon = true):VaunchFile|undefined {
+      // Return early if no colon and require a colon
+      if (!operator.includes(":") && requireColon) return undefined;
+      const prefix = operator.split(":")[0];
+      for (const folder of this.rawFolders as VaunchFolder[]) {
+        for (const file of folder.getQueryFiles()) {
+          if (file.getNames().includes(prefix)) return file;
+        }
+      }
+      return undefined
+    },
     findPosition(folderName: string) {
       return this.rawFolders.findIndex(folder => folder.name == folderName)
     }
