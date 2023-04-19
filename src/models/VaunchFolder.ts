@@ -52,6 +52,10 @@ export class VaunchFolder {
     return Array.from(this.files.values());
   }
 
+  getQueryFiles(): VaunchFile[] {
+    return Array.from(this.files.values()).filter(file => file.filetype == "VaunchQuery");
+  }
+
   setFiles(newFiles:VaunchFile[]) {
     this.files = newFiles
   }

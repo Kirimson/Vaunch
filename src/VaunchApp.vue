@@ -80,7 +80,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   if (newTab) commandArgs.push("_blank");
 
   // If no command was found, could it be a qry file?
-  let file = findQryFile(operator);
+  let file = folders.findQryFile(operator);
   if (file) {
     // If the first parameter was supplied in the same 'word' as the prefix, unshift
     // it into the commandArgs. This deals with a multi ${} file, executed like:
@@ -113,7 +113,7 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
     let file: VaunchFile | undefined = folders.getFileByPath(defaultFile);
     // If the default file is not a filepath, check if it's just the prefix
     if (!file) {
-      file = findQryFile(defaultFile, false);
+      file = folders.findQryFile(defaultFile, false);
     }
     // If a default file was found, execute it with the commandArgs, returning the response to vaunchInput
     if (file) {
@@ -131,28 +131,9 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   return handleResponse(noCommandFoundResp);
 };
 
-const findQryFile = (
-  operator: string,
-  requireColon = true
-): VaunchFile | undefined => {
-  if (!operator.includes(":") && requireColon) return undefined;
-
-  operator = operator.split(":")[0];
-  for (let folder of folders.items as VaunchFolder[]) {
-    for (let file of folder.getFiles()) {
-      if (file.filetype == "VaunchQuery") {
-        if (file.getNames().includes(operator)) {
-          return file;
-        }
-      }
-    }
-  }
-  return undefined;
-};
-
 const fuzzy = (input: string) => {
   fuzzyFiles.clear();
-  if (input.length > 0) {
+  if (input.length > 0 && folders.findQryFile(input) == undefined) {
     // If fuzzy is enabled, search for files matching
     const folders = useFolderStore();
     let matches = folders.findFiles(input);
@@ -192,7 +173,7 @@ const updateFuzzyIndex = (increment: boolean) => {
 const setIconIfQuery = (input: string) => {
   // Checks if the input string matches a VaunchQuery prefix,
   // and set's the input prompts' icon to a matching file
-  let file = findQryFile(input);
+  let file = folders.findQryFile(input);
   if (file) {
     setInputIcon(file);
   }
