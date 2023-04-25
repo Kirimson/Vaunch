@@ -72,7 +72,7 @@ export class VaunchTouch extends VaunchCommand {
         const filePrefix: string = args[1];
         const fileContent: string = args[2];
         if (filePrefix && fileContent) {
-          newFile = new VaunchQuery(fileName, filePrefix, fileContent, folder);
+          newFile = new VaunchQuery(fileName, filePrefix, fileContent);
           // Icon name/class is the fourth/fith arg provided for VaunchLink
           iconName = args[3];
           iconClass = args[4];
@@ -84,7 +84,7 @@ export class VaunchTouch extends VaunchCommand {
         }
       } else {
         const fileContent: string = args[1];
-        newFile = new VaunchLink(fileName, fileContent, folder);
+        newFile = new VaunchLink(fileName, fileContent);
         // Icon name/class is the third/fourth arg provided for VaunchLink
         iconName = args[2];
         iconClass = args[3];
