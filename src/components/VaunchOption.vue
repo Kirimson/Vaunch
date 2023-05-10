@@ -98,10 +98,13 @@ defineExpose({
 
 .option-entry {
   transition: background-color 0.15s;
+  border-radius: 0.33rem;
+  margin: 0 0.25em;
 }
 .option-entry:hover {
   cursor: pointer;
   background: v-bind("config.color.highlight");
+  border-radius: 0.33em;
 }
 
 .option-entry {
