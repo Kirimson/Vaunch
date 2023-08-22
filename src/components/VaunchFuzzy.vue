@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { VaunchFile } from "@/models/VaunchFile";
 import { useConfigStore } from "@/stores/config";
 import { useFolderStore } from "@/stores/folder";
 import { ref, watch } from "vue";
@@ -42,11 +41,18 @@ watch(getCurrentIndex, (newIndex: number) => {
 
 <style>
 #fuzzy-container {
+  position: absolute;
+  top: 22.5vh;
   display: flex;
   flex-direction: column;
-  width: 65vw;
+  width: 75vw;
   max-height: 35vh;
   margin-bottom: 1em;
+  z-index: 100;
+}
+
+.fuzzy-no-gui {
+  top: 55vh !important;
 }
 
 #fuzzy-title {
@@ -92,7 +98,7 @@ watch(getCurrentIndex, (newIndex: number) => {
 </style>
 
 <template>
-  <div id="fuzzy-container" class="vaunch-window">
+  <div id="fuzzy-container" :class="{'vaunch-window':true, 'vaunch-solid-bg':true, 'fuzzy-no-gui': !config.showGUI}">
     <span class="folder-title">
       <i class="fa-solid fa-magnifying-glass"></i>
       <span class="folder-name">Fuzzy Search</span>
