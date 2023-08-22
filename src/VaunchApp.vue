@@ -357,14 +357,13 @@ main {
       :response="sessionConfig.currentResponse"
     />
 
-    <div id="bottom-half">
-      <VaunchFuzzy
-        v-if="fuzzyFiles.items.length > 0 && config.fuzzy"
-        :fuzzy-matches="fuzzyFiles.items"
-        :current-index="fuzzyFiles.index"
-      />
-
-      <div v-if="config.showGUI" id="commands-folders-container">
+    <VaunchFuzzy
+      v-if="fuzzyFiles.items.length > 0 && config.fuzzy"
+      :fuzzy-matches="fuzzyFiles.items"
+      :current-index="fuzzyFiles.index"
+    />
+    <div v-if="config.showGUI" id="bottom-half">
+      <div id="commands-folders-container">
         <div v-if="config.showCommands" id="commands-container">
           <VaunchGuiCommands />
         </div>
