@@ -48,7 +48,7 @@ watch(getCurrentIndex, (newIndex: number) => {
   width: 75vw;
   max-height: 35vh;
   margin-bottom: 1em;
-  z-index: 100;
+  z-index: 9;
 }
 
 .fuzzy-no-gui {

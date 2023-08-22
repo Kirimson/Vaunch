@@ -22,6 +22,7 @@ const closeWindow = () => {
   left: 25vw;
   height: 50vh;
   width: 50vw;
+  z-index: 10;
 
   display: flex;
   flex-direction: column;
