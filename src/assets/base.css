@@ -179,7 +179,7 @@ select {
   padding: 1em;
   margin: 0.5em;
   box-shadow: none !important;
-  border: solid thin rgba(100, 100, 100, 0.25);
+  border: solid thin rgba(50, 50, 50, 0.5);
   user-select: none;
   transition: background-color 0.15s;
 }
