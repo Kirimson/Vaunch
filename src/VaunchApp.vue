@@ -67,18 +67,9 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
       return handleResponse(command.execute(commandArgs));
     }
   }
-  
+
   // If ctrl was held, append _black to commandArgs
   if (newTab) commandArgs.push("_blank");
-
-  // If a fuzzy file has been chosen, let's execute that
-  if (fuzzyFiles.items.length > 0 && config.fuzzy) {
-    // Also shift this entry off the history, in case it was a qry file
-    sessionConfig.history.shift();
-    let response = fuzzyFiles.items[fuzzyFiles.index].file.execute(commandArgs);
-    return handleResponse(response);
-  }
-
 
   // If no command was found, could it be a qry file?
   let file = folders.findQryFile(operator);
@@ -96,6 +87,14 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
     if (file) {
       return handleResponse(file.execute(commandArgs));
     }
+  }
+
+  // If a fuzzy file has been chosen, let's execute that
+  if (fuzzyFiles.items.length > 0 && config.fuzzy) {
+    // Also shift this entry off the history, in case it was a qry file
+    sessionConfig.history.shift();
+    let response = fuzzyFiles.items[fuzzyFiles.index].file.execute(commandArgs);
+    return handleResponse(response);
   }
 
   // If the input is a valid URL, navigate to it. Create a temporary VaunchLink with the operator and commandArgs
