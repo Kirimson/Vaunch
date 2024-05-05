@@ -60,13 +60,16 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
   sessionConfig.history.unshift(commandArgs.join(" "));
   let operator = commandArgs[0];
   commandArgs.shift();
-
+  
   // Check if we're running a command, if we find it in commands, execute it
   for (let command of commands) {
     if (command.getNames().includes(operator)) {
       return handleResponse(command.execute(commandArgs));
     }
   }
+  
+  // If ctrl was held, append _black to commandArgs
+  if (newTab) commandArgs.push("_blank");
 
   // If a fuzzy file has been chosen, let's execute that
   if (fuzzyFiles.items.length > 0 && config.fuzzy) {
@@ -76,8 +79,6 @@ const executeCommand = (commandArgs: string[], newTab = false) => {
     return handleResponse(response);
   }
 
-  // If ctrl was held, append _black to commandArgs
-  if (newTab) commandArgs.push("_blank");
 
   // If no command was found, could it be a qry file?
   let file = folders.findQryFile(operator);
