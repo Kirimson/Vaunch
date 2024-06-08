@@ -15,7 +15,7 @@ export class VaunchQuery extends VaunchUrlFile {
     iconClass = "solid",
     hits = 0,
     description = "",
-    sed: [string,string] = ["", ""],
+    sed: [string, string] = ["", ""],
   ) {
     if (!name.endsWith(".qry")) {
       name = name + ".qry";
@@ -50,17 +50,33 @@ export class VaunchQuery extends VaunchUrlFile {
     }
 
     let newLocation: string;
-    // If file content contains multiple replacable sections
+    // If file content contains multiple replaceable sections
     // each arg will be used to replace each section
     if (this.content.includes("${1}")) {
       newLocation = this.content;
       for (let i = 0; i < args.length; i++) {
-        const arg: string = args[i];
+        let arg: string = args[i];
+
+        // If the Query file has a sed expression, modify the arg to apply the expression
+        if (this.sed[0] != "") {
+          const splitPattern = this.sed[0].split("/");
+          const sedRegex = new RegExp(`${splitPattern[1]}`, splitPattern[2]);
+          arg = arg.replace(sedRegex, this.sed[1]||"")
+        }
+
         newLocation = newLocation.replace(`\${${i + 1}}`, arg);
       }
     } else {
       // Else, replace all ${} instances with the single provided arg
-      const combinedArgs = args.join(" ");
+      let combinedArgs = args.join(" ");
+
+      // If the Query file has a sed expression, modify the args to apply the expression
+      if (this.sed[0] != "") {
+        const splitPattern = this.sed[0].split("/");
+        const sedRegex = new RegExp(`${splitPattern[1]}`, splitPattern[2]);
+        combinedArgs = combinedArgs.replace(sedRegex, this.sed[1]||"")
+      }
+
       const encodedArgs = encodeURIComponent(combinedArgs).replace(/%20/g, "+");
       newLocation = this.content.replace(/\${}/g, encodedArgs);
     }

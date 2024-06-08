@@ -17,6 +17,7 @@ import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription"
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
+import { VaunchSed } from "@/models/commands/fs/VaunchSed";
 
 // Load in all available commands into Vaunch
 export const commands = [
@@ -39,4 +40,5 @@ export const commands = [
   new VaunchExport(),
   new VaunchImport(),
   new VaunchHelp(),
+  new VaunchSed(),
 ];
