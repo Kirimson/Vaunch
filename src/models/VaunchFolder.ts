@@ -117,7 +117,8 @@ export class VaunchFolder {
           fileData.icon,
           fileData.iconClass,
           fileData.hits,
-          fileData.description
+          fileData.description,
+          fileData.sed,
         );
       }
       if (file != undefined) folder.addFile(file);

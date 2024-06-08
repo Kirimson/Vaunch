@@ -5,6 +5,7 @@ export class VaunchQuery extends VaunchUrlFile {
   prefix: string;
   extension = ".qry";
   filetype = "VaunchQuery";
+  sed: [string, string];
 
   constructor(
     name: string,
@@ -13,7 +14,8 @@ export class VaunchQuery extends VaunchUrlFile {
     icon = "magnifying-glass",
     iconClass = "solid",
     hits = 0,
-    description = ""
+    description = "",
+    sed: [string,string] = ["", ""],
   ) {
     if (!name.endsWith(".qry")) {
       name = name + ".qry";
@@ -21,6 +23,7 @@ export class VaunchQuery extends VaunchUrlFile {
     super(name, icon, iconClass, hits, description);
     this.prefix = prefix.replace(":", "");
     this.content = content;
+    this.sed = sed;
   }
 
   getDescription(): string {
@@ -89,7 +92,8 @@ export class VaunchQuery extends VaunchUrlFile {
       iconClass: this.iconClass,
       type: this.filetype,
       hits: this.hits,
-      description: this.description
+      description: this.description,
+      sed: this.sed
     };
   }
 
