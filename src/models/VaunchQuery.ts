@@ -61,8 +61,8 @@ export class VaunchQuery extends VaunchUrlFile {
     } else {
       // Else, replace all ${} instances with the single provided arg
       const combinedArgs = args.join(" ");
-      const encodedargs = encodeURIComponent(combinedArgs).replace(/%20/g, "+");
-      newLocation = this.content.replace(/\${}/g, encodedargs);
+      const encodedArgs = encodeURIComponent(combinedArgs).replace(/%20/g, "+");
+      newLocation = this.content.replace(/\${}/g, encodedArgs);
     }
     // Ensure the final file content is "linkable"
     const linkUrl: URL | undefined = this.createUrl(newLocation);
