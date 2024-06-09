@@ -77,7 +77,9 @@ export class VaunchQuery extends VaunchUrlFile {
         combinedArgs = combinedArgs.replace(sedRegex, this.sed[1]||"")
       }
 
-      const encodedArgs = encodeURIComponent(combinedArgs).replace(/%20/g, "+");
+      let encodedArgs = encodeURIComponent(combinedArgs).replace(/%20/g, "+");
+      // If we're sed-ing, lets trust the user with forward slashes
+      if (this.sed[0] != "") encodedArgs = encodedArgs.replace(/%2F/g, "/")
       newLocation = this.content.replace(/\${}/g, encodedArgs);
     }
     // Ensure the final file content is "linkable"

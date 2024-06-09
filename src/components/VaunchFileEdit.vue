@@ -12,6 +12,7 @@ import { handleResponse } from "@/utilities/response";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 import { useFolderStore } from "@/stores/folder";
 import type { VaunchFolder } from "@/models/VaunchFolder";
+import { VaunchSed } from "@/models/commands/fs/VaunchSed";
 const props = defineProps(["file", "folderName"]);
 
 const emit = defineEmits(["closeEdit"]);
@@ -25,6 +26,8 @@ const newContent = ref();
 const newPos = ref();
 const newIcon = ref();
 const newIconClass = ref();
+const newSedExp = ref();
+const newSedReplace = ref();
 // eslint-disable-next-line vue/no-setup-props-destructure
 const selectedClass = props.file.iconClass;
 const newDescription = ref();
@@ -40,7 +43,7 @@ const saveFile = () => {
   let originalPath = `${props.folderName}/${props.file.fileName}`;
 
   // Edit the content of the file, if prefix is present, it is a query file
-  // and should be the firs arg after the filename
+  // and should be the first arg after the filename
   let editArgs: string[] = [];
   if (newPrefix.value) {
     // If prefix has changed, add it to the editArgs
@@ -89,6 +92,17 @@ const saveFile = () => {
     const setPos = new VaunchSetPosition();
     let response = setPos.execute([originalPath, newPos.value.value])
     if (response.type == ResponseType.Error) return handleResponse(response);
+  }
+
+  // Edit the sed expression of the file if changed
+  if (newSedExp.value) {
+    console.log("updating sed")
+    // If sed has changed, run sed against the file
+    if (newSedExp.value.value != props.file.sed[0]) {
+      let sed = new VaunchSed();
+      let response = sed.execute([originalPath, newSedExp.value.value, newSedReplace.value.value])
+      if (response.type == ResponseType.Error) return handleResponse(response);
+    }
   }
 
   // If the name/folder of the file has changed, attempt to move it
@@ -259,6 +273,40 @@ const saveFile = () => {
                   type="text"
                   :id="file.getIdSafeName() + '-prefix'"
                   :value="file.prefix"
+                />
+              </div>
+            </div>
+
+            <div v-if="file.filetype == 'VaunchQuery'" class="edit-attr">
+              <span>Edit the sed expression for the file</span>
+              <div class="edit-input-container">
+                <label
+                  class="edit-label"
+                  :for="file.getIdSafeName() + '-sed'"
+                  >Sed expression:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newSedExp"
+                  class="edit-input"
+                  type="text"
+                  :id="file.getIdSafeName() + '-sed-expression'"
+                  :value="file.sed[0]"
+                />
+                <label
+                  class="edit-label"
+                  :for="file.getIdSafeName() + '-sed'"
+                  >Sed replace:
+                </label>
+                <input
+                  autocapitalize="none"
+                  autocomplete="off"
+                  ref="newSedReplace"
+                  class="edit-input"
+                  type="text"
+                  :id="file.getIdSafeName() + '-sed-replace'"
+                  :value="file.sed[1]"
                 />
               </div>
             </div>
