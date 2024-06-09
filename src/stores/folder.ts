@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js'
+import Fuse, { type IFuseOptions } from 'fuse.js'
 
 import { defineStore, type StoreDefinition } from "pinia";
 import { useStorage } from "@vueuse/core";
@@ -97,8 +97,7 @@ export const useFolderStore: StoreDefinition = defineStore({
       for (const folder of this.rawFolders.values()) {
         folder.files.forEach(file => masterList.push({'file': file,'folder':folder.name}))
       }
-
-      const options:Fuse.IFuseOptions<{file: VaunchFile,folder: string}> = {
+      const options: IFuseOptions<{file: VaunchFile,folder: string}> = {
         includeScore: true,
         threshold: 0.5,
         useExtendedSearch: true,
