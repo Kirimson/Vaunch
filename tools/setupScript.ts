@@ -1,7 +1,7 @@
 import * as https from "https";
 import * as fs from "fs";
 import * as path from "path";
-import * as decompress from "decompress";
+import decompress from "decompress";
 
 const url =
   "https://use.fontawesome.com/releases/v6.2.0/fontawesome-free-6.2.0-web.zip";
