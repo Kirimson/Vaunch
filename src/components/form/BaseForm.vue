@@ -5,14 +5,20 @@ defineProps<{
 </script>
 
 <style scoped>
-.vaunch-form {
+form {
   display: flex;
   flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  form {
+    flex-direction: column;
+  }
 }
 </style>
 
 <template>
-<form class="vaunch-form" @submit.prevent="submit">
+<form @submit.prevent="submit">
   <slot></slot>
 </form>
 </template>

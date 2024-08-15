@@ -7,7 +7,6 @@ import { ResponseType, type VaunchResponse } from "@/models/VaunchResponse";
 import { VaunchEditFile } from "@/models/commands/fs/VaunchEditFile";
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription";
-import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
 import { useFolderStore } from "@/stores/folder";
@@ -17,6 +16,8 @@ import BaseForm from "./form/BaseForm.vue";
 import FormSegment from "./form/FormSegment.vue";
 import type { VaunchLink } from "@/models/VaunchLink";
 import { VaunchQuery } from "@/models/VaunchQuery";
+import FormInput from "./form/FormInput.vue";
+import FormDropdown from "./form/FormDropdown.vue";
 
 const props = defineProps<{
   file: VaunchLink | VaunchQuery
@@ -24,30 +25,28 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(["closeEdit"]);
-const config = useConfigStore();
 const folders = useFolderStore()
+const parentFolder: VaunchFolder = folders.getFolderByName(props.folderName)
 
-const newName = ref();
-const newFolder = ref();
-const newPrefix = ref();
-const newContent = ref();
-const newPos = ref();
-const newIcon = ref();
-const newIconClass = ref();
-const newSedExp = ref();
-const newSedReplace = ref();
-// eslint-disable-next-line vue/no-setup-props-destructure
-const selectedClass = props.file.iconClass;
-const newDescription = ref();
+const initialPosition = ref(parentFolder.findFilePosition(props.file.fileName));
+
+const fileName = ref(props.file.fileName);
+const fileFolder = ref(props.folderName);
+const fileContent = ref(props.file.content);
+const filePos = ref(parentFolder.findFilePosition(props.file.fileName) + 1);
+const fileIcon = ref(props.file.icon);
+const fileIconClass = ref(props.file.iconClass);
+
+const filePrefix = ref(props.file instanceof VaunchQuery ? props.file.prefix : "");
+const fileSedExp = ref(props.file instanceof VaunchQuery ? props.file.sed[0] : "");
+const fileSedReplace = ref(props.file instanceof VaunchQuery ? props.file.sed[1] : "");
+const fileDescription = ref(props.file.description);
 
 const closeWindow = () => {
   emit("closeEdit");
 };
 
 const saveFile = () => {
-  // .value.value is used here to get the .value of the reference,
-  // a HTMLInputElement, which itself has a .value property
-
   let originalPath = `${props.folderName}/${props.file.fileName}`;
 
   // Edit the content of the file, if prefix is present, it is a query file
@@ -56,27 +55,24 @@ const saveFile = () => {
 
   // If a QueryFile, check for specific extra parameters
   if (props.file instanceof VaunchQuery) {
-    if (newPrefix.value) {
+    if (filePrefix.value) {
       // If prefix has changed, add it to the editArgs
-      if (newPrefix.value.value != props.file.prefix) {
-        editArgs.push(newPrefix.value.value);
+      if (filePrefix.value != props.file.prefix) {
+        editArgs.push(filePrefix.value);
       } else editArgs.push("*");
     }
     // Edit the sed expression of the file if changed
-    if (newSedExp.value) {
-      console.log("updating sed")
-      // If sed has changed, run sed against the file
-      if (newSedExp.value.value != props.file.sed[0]) {
-        let sed = new VaunchSed();
-        let response = sed.execute([originalPath, newSedExp.value.value, newSedReplace.value.value])
-        if (response.type == ResponseType.Error) return handleResponse(response);
-      }
+    // If sed has changed, run sed against the file
+    if (fileSedExp.value != props.file.sed[0]) {
+      let sed = new VaunchSed();
+      let response = sed.execute([originalPath, fileSedExp.value, fileSedReplace.value])
+      if (response.type == ResponseType.Error) return handleResponse(response);
     }
   }
 
   // If the link content has changed, add it to the editArgs
-  if (newContent.value.value != props.file.content)
-    editArgs.push(newContent.value.value);
+  if (fileContent.value != props.file.content) editArgs.push(fileContent.value);
+
   if (editArgs.length > 0) {
     // Edit the file, using the originalPath to get to the file
     let edit = new VaunchEditFile();
@@ -85,52 +81,38 @@ const saveFile = () => {
   }
 
   // Edit the icon of the file
-  if (
-    newIcon.value.value != props.file.icon ||
-    newIconClass.value.value != props.file.iconClass
-  ) {
+  if (fileIcon.value != props.file.icon || fileIconClass.value != props.file.iconClass) {
     let setIcon = new VaunchSetIcon();
     let response: VaunchResponse = setIcon.execute([
       originalPath,
-      newIcon.value.value.toLowerCase(),
-      newIconClass.value.value.toLowerCase(),
+      fileIcon.value.toLowerCase(),
+      fileIconClass.value.toLowerCase(),
     ]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // Edit the description of the file
-  if (newDescription.value.value != props.file.description) {
+  if (fileDescription.value != props.file.description) {
     let setDesc = new VaunchSetDescription();
-    let response: VaunchResponse = setDesc.execute([
-      originalPath,
-      newDescription.value.value,
-    ]);
+    let response: VaunchResponse = setDesc.execute([originalPath, fileDescription.value]);
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // If a position has been set, update the position of the file
   // Adding one to get "human" position rather than positional index
-  const parentFolder: VaunchFolder = folders.getFolderByName(props.folderName)
-  if (newPos.value.value != parentFolder.findFilePosition(props.file.fileName) + 1) {
+  if (filePos.value != parentFolder.findFilePosition(props.file.fileName) + 1) {
     const setPos = new VaunchSetPosition();
-    let response = setPos.execute([originalPath, newPos.value.value])
+    let response = setPos.execute([originalPath, filePos.value.toString()])
     if (response.type == ResponseType.Error) return handleResponse(response);
   }
 
   // If the name/folder of the file has changed, attempt to move it
   // Do this last so the originalPath variable can be used for all other commands
-  let newFolderName = (newFolder.value.value as string)
-    .toLowerCase()
-    .replace(/\s+/g, "_");
-  if (
-    newFolderName != props.folderName ||
-    newName.value.value != props.file.fileName
-  ) {
+  let newFolderName = fileFolder.value.toLowerCase().replace(/\s+/g, "_");
+  if (newFolderName != props.folderName || fileName.value != props.file.fileName) {
     // Ensure that the file ends with .<extension> and is in good filename format
     // eg replacing spaces with underscores, and lower case etc...
-    let newFileName: string = (newName.value.value as string)
-      .toLowerCase()
-      .replace(/\s+/g, "_");
+    let newFileName: string = (fileName.value as string).toLowerCase().replace(/\s+/g, "_");
     let newPath = `${newFolderName}/${newFileName}`;
     let mv = new VaunchMv();
     let response: VaunchResponse = mv.execute([originalPath, newPath]);
@@ -165,57 +147,6 @@ const saveFile = () => {
   overflow: auto;
   padding: 0 1rem;
 }
-
-#edit-form {
-  display: flex;
-  flex-direction: row;
-}
-
-.edit-segment {
-  padding: 0.5rem;
-  margin: 0.5rem;
-  border: solid thin rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  flex: 1;
-}
-
-.edit-attr {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-  width: 100%;
-  justify-content: left;
-}
-
-.edit-input-container {
-  display: flex;
-  justify-content: left;
-}
-
-.edit-label {
-  padding-right: 0.5em;
-}
-
-.edit-input {
-  width: 50%;
-  flex: 1;
-  border: none;
-  background: none;
-  font-size: 1rem;
-  border-bottom: solid thin v-bind("config.color.text") !important;
-  color: v-bind("config.color.text");
-}
-
-.edit-input:focus {
-  outline: none;
-}
-
-@media (max-width: 768px) {
-  #edit-form {
-    flex-direction: column;
-  }
-}
 </style>
 
 <template>
@@ -224,102 +155,36 @@ const saveFile = () => {
       <div class="edit-attributes">
         <BaseForm :submit=saveFile>
           <FormSegment title="File Content">
-            <div class="edit-attr">
-              <span>Edit the name of the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-filename'">Name:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newName" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-filename'" :value="file.fileName" />
-              </div>
-            </div>
+            <FormInput label="Edit the name of the file" name="Name" :value="fileName"
+              @change="(newVal: string) => fileName = newVal" />
 
-            <div class="edit-attr">
-              <div>Edit the folder the file is in</div>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-folder'">Folder:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newFolder" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-filename'" :value="props.folderName" />
-              </div>
-            </div>
+            <FormInput label="Edit the folder the file is in" name="Folder" :value="fileFolder"
+              @change="(newVal: string) => fileFolder = newVal" />
 
-            <div v-if="file instanceof VaunchQuery" class="edit-attr">
-              <span>Edit the prefix used for the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-prefix'">Prefix:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newPrefix" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-prefix'" :value="file.prefix" />
-              </div>
-            </div>
+            <FormInput v-if="file instanceof VaunchQuery" label="Edit the prefix used for the file" name="Prefix"
+              :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />
 
-            <div v-if="file instanceof VaunchQuery" class="edit-attr">
-              <span>Edit the sed expression for the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-sed'">Sed expression:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newSedExp" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-sed-expression'" :value="file.sed[0]" />
-                <label class="edit-label" :for="file.getIdSafeName() + '-sed'">Sed replace:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newSedReplace" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-sed-replace'" :value="file.sed[1]" />
-              </div>
-            </div>
+            <FormInput v-if="file instanceof VaunchQuery" label="Edit the sed expression for the file"
+              name="Sed Expression" :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" />
+            <FormInput v-if="file instanceof VaunchQuery" name="Sed Replace" :value="fileSedReplace"
+              @change="(newVal: string) => fileSedReplace = newVal" />
 
-            <div class="edit-attr">
-              <span>Edit the link content of the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-content'">Destination:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newContent" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-content'" :value="file.content" />
-              </div>
-            </div>
+            <FormInput label="Edit the destination of the file" name="Destination" :value="fileContent"
+              @change="(newVal: string) => fileContent = newVal" />
+
           </FormSegment>
 
           <FormSegment title="File Customisation">
-            <div class="edit-attr">
-              <span>Set the position of the folder</span>
-              <div class="edit-input-container">
-                <label class="edit-label" for="new-position">Position:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newPos" class="edit-input" type="text"
-                  id="new-position"
-                  :value="folders.getFolderByName(props.folderName).findFilePosition(props.file.fileName) + 1" />
-              </div>
-            </div>
+            <FormInput label="Set the position of the file" name="Position" :value="(initialPosition + 1).toString()"
+              @change="(newVal: string) => filePos = parseInt(newVal)" />
 
-            <div class="edit-attr">
-              <span>Edit the icon used for the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-icon-name'">Icon Name:
-                </label>
-                <input autocapitalize="none" autocomplete="off" ref="newIcon" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-icon-name'" :value="file.icon" />
-              </div>
-            </div>
-            <div class="edit-attr">
-              <span>Edit the icon class for the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-icon-class'">Icon Class:
-                </label>
-                <select v-model="selectedClass" ref="newIconClass" id="new-icon-class">
-                  <option value="solid">Solid</option>
-                  <option value="brands">Brands</option>
-                </select>
-              </div>
-            </div>
-            <div class="edit-attr">
-              <span>Edit the description for the file</span>
-              <div class="edit-input-container">
-                <label class="edit-label" :for="file.getIdSafeName() + '-description'">File Description:
-                </label>
-                <input autocomplete="off" ref="newDescription" class="edit-input" type="text"
-                  :id="file.getIdSafeName() + '-description'" :value="file.description" />
-              </div>
-            </div>
+            <FormInput label="Edit the icon of the file" name="Icon Name" :value="fileIcon"
+              @change="(newVal: string) => fileIcon = newVal" />
+            <FormDropdown name="Icon Type" :value="fileSedReplace" values="['solid','brands']"
+              @change="(newVal: string) => fileIconClass = newVal" />
+
+            <FormInput label="Edit the description for the file" name="File Description" :value="fileDescription"
+              @change="(newVal: string) => fileDescription = newVal" />
           </FormSegment>
 
           <input style="display: none" type="submit" />
