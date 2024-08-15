@@ -36,6 +36,7 @@ const fileContent = ref(props.file.content);
 const filePos = ref(parentFolder.findFilePosition(props.file.fileName) + 1);
 const fileIcon = ref(props.file.icon);
 const fileIconClass = ref(props.file.iconClass);
+console.log(fileIconClass.value)
 
 const filePrefix = ref(props.file instanceof VaunchQuery ? props.file.prefix : "");
 const fileSedExp = ref(props.file instanceof VaunchQuery ? props.file.sed[0] : "");
@@ -82,6 +83,7 @@ const saveFile = () => {
 
   // Edit the icon of the file
   if (fileIcon.value != props.file.icon || fileIconClass.value != props.file.iconClass) {
+    console.log(fileIconClass.value)
     let setIcon = new VaunchSetIcon();
     let response: VaunchResponse = setIcon.execute([
       originalPath,
@@ -180,7 +182,7 @@ const saveFile = () => {
 
             <FormInput label="Edit the icon of the file" name="Icon Name" :value="fileIcon"
               @change="(newVal: string) => fileIcon = newVal" />
-            <FormDropdown name="Icon Type" :value="fileSedReplace" values="['solid','brands']"
+            <FormDropdown name="Icon Type" :value="fileIconClass" :values="['solid','brands']"
               @change="(newVal: string) => fileIconClass = newVal" />
 
             <FormInput label="Edit the description for the file" name="File Description" :value="fileDescription"

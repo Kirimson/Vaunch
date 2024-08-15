@@ -1,22 +1,31 @@
 <script setup lang="ts">
-import { useConfigStore } from '@/stores/config';
 import { getCurrentInstance } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   label?: string
   name: string
   value: string
+  values: string[]
 }>();
 
 const emit = defineEmits<{
   change: [value: string]
 }>();
 
-const config = useConfigStore();
 const instance = getCurrentInstance()
-
-const handleChange = (event:HTMLSelectElement) => {
+const initialValue = props.value
+const handleChange = (event: HTMLSelectElement) => {
   emit("change", event.value)
+}
+
+const titleCase = (s: string) => {
+  return s
+    .toLowerCase()
+    .split(" ")
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
 }
 </script>
 
@@ -41,17 +50,16 @@ input {
 input:focus {
   outline: none;
 }
-
 </style>
 
 <template>
   <div class="container">
     <span v-if="label">{{ label }}</span>
     <div class="input-container">
-      <label :for="instance?.uid+'-filename'">{{ name }}:</label>
-      <select @input="handleChange($event.target as HTMLSelectElement)" ref="newIconClass" id="new-icon-class">
-        <option value="solid">Solid</option>
-        <option value="brands">Brands</option>
+      <label :for="instance?.uid + '-dropdown'">{{ name }}:</label>
+      <select v-model="initialValue" @input="handleChange($event.target as HTMLSelectElement)"
+        id="instance?.uid+'-dropdown'">
+        <option v-for="val in values" :key="val" :value="val">{{ titleCase(val) }}</option>
       </select>
     </div>
   </div>
