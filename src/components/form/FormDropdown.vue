@@ -30,26 +30,17 @@ const titleCase = (s: string) => {
 </script>
 
 <style scoped>
-.input-container {
-  display: flex;
-}
+@import url("@/components/form/form.css");
 
-label {
-  margin-right: 0.5em;
-}
-
-input {
-  width: 100%;
-  flex: 1;
-  border: none;
-  background: none;
-  font-size: 1rem;
+select {
+  font: inherit;
   color: inherit;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  flex: 1;
 }
 
-input:focus {
-  outline: none;
-}
 </style>
 
 <template>
