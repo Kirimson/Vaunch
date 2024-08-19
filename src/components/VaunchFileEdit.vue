@@ -26,6 +26,8 @@ const props = defineProps<{
 
 const emit = defineEmits(["closeEdit"]);
 const folders = useFolderStore()
+const allFolders = folders.folderNames
+
 const parentFolder: VaunchFolder = folders.getFolderByName(props.folderName)
 
 const initialPosition = ref(parentFolder.findFilePosition(props.file.fileName));
@@ -36,7 +38,6 @@ const fileContent = ref(props.file.content);
 const filePos = ref(parentFolder.findFilePosition(props.file.fileName) + 1);
 const fileIcon = ref(props.file.icon);
 const fileIconClass = ref(props.file.iconClass);
-console.log(fileIconClass.value)
 
 const filePrefix = ref(props.file instanceof VaunchQuery ? props.file.prefix : "");
 const fileSedExp = ref(props.file instanceof VaunchQuery ? props.file.sed[0] : "");
@@ -83,7 +84,6 @@ const saveFile = () => {
 
   // Edit the icon of the file
   if (fileIcon.value != props.file.icon || fileIconClass.value != props.file.iconClass) {
-    console.log(fileIconClass.value)
     let setIcon = new VaunchSetIcon();
     let response: VaunchResponse = setIcon.execute([
       originalPath,
@@ -160,8 +160,8 @@ const saveFile = () => {
             <FormInput label="Edit the name of the file" name="Name" :value="fileName"
               @change="(newVal: string) => fileName = newVal" />
 
-            <FormInput label="Edit the folder the file is in" name="Folder" :value="fileFolder"
-              @change="(newVal: string) => fileFolder = newVal" />
+            <FormDropdown label="Edit the folder the file is in" name="Folder" :value="fileFolder"
+              :values="allFolders" :format-display-names="true" @change="(newVal: string) => fileFolder = newVal" />
 
             <FormInput v-if="file instanceof VaunchQuery" label="Edit the prefix used for the file" name="Prefix"
               :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />

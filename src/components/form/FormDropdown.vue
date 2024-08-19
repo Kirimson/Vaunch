@@ -6,6 +6,7 @@ const props = defineProps<{
   name: string
   value: string
   values: string[]
+  formatDisplayNames?: boolean
 }>();
 
 const emit = defineEmits<{
@@ -45,12 +46,12 @@ select {
 
 <template>
   <div class="container">
-    <span v-if="label">{{ label }}</span>
+    <span class="description" v-if="label">{{ label }}</span>
     <div class="input-container">
       <label :for="instance?.uid + '-dropdown'">{{ name }}:</label>
       <select v-model="initialValue" @input="handleChange($event.target as HTMLSelectElement)"
         id="instance?.uid+'-dropdown'">
-        <option v-for="val in values" :key="val" :value="val">{{ titleCase(val) }}</option>
+        <option v-for="val in values" :key="val" :value="val">{{ formatDisplayNames ? titleCase(val).replaceAll("_", " ") : titleCase(val) }}</option>
       </select>
     </div>
   </div>

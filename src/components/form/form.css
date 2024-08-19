@@ -11,3 +11,9 @@ label {
   opacity: 0.75;
   padding-right: 0.25em;
 }
+
+.description {
+  display: block;
+  font-size: larger;
+  margin-bottom: 0.25em;
+}

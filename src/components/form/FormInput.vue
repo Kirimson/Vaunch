@@ -27,12 +27,6 @@ const handleChange = (event:HTMLInputElement) => {
   padding-bottom: 1em;
 }
 
-.description {
-  display: block;
-  font-size: larger;
-  margin-bottom: 0.25em;
-}
-
 .container:after {
   display:block;
   content: '';
