@@ -23,10 +23,6 @@ const handleChange = (event:HTMLInputElement) => {
 <style scoped>
 @import url("@/components/form/form.css");
 
-.container {
-  padding-bottom: 1em;
-}
-
 .container:after {
   display:block;
   content: '';
