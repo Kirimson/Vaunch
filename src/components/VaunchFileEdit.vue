@@ -167,9 +167,9 @@ const saveFile = () => {
               :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />
 
             <FormInput v-if="file instanceof VaunchQuery" label="Edit the sed expression for the file"
-              name="Sed Expression" :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" />
+              name="Sed Expression" :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" placeholder="/foo/" />
             <FormInput v-if="file instanceof VaunchQuery" name="Sed Replace" :value="fileSedReplace"
-              @change="(newVal: string) => fileSedReplace = newVal" />
+              placeholder="bar" @change="(newVal: string) => fileSedReplace = newVal" />
 
             <FormInput label="Edit the destination of the file" name="Destination" :value="fileContent"
               @change="(newVal: string) => fileContent = newVal" />

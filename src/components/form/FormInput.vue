@@ -6,6 +6,7 @@ defineProps<{
   label?: string
   name: string
   value: string
+  placeholder?: string
 }>();
 
 const emit = defineEmits<{
@@ -56,7 +57,7 @@ input:focus {
     <span class="description" v-if="label">{{ label }}</span>
     <div class="input-container">
       <label :for="instance?.uid+'-filename'">{{ name }}:</label>
-      <input autocapitalize="none" autocomplete="off" type="text"
+      <input autocapitalize="none" autocomplete="off" type="text" :placeholder="placeholder"
         :id="instance?.uid+'-filename'" :value="value" @input="handleChange($event.target as HTMLInputElement)" />
     </div>
   </div>
