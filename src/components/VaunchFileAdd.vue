@@ -9,6 +9,9 @@ import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
+import BaseForm from "./form/BaseForm.vue";
+import FormSegment from "./form/FormSegment.vue";
+import FormDropdown from "./form/FormDropdown.vue";
 const props = defineProps(["folder"]);
 
 const emit = defineEmits(["closeAdd"]);
@@ -25,8 +28,8 @@ const newDescription = ref();
 const state = reactive({
   fileType: "lnk",
 });
-const setFileType = (event: any) => {
-  state.fileType = event.target.value;
+const setFileType = (newType: string) => {
+  state.fileType = newType;
 };
 
 const closeWindow = () => {
@@ -186,6 +189,10 @@ const createFile = () => {
   outline: none;
 }
 
+#create-file-header {
+  padding: 0 1rem;
+}
+
 @media (max-width: 768px) {
   .create-file-container {
     flex-direction: column;
@@ -194,13 +201,34 @@ const createFile = () => {
 </style>
 
 <template>
-  <VaunchWindow
-    :title="folder.titleCase() + ': Create File'"
-    :icon="folder.icon"
-    :icon-class="folder.iconClass"
-    v-on:close-window="closeWindow"
-  >
-    <div id="edit-container">
+  <VaunchWindow :title="folder.titleCase() + ': Create File'" :icon="folder.icon" :icon-class="folder.iconClass"
+    v-on:close-window="closeWindow">
+    <div id="create-file-header">
+      <FormSegment title="Create a new file">
+        <FormDropdown name="File Type" value="lnk" :values-map="[{k: 'lnk', v: 'Link File'}, {k: 'qry', v: 'Query File'}]" @change="setFileType" />
+        <p v-if="state.fileType == 'qry'">
+          Query Files substitute your input within a link, replacing <code>${}</code> or <code>${1}</code>,
+          <code>${2}</code> etc if multiple
+          input arguments are needed.<br />Treat them like custom search engines. Invoked by either filename or
+          by a prefix you set.
+        </p>
+        <p v-else>
+          Link Files are a simple link to a set site, they cannot be customised like query files.<br />Treat them like
+          bookmarks. Invoked by filename
+        </p>
+      </FormSegment>
+    </div>
+    <BaseForm :submit="createFile">
+
+      <FormSegment title="File Details">
+
+      </FormSegment>
+
+      <FormSegment title="File Customisation">
+
+      </FormSegment>
+    </BaseForm>
+    <!-- <div id="edit-container">
       <form id="edit-form" @submit.prevent="createFile">
         <div class="edit-attributes">
           <div class="edit-segment">
@@ -216,10 +244,7 @@ const createFile = () => {
                 arguments
               </p>
               <div class="edit-input-container">
-                <label
-                  class="edit-label"
-                  :for="folder.getIdSafeName() + '-type'"
-                  >File Type:
+                <label class="edit-label" :for="folder.getIdSafeName() + '-type'">File Type:
                 </label>
                 <select @change="setFileType($event)">
                   <option value="lnk">Link (.lnk)</option>
@@ -238,14 +263,8 @@ const createFile = () => {
                 <span>Set the name of the file</span>
                 <div class="edit-input-container">
                   <label class="edit-label" for="new-filename">Name: </label>
-                  <input
-                    autocapitalize="none"
-                    autocomplete="off"
-                    ref="newName"
-                    class="edit-input"
-                    type="text"
-                    id="new-filename"
-                  />
+                  <input autocapitalize="none" autocomplete="off" ref="newName" class="edit-input" type="text"
+                    id="new-filename" />
                 </div>
               </div>
 
@@ -253,31 +272,18 @@ const createFile = () => {
                 <span>Set the prefix used for the file</span>
                 <div class="edit-input-container">
                   <label class="edit-label" for="new-prefix">Prefix: </label>
-                  <input
-                    autocapitalize="none"
-                    autocomplete="off"
-                    ref="newPrefix"
-                    class="edit-input"
-                    type="text"
-                    id="new-prefix"
-                  />
+                  <input autocapitalize="none" autocomplete="off" ref="newPrefix" class="edit-input" type="text"
+                    id="new-prefix" />
                 </div>
               </div>
 
               <div class="edit-attr">
                 <span>Set the link content of the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-content"
-                    >Destination:
+                  <label class="edit-label" for="new-content">Destination:
                   </label>
-                  <input
-                    autocapitalize="none"
-                    autocomplete="off"
-                    ref="newContent"
-                    class="edit-input"
-                    type="text"
-                    id="new-content"
-                  />
+                  <input autocapitalize="none" autocomplete="off" ref="newContent" class="edit-input" type="text"
+                    id="new-content" />
                 </div>
               </div>
             </div>
@@ -287,46 +293,28 @@ const createFile = () => {
               <h2 v-if="state.fileType == 'qry'">Query File Customisation</h2>
 
               <div class="edit-attr">
-              <span>Set the position of the folder</span>
-              <div class="edit-input-container">
-                <label
-                  class="edit-label"
-                  for="new-position"
-                  >Position:
-                </label>
-                <input
-                  autocapitalize="none"
-                  autocomplete="off"
-                  ref="newPos"
-                  class="edit-input"
-                  type="text"
-                  id="new-position"
-                />
+                <span>Set the position of the folder</span>
+                <div class="edit-input-container">
+                  <label class="edit-label" for="new-position">Position:
+                  </label>
+                  <input autocapitalize="none" autocomplete="off" ref="newPos" class="edit-input" type="text"
+                    id="new-position" />
+                </div>
               </div>
-            </div>
 
               <div class="edit-attr">
                 <span>Edit the icon used for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-name"
-                    >Icon Name:
+                  <label class="edit-label" for="new-icon-name">Icon Name:
                   </label>
-                  <input
-                    autocapitalize="none"
-                    autocomplete="off"
-                    ref="newIcon"
-                    class="edit-input"
-                    type="text"
-                    id="new-icon-name"
-                    :value="state.fileType == 'lnk' ? 'file' : 'magnifying-glass'"
-                  />
+                  <input autocapitalize="none" autocomplete="off" ref="newIcon" class="edit-input" type="text"
+                    id="new-icon-name" :value="state.fileType == 'lnk' ? 'file' : 'magnifying-glass'" />
                 </div>
               </div>
               <div class="edit-attr">
                 <span>Edit the icon class for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-class"
-                    >Icon Class:
+                  <label class="edit-label" for="new-icon-class">Icon Class:
                   </label>
                   <select ref="newIconClass" id="new-icon-class">
                     <option value="solid">Solid</option>
@@ -337,16 +325,9 @@ const createFile = () => {
               <div class="edit-attr">
                 <span>Edit the description for the file</span>
                 <div class="edit-input-container">
-                  <label class="edit-label" for="new-description"
-                    >File Description:
+                  <label class="edit-label" for="new-description">File Description:
                   </label>
-                  <input
-                    autocomplete="off"
-                    ref="newDescription"
-                    class="edit-input"
-                    type="text"
-                    id="new-description"
-                  />
+                  <input autocomplete="off" ref="newDescription" class="edit-input" type="text" id="new-description" />
                 </div>
               </div>
             </div>
@@ -355,7 +336,8 @@ const createFile = () => {
           <input style="display: none" type="submit" />
         </div>
       </form>
-    </div>
+    </div> -->
+
     <div class="edit-buttons">
       <div>
         <VaunchButton icon="plus" text="Create" @click="createFile" />

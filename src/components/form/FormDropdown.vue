@@ -5,7 +5,8 @@ const props = defineProps<{
   label?: string
   name: string
   value: string
-  values: string[]
+  values?: string[]
+  valuesMap?: {k: string, v: string}[]
   formatDisplayNames?: boolean
 }>();
 
@@ -52,6 +53,7 @@ select {
       <select v-model="initialValue" @input="handleChange($event.target as HTMLSelectElement)"
         id="instance?.uid+'-dropdown'">
         <option v-for="val in values" :key="val" :value="val">{{ formatDisplayNames ? titleCase(val).replaceAll("_", " ") : titleCase(val) }}</option>
+        <option v-for="val in valuesMap" :key="val.k" :value="val.k">{{ formatDisplayNames ? titleCase(val.v).replaceAll("_", " ") : titleCase(val.v) }}</option>
       </select>
     </div>
   </div>

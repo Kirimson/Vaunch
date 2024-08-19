@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   submit: () => any
+  direction?: string
 }>()
 </script>
 
@@ -19,6 +20,10 @@ form {
   flex-direction: row;
 }
 
+form[direction="column"] {
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
   form {
     flex-direction: column;
@@ -28,7 +33,7 @@ form {
 
 <template>
 <div class="form-container">
-  <form @submit.prevent="submit">
+  <form @submit.prevent="submit" :direction="direction">
     <slot></slot>
   </form>
 </div>
