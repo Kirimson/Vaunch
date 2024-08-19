@@ -127,12 +127,6 @@ const saveFile = () => {
 </script>
 
 <style scoped>
-#edit-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  flex-grow: 1;
-}
 
 .edit-buttons {
   display: flex;
@@ -144,55 +138,46 @@ const saveFile = () => {
 .edit-buttons div {
   margin: 0 0.5rem;
 }
-
-.edit-attributes {
-  overflow: auto;
-  padding: 0 1rem;
-}
 </style>
 
 <template>
   <VaunchWindow :title="'Edit - ' + file.titleCase()" :icon="'pencil'" v-on:close-window="closeWindow">
-    <div id="edit-container">
-      <div class="edit-attributes">
-        <BaseForm :submit=saveFile>
-          <FormSegment title="File Content">
-            <FormInput label="Edit the name of the file" name="Name" :value="fileName"
-              @change="(newVal: string) => fileName = newVal" />
+    <BaseForm :submit=saveFile>
+      <FormSegment title="File Content">
+        <FormInput label="Edit the name of the file" name="Name" :value="fileName"
+          @change="(newVal: string) => fileName = newVal" />
 
-            <FormDropdown label="Edit the folder the file is in" name="Folder" :value="fileFolder"
-              :values="allFolders" :format-display-names="true" @change="(newVal: string) => fileFolder = newVal" />
+        <FormDropdown label="Edit the folder the file is in" name="Folder" :value="fileFolder" :values="allFolders"
+          :format-display-names="true" @change="(newVal: string) => fileFolder = newVal" />
 
-            <FormInput v-if="file instanceof VaunchQuery" label="Edit the prefix used for the file" name="Prefix"
-              :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />
+        <FormInput v-if="file instanceof VaunchQuery" label="Edit the prefix used for the file" name="Prefix"
+          :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />
 
-            <FormInput v-if="file instanceof VaunchQuery" label="Edit the sed expression for the file"
-              name="Sed Expression" :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" placeholder="/foo/" />
-            <FormInput v-if="file instanceof VaunchQuery" name="Sed Replace" :value="fileSedReplace"
-              placeholder="bar" @change="(newVal: string) => fileSedReplace = newVal" />
+        <FormInput v-if="file instanceof VaunchQuery" label="Edit the sed expression for the file" name="Sed Expression"
+          :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" placeholder="/foo/" />
+        <FormInput v-if="file instanceof VaunchQuery" name="Sed Replace" :value="fileSedReplace" placeholder="bar"
+          @change="(newVal: string) => fileSedReplace = newVal" />
 
-            <FormInput label="Edit the destination of the file" name="Destination" :value="fileContent"
-              @change="(newVal: string) => fileContent = newVal" />
+        <FormInput label="Edit the destination of the file" name="Destination" :value="fileContent"
+          @change="(newVal: string) => fileContent = newVal" />
 
-          </FormSegment>
+      </FormSegment>
 
-          <FormSegment title="File Customisation">
-            <FormInput label="Set the position of the file" name="Position" :value="(initialPosition + 1).toString()"
-              @change="(newVal: string) => filePos = parseInt(newVal)" />
+      <FormSegment title="File Customisation">
+        <FormInput label="Set the position of the file" name="Position" :value="(initialPosition + 1).toString()"
+          @change="(newVal: string) => filePos = parseInt(newVal)" />
 
-            <FormInput label="Edit the icon of the file" name="Icon Name" :value="fileIcon"
-              @change="(newVal: string) => fileIcon = newVal" />
-            <FormDropdown name="Icon Type" :value="fileIconClass" :values="['solid','brands']"
-              @change="(newVal: string) => fileIconClass = newVal" />
+        <FormInput label="Edit the icon of the file" name="Icon Name" :value="fileIcon"
+          @change="(newVal: string) => fileIcon = newVal" />
+        <FormDropdown name="Icon Type" :value="fileIconClass" :values="['solid', 'brands']"
+          @change="(newVal: string) => fileIconClass = newVal" />
 
-            <FormInput label="Edit the description for the file" name="File Description" :value="fileDescription"
-              @change="(newVal: string) => fileDescription = newVal" />
-          </FormSegment>
+        <FormInput label="Edit the description for the file" name="File Description" :value="fileDescription"
+          @change="(newVal: string) => fileDescription = newVal" />
+      </FormSegment>
 
-          <input style="display: none" type="submit" />
-        </BaseForm>
-      </div>
-    </div>
+      <input style="display: none" type="submit" />
+    </BaseForm>
     <div class="edit-buttons">
       <div>
         <VaunchButton icon="save" text="Save" @click="saveFile" />
