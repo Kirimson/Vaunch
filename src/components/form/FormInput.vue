@@ -29,7 +29,7 @@ const handleChange = (event:HTMLInputElement) => {
   content: '';
   outline: solid 0px v-bind("config.color.highlight");
   border-radius: 5px;
-  transition: outline 75ms ease-in-out;
+  transition: outline 50ms ease-in-out;
 }
 
 .input-container:focus-within {
