@@ -249,62 +249,6 @@ const createFile = () => {
           @change="(newVal) => fileDescription = newVal" />
       </FormSegment>
     </BaseForm>
-    <!-- <div id="edit-container">
-      <form id="edit-form" @submit.prevent="createFile">
-        <div class="edit-attributes">
-
-          <div class="create-file-container">
-
-            <div class="edit-segment">
-              <h2 v-if="state.fileType == 'lnk'">Link File Customisation</h2>
-              <h2 v-if="state.fileType == 'qry'">Query File Customisation</h2>
-
-              <div class="edit-attr">
-                <span>Set the position of the folder</span>
-                <div class="edit-input-container">
-                  <label class="edit-label" for="new-position">Position:
-                  </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newPos" class="edit-input" type="text"
-                    id="new-position" />
-                </div>
-              </div>
-
-              <div class="edit-attr">
-                <span>Edit the icon used for the file</span>
-                <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-name">Icon Name:
-                  </label>
-                  <input autocapitalize="none" autocomplete="off" ref="newIcon" class="edit-input" type="text"
-                    id="new-icon-name" :value="state.fileType == 'lnk' ? 'file' : 'magnifying-glass'" />
-                </div>
-              </div>
-              <div class="edit-attr">
-                <span>Edit the icon class for the file</span>
-                <div class="edit-input-container">
-                  <label class="edit-label" for="new-icon-class">Icon Class:
-                  </label>
-                  <select ref="newIconClass" id="new-icon-class">
-                    <option value="solid">Solid</option>
-                    <option value="brands">Brands</option>
-                  </select>
-                </div>
-              </div>
-              <div class="edit-attr">
-                <span>Edit the description for the file</span>
-                <div class="edit-input-container">
-                  <label class="edit-label" for="new-description">File Description:
-                  </label>
-                  <input autocomplete="off" ref="newDescription" class="edit-input" type="text" id="new-description" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <input style="display: none" type="submit" />
-        </div>
-      </form>
-    </div> -->
-
     <div class="edit-buttons">
       <div>
         <VaunchButton icon="plus" text="Create" @click="createFile" />
