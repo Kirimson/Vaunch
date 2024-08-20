@@ -1,7 +1,7 @@
 {
   "files": [],
   "compilerOptions": {
-    "lib": ["es2021"]
+    "lib": ["ES2023"]
   },
   "references": [
     {

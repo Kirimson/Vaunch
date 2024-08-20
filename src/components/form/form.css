@@ -1,0 +1,32 @@
+.container {
+  padding-bottom: 0.5em;
+}
+
+.input-container {
+  display: flex;
+  padding: 0.25em;
+  background-color: rgba(150, 150, 150, 0.25);
+  border: solid thin rgba(100, 100, 100, 0.25);
+  border-radius: 5px;
+}
+
+label {
+  margin-right: 0.5em;
+  opacity: 0.75;
+  padding-right: 0.25em;
+}
+
+.description {
+  display: block;
+  font-size: larger;
+  margin-bottom: 0.25em;
+}
+
+.description:has(+ span) {
+  margin-bottom: 0em;
+}
+
+.extra-info {
+  opacity: 0.85;
+  font-size: smaller;
+}
