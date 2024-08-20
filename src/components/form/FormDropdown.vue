@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getCurrentInstance } from 'vue';
+import { useConfigStore } from '@/stores/config';
 
 const props = defineProps<{
   label?: string
@@ -14,6 +15,7 @@ const emit = defineEmits<{
   change: [value: string]
 }>();
 
+const config = useConfigStore();
 const instance = getCurrentInstance()
 const initialValue = props.value
 const handleChange = (event: HTMLSelectElement) => {
@@ -41,6 +43,21 @@ select {
   border-radius: 5px;
   background-color: transparent;
   flex: 1;
+}
+
+select:focus {
+  outline: none;
+}
+
+.input-container {
+  content: '';
+  outline: solid 0px v-bind("config.color.highlight");
+  border-radius: 5px;
+  transition: outline 75ms ease-in-out;
+}
+
+.input-container:focus-within {
+  outline: solid 2px v-bind("config.color.highlight");
 }
 
 </style>
