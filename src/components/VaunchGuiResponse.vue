@@ -8,8 +8,8 @@ const sessionConfig = useSessionStore();
 const responseWindow = ref();
 
 onMounted(() => {
-  // Fade out and dismiss the window after three seconds
-  setTimeout(dismiss, 3000);
+  // Fade out and dismiss the window after two seconds
+  setTimeout(dismiss, 2000);
 });
 
 const dismiss = () => {
@@ -28,7 +28,7 @@ const dismiss = () => {
   left: 25vw;
   width: 50vw;
 
-  z-index: 10;
+  z-index: 100;
   transition: opacity 1s;
 }
 
@@ -46,8 +46,8 @@ const dismiss = () => {
 
 <template>
   <div class="response-window-container" ref="responseWindow">
-    <div class="vaunch-window" id="response-window">
-      <span class="folder-title">
+    <div class="vaunch-window vaunch-solid-bg " id="response-window">
+      <span class="folder-title greyscale-title">
         <i
           v-if="response.type == 'error'"
           class="fa-solid fa-circle-exclamation"
