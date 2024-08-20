@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VaunchWindow from "./VaunchWindow.vue";
 import VaunchButton from "./VaunchButton.vue";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { ResponseType, type VaunchResponse } from "@/models/VaunchResponse";
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription";
