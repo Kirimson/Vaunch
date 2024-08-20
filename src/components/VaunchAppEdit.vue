@@ -79,14 +79,6 @@ const saveApp = () => {
 </script>
 
 <style scoped>
-#edit-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
 .edit-buttons {
   display: flex;
   justify-content: center;
@@ -96,64 +88,6 @@ const saveApp = () => {
 
 .edit-buttons div {
   margin: 0 0.5rem;
-}
-
-.edit-attributes {
-  overflow: auto;
-  width: 100%;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-#edit-form {
-  display: flex;
-  flex-direction: row;
-}
-
-.edit-segment {
-  padding: 0.5rem;
-  margin: 0.5rem;
-  border: solid thin rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  flex: 1;
-}
-
-.edit-attr {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-  width: 100%;
-  justify-content: left;
-}
-
-.edit-input-container {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.edit-label {
-  padding-right: 0.5em;
-}
-
-.edit-input {
-  border: none;
-  background: none;
-  font-size: 1rem;
-  flex-grow: 0;
-  width: 30%;
-  border-bottom: solid thin v-bind("config.color.text") !important;
-  color: v-bind("config.color.text");
-}
-
-.edit-input:focus {
-  outline: none;
-}
-
-.edit-checkbox:checked {
-  background-color: v-bind("config.color.highlight");
 }
 </style>
 
