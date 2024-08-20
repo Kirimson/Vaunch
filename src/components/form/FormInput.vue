@@ -7,6 +7,7 @@ defineProps<{
   name: string
   value?: string
   placeholder?: string
+  extraInfo?: string
 }>();
 
 const emit = defineEmits<{
@@ -55,6 +56,7 @@ input:focus {
 <template>
   <div class="container">
     <span class="description" v-if="label">{{ label }}</span>
+    <span class="extra-info" v-if="extraInfo">{{ extraInfo }}</span>
     <div class="input-container">
       <label :for="instance?.uid+'-filename'">{{ name }}:</label>
       <input autocapitalize="none" autocomplete="off" type="text" :placeholder="placeholder"
