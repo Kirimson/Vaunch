@@ -126,7 +126,7 @@ const enterSubmit = () => {
 <template>
   <VaunchWindow :title="folder ? `Edit - ${folder.titleCase()}` : 'New Folder'" :icon="'pencil'"
     v-on:close-window="closeWindow">
-    <BaseForm :submit="enterSubmit">
+    <BaseForm @submit="enterSubmit">
       <FormSegment full-width title="Folder Details">
         <FormInput label="Name of the folder" name="Folder Name" :value="folderName"
           @change="(newVal) => folderName = newVal" />
@@ -139,6 +139,7 @@ const enterSubmit = () => {
         <FormDropdown name="Icon Class" :value="folderIconClass" :values="['solid', 'brands']"
           @change="(newVal) => folderIconClass = newVal" />
       </FormSegment>
+      <input style="display: none" type="submit" />
     </BaseForm>
     <div class="edit-buttons">
       <div>

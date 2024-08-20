@@ -1,7 +1,10 @@
 <script setup lang="ts">
 defineProps<{
-  submit: () => any
   direction?: string
+}>()
+
+const emit = defineEmits<{
+  submit: []
 }>()
 </script>
 
@@ -33,7 +36,7 @@ form[direction="column"] {
 
 <template>
 <div class="form-container">
-  <form @submit.prevent="submit" :direction="direction">
+  <form @submit.prevent="$emit('submit')" :direction="direction">
     <slot></slot>
   </form>
 </div>

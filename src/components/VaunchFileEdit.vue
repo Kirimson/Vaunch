@@ -142,7 +142,7 @@ const saveFile = () => {
 
 <template>
   <VaunchWindow :title="'Edit - ' + file.titleCase()" :icon="'pencil'" v-on:close-window="closeWindow">
-    <BaseForm :submit=saveFile>
+    <BaseForm @submit="saveFile">
       <FormSegment title="File Content">
         <FormInput label="Edit the name of the file" name="Name" :value="fileName"
           @change="(newVal) => fileName = newVal" />

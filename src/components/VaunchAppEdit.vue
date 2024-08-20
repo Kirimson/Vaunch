@@ -93,7 +93,7 @@ const saveApp = () => {
 
 <template>
   <VaunchWindow title="Vaunch Settings" :icon="'pencil'" v-on:close-window="closeWindow">
-    <BaseForm :submit="saveApp">
+    <BaseForm @submit="saveApp">
       <FormSegment title="Behaviour">
         <FormCheckBox label="Toggle if the Folder and Command panes are visible" :checked="showGui" name="Show UI"
           @change="(newVal) => showGui = newVal" />
@@ -121,6 +121,7 @@ const saveApp = () => {
         <FormInput name="Text Colour" :value="textColor" @change="(newVal) => textColor = newVal" />
         <FormInput name="Highlight Colour" :value="highlightColor" @change="(newVal) => highlightColor = newVal" />
       </FormSegment>
+      <input style="display: none" type="submit" />
     </BaseForm>
     <div class="edit-buttons">
       <div>

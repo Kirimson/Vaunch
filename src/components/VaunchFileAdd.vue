@@ -206,7 +206,7 @@ const createFile = () => {
 <template>
   <VaunchWindow :title="folder.titleCase() + ': Create File'" :icon="folder.icon" :icon-class="folder.iconClass"
     v-on:close-window="closeWindow">
-    <BaseForm :submit="createFile">
+    <BaseForm @submit="createFile">
 
       <FormSegment full-width title="Create a new file">
         <FormDropdown name="File Type" :value="fileType"
@@ -248,6 +248,7 @@ const createFile = () => {
         <FormInput label="Description of the file" name="File Description"
           @change="(newVal) => fileDescription = newVal" />
       </FormSegment>
+      <input style="display: none" type="submit" />
     </BaseForm>
     <div class="edit-buttons">
       <div>
