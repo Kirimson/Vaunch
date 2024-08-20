@@ -145,35 +145,35 @@ const saveFile = () => {
     <BaseForm :submit=saveFile>
       <FormSegment title="File Content">
         <FormInput label="Edit the name of the file" name="Name" :value="fileName"
-          @change="(newVal: string) => fileName = newVal" />
+          @change="(newVal) => fileName = newVal" />
 
         <FormDropdown label="Edit the folder the file is in" name="Folder" :value="fileFolder" :values="allFolders"
-          :format-display-names="true" @change="(newVal: string) => fileFolder = newVal" />
+          :format-display-names="true" @change="(newVal) => fileFolder = newVal" />
 
         <FormInput v-if="file instanceof VaunchQuery" label="Edit the prefix used for the file" name="Prefix"
-          :value="filePrefix" @change="(newVal: string) => filePrefix = newVal" />
+          :value="filePrefix" @change="(newVal) => filePrefix = newVal" />
 
         <FormInput v-if="file instanceof VaunchQuery" label="Edit the sed expression for the file" name="Sed Expression"
-          :value="fileSedExp" @change="(newVal: string) => fileSedExp = newVal" placeholder="/foo/" />
+          :value="fileSedExp" @change="(newVal) => fileSedExp = newVal" placeholder="/foo/" />
         <FormInput v-if="file instanceof VaunchQuery" name="Sed Replace" :value="fileSedReplace" placeholder="bar"
-          @change="(newVal: string) => fileSedReplace = newVal" />
+          @change="(newVal) => fileSedReplace = newVal" />
 
         <FormInput label="Edit the destination of the file" name="Destination" :value="fileContent"
-          @change="(newVal: string) => fileContent = newVal" />
+          @change="(newVal) => fileContent = newVal" />
 
       </FormSegment>
 
       <FormSegment title="File Customisation">
         <FormInput label="Set the position of the file" name="Position" :value="(initialPosition + 1).toString()"
-          @change="(newVal: string) => filePos = parseInt(newVal)" />
+          @change="(newVal) => filePos = parseInt(newVal)" />
 
         <FormInput label="Edit the icon of the file" name="Icon Name" :value="fileIcon"
-          @change="(newVal: string) => fileIcon = newVal" />
+          @change="(newVal) => fileIcon = newVal" />
         <FormDropdown name="Icon Type" :value="fileIconClass" :values="['solid', 'brands']"
-          @change="(newVal: string) => fileIconClass = newVal" />
+          @change="(newVal) => fileIconClass = newVal" />
 
         <FormInput label="Edit the description for the file" name="File Description" :value="fileDescription"
-          @change="(newVal: string) => fileDescription = newVal" />
+          @change="(newVal) => fileDescription = newVal" />
       </FormSegment>
 
       <input style="display: none" type="submit" />

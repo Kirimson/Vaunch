@@ -5,7 +5,7 @@ import { getCurrentInstance } from 'vue';
 defineProps<{
   label?: string
   name: string
-  value: string
+  value?: string
   placeholder?: string
 }>();
 

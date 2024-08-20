@@ -16,8 +16,8 @@ defineProps<{
 }
 
 form {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 form[direction="column"] {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   title: string
+  fullWidth?: boolean
 }>()
 </script>
 
@@ -12,10 +13,14 @@ defineProps<{
   flex: 1;
 }
 
+.full-width {
+  grid-column: 1/-1;
+}
+
 </style>
 
 <template>
-<div class="form-segment">
+<div :class="{'form-segment': true, 'full-width': fullWidth}">
   <h2>{{ title }}</h2>
   <slot></slot>
 </div>
