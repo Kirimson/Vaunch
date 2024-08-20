@@ -25,18 +25,15 @@ const handleChange = (event:HTMLInputElement) => {
 <style scoped>
 @import url("@/components/form/form.css");
 
-.container:after {
-  display:block;
+.input-container {
   content: '';
-  border-bottom: solid 2px v-bind("config.color.highlight");
-  border-radius: 50px;
-  transform: scaleX(0);
-  transition: transform 150ms ease-in-out;
+  outline: solid 0px v-bind("config.color.highlight");
+  border-radius: 5px;
+  transition: outline 75ms ease-in-out;
 }
 
-.container:focus-within:after {
-  transform: scaleX(1);
-  border-radius: 50px;
+.input-container:focus-within {
+  outline: solid 2px v-bind("config.color.highlight");
 }
 
 input {
