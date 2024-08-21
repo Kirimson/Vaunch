@@ -17,6 +17,12 @@ defineProps<{
   grid-column: 1/-1;
 }
 
+@media (max-width: 576px) {
+  .form-segment{
+    grid-column: 1/-1;
+  }
+}
+
 </style>
 
 <template>
