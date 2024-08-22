@@ -105,8 +105,9 @@ const setWindow = (window: string, show: boolean) => {
       <VaunchFileEdit v-if="state.showEdit" :file="file" :folder-name="props.folderName"
         v-on:close-edit="setWindow('edit', false)" />
       <VaunchConfirm v-if="state.showDelete" v-on:close-window="setWindow('delete', false)"
-        v-on:answer-yes="deleteFile()" v-on:answer-no="setWindow('delete', false)" title="Are You Sure?" icon="trash"
-        :ask-text="'Are you sure you want to delete ' + file.titleCase() + '?'" />
+        v-on:answer-yes="deleteFile()" v-on:answer-no="setWindow('delete', false)" title="Delete File" icon="trash"
+        :ask-text="'Delete ' + file.titleCase() + '?'"
+        :ask-lines="['This action will permanently delete this file.', 'This file has been used ' + file.hits + ' time' + (file.hits != 1 ? 's.' : '.')]" />
     </template>
   </VaunchOption>
 </template>

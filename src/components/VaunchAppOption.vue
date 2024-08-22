@@ -107,11 +107,11 @@ const importVaunch = () => {
       <VaunchFolderEdit v-if="state.showAdd" :add-new="true" v-on:close-edit="setWindow('add', false)" />
       <VaunchAppEdit v-if="state.showEdit" :add-new="true" v-on:close-edit="setWindow('edit', false)" />
       <VaunchConfirm v-if="state.showExport" v-on:close-window="setWindow('export', false)"
-        v-on:answer-yes="exportVaunch" v-on:answer-no="setWindow('export', false)" title="Export Vaunch Settings?"
-        icon="file-export" ask-text="Do you want to export your Vaunch settings?" />
+        v-on:answer-yes="exportVaunch" v-on:answer-no="setWindow('export', false)" title="Export your current config"
+        icon="file-export" :ask-lines="['Do you want to export your current Vaunch config to a file?','The exported file can be imported on another device.']" />
       <VaunchConfirm v-if="state.showImport" v-on:close-window="setWindow('import', false)"
-        v-on:answer-yes="importVaunch" v-on:answer-no="setWindow('import', false)" title="Import Vaunch Settings?"
-        icon="file-import" ask-text="Do you want to import Vaunch settings from a file?" />
+        v-on:answer-yes="importVaunch" v-on:answer-no="setWindow('import', false)" title="Import an existing config"
+        icon="file-import" :ask-lines="['Do you want to upload an existing config to merge with your current Vaunch config?','Existing files will not be overwritten by the new config']" />
       <VaunchAbout v-if="state.showAbout" v-on:close-window="setWindow('about', false)" />
     </template>
   </VaunchOption>
