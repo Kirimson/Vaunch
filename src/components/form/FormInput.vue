@@ -48,6 +48,11 @@ input {
 input:focus {
   outline: none;
 }
+
+input::placeholder {
+  color: inherit;
+  opacity: 0.2;
+}
 </style>
 
 <template>
