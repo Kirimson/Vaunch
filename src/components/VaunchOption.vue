@@ -85,6 +85,8 @@ defineExpose({
   display: flex;
   justify-content: start;
   align-items: center;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .option-icon {

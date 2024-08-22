@@ -66,40 +66,21 @@ const setWindow = (window: string, show: boolean) => {
   <VaunchOption :x-pos="props.xPos" :y-pos="props.yPos" ref="optionContainer">
     <template v-slot:options>
       <div class="option-title">
-        <i
-          :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'option-icon']"
-        ></i
-        >{{ file.titleCase() }}
+        <i :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'option-icon']"></i>{{ file.titleCase() }}
       </div>
 
       <div class="options-segment">
-        <div
-          v-if="file.filetype == 'VaunchLink'"
-          class="option-entry"
-          @click="executeFile([])"
-        >
+        <div v-if="file.filetype == 'VaunchLink'" class="option-entry" @click="executeFile([])">
           <i class="fa-solid fa-link option-icon" />Open
         </div>
-        <div
-          v-if="file.filetype == 'VaunchLink'"
-          class="option-entry"
-          @click="executeFile(['_blank'])"
-        >
+        <div v-if="file.filetype == 'VaunchLink'" class="option-entry" @click="executeFile(['_blank'])">
           <i class="fa-solid fa-up-right-from-square option-icon" />Open in New
           Tab
         </div>
-        <div
-          v-if="file.filetype == 'VaunchLink'"
-          class="option-entry"
-          @click="copyLink()"
-        >
+        <div v-if="file.filetype == 'VaunchLink'" class="option-entry" @click="copyLink()">
           <i class="fa-solid fa-clipboard option-icon" />Copy Link
         </div>
-        <div
-          v-if="file.filetype == 'VaunchQuery'"
-          class="option-entry"
-          @click="executeFile([])"
-        >
+        <div v-if="file.filetype == 'VaunchQuery'" class="option-entry" @click="executeFile([])">
           <i class="fa-solid fa-ellipsis option-icon" />Autofill Input
         </div>
       </div>
@@ -115,21 +96,11 @@ const setWindow = (window: string, show: boolean) => {
     </template>
 
     <template v-slot:windows>
-      <VaunchFileEdit
-        v-if="state.showEdit"
-        :file="file"
-        :folder-name="props.folderName"
-        v-on:close-edit="setWindow('edit', false)"
-      />
-      <VaunchConfirm
-        v-if="state.showDelete"
-        v-on:close-window="setWindow('delete', false)"
-        v-on:answer-yes="deleteFile()"
-        v-on:answer-no="setWindow('delete', false)"
-        title="Are You Sure?"
-        icon="trash"
-        :ask-text="'Are you sure you want to delete ' + file.titleCase() + '?'"
-      />
+      <VaunchFileEdit v-if="state.showEdit" :file="file" :folder-name="props.folderName"
+        v-on:close-edit="setWindow('edit', false)" />
+      <VaunchConfirm v-if="state.showDelete" v-on:close-window="setWindow('delete', false)"
+        v-on:answer-yes="deleteFile()" v-on:answer-no="setWindow('delete', false)" title="Are You Sure?" icon="trash"
+        :ask-text="'Are you sure you want to delete ' + file.titleCase() + '?'" />
     </template>
   </VaunchOption>
 </template>
