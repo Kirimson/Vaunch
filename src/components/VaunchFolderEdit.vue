@@ -18,7 +18,7 @@ import type { VaunchFolder } from "@/models/VaunchFolder";
 
 const props = defineProps<{
   folder?: VaunchFolder,
-  addNew: boolean
+  addNew?: boolean
 }>();
 
 const emit = defineEmits(["closeEdit"]);

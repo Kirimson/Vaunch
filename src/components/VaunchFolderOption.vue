@@ -6,8 +6,13 @@ import { useSessionStore } from "@/stores/sessionState";
 import VaunchOption from "./VaunchOption.vue";
 import VaunchFolderEdit from "./VaunchFolderEdit.vue";
 import VaunchFileAdd from "./VaunchFileAdd.vue";
+import type { VaunchFolder } from "@/models/VaunchFolder";
 
-const props = defineProps(["folder", "xPos", "yPos"]);
+const props = defineProps<{
+  folder: VaunchFolder
+  xPos: number
+  yPos: number
+}>();
 const optionContainer = ref();
 const sessionConfig = useSessionStore();
 

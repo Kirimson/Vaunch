@@ -7,8 +7,14 @@ import VaunchConfirm from "./VaunchConfirm.vue";
 import { useSessionStore } from "@/stores/sessionState";
 import { focusVaunchInput } from "@/utilities/inputUtils";
 import VaunchOption from "./VaunchOption.vue";
+import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
 
-const props = defineProps(["file", "folderName", "xPos", "yPos"]);
+const props = defineProps<{
+  file: VaunchUrlFile
+  folderName: string
+  xPos: number
+  yPos: number
+}>();
 const optionContainer = ref();
 const sessionConfig = useSessionStore();
 

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useSessionStore } from "@/stores/sessionState";
+import type { VaunchResponse } from "@/models/VaunchResponse";
 
-defineProps(["response"]);
+defineProps<{
+  response: VaunchResponse
+}>();
 const sessionConfig = useSessionStore();
 
 const responseWindow = ref();
@@ -48,10 +51,7 @@ const dismiss = () => {
   <div class="response-window-container" ref="responseWindow">
     <div class="vaunch-window vaunch-solid-bg " id="response-window">
       <span class="folder-title greyscale-title">
-        <i
-          v-if="response.type == 'error'"
-          class="fa-solid fa-circle-exclamation"
-        ></i>
+        <i v-if="response.type == 'error'" class="fa-solid fa-circle-exclamation"></i>
         <span v-if="response.type == 'error'" id="man-title-text">Error</span>
         <i v-if="response.type == 'info'" class="fa-solid fa-circle-info"></i>
         <span v-if="response.type == 'info'" id="man-title-text">Info</span>

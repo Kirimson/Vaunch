@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VaunchWindow from "./VaunchWindow.vue";
 import VaunchButton from "./VaunchButton.vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { defaultconfig, useConfigStore } from "@/stores/config";
 import { VaunchToggleCase } from "@/models/commands/config/VaunchToggleCase";
 import { VaunchToggleGui } from "@/models/commands/config/VaunchToggleGui";

@@ -6,10 +6,10 @@ import { commands } from "@/stores/command";
 import { useConfigStore } from "@/stores/config";
 import { useFolderStore } from "@/stores/folder";
 import { VaunchFolder } from "./models/VaunchFolder";
-import type { VaunchFile } from "./models/VaunchFile";
+import { VaunchFile } from "./models/VaunchFile";
 import { reactive, ref, computed } from "vue";
 import draggable from 'vuedraggable'
-import { useFuzzyStore } from "./stores/fuzzy";
+import { useFuzzyStore, type FuzzyEntry } from "./stores/fuzzy";
 import VaunchFuzzy from "./components/VaunchFuzzy.vue";
 import VaunchGuiCommands from "./components/VaunchGuiCommands.vue";
 import VaunchMan from "./components/VaunchMan.vue";
@@ -359,7 +359,7 @@ main {
 
     <VaunchFuzzy
       v-if="fuzzyFiles.items.length > 0 && config.fuzzy"
-      :fuzzy-matches="fuzzyFiles.items"
+      :fuzzy-matches="fuzzyFiles.items as FuzzyEntry[]"
       :current-index="fuzzyFiles.index"
     />
     <div v-if="config.showGUI" id="bottom-half">
@@ -407,7 +407,7 @@ main {
     <!-- Context menu components are at the app root to ensure there will be only one open at any one time -->
     <VaunchFileOption
       v-if="sessionConfig.showFileOptions"
-      :file="data.optionFile"
+      :file="data.optionFile as VaunchUrlFile"
       :folder-name="data.optionFileFolder"
       :x-pos="data.optionX"
       :y-pos="data.optionY"

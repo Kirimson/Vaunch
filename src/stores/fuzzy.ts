@@ -1,17 +1,22 @@
-import type { VaunchFile } from "@/models/VaunchFile";
+import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
 import { defineStore } from "pinia";
+
+export type FuzzyEntry = {
+  file: VaunchUrlFile;
+  folder: string;
+};
 
 export const useFuzzyStore = defineStore("fuzzy", {
   // Store to hold currently matched files from the fuzzy finder
   state: () => {
     return {
-      items: [] as Array<{'file':VaunchFile, 'folder':string}>,
+      items: new Array<FuzzyEntry>(),
       index: 0,
     };
   },
   actions: {
     // Sets the list of found files
-    setFuzzy(files: Array<{'file':VaunchFile, 'folder':string}>) {
+    setFuzzy(files: Array<FuzzyEntry>) {
       this.items = files;
     },
     // Clears the list of found files

@@ -77,34 +77,22 @@ const handleClick = (file: VaunchCommand, args: string[]) => {
   border-bottom: solid thin v-bind("config.color.text") !important;
   color: v-bind("config.color.text");
 }
+
 .command-input:focus {
   outline: none;
 }
 </style>
 
 <template>
-  <div
-    :key="file.fileName"
-    class="file command-file vaunch-window"
-    @click.exact="handleClick(file, [])"
-    :id="parentFolderName + '-' + file.getIdSafeName()"
-  >
+  <div :key="file.fileName" class="file command-file vaunch-window" @click.exact="handleClick(file, [])"
+    :id="parentFolderName + '-' + file.getIdSafeName()">
     <div class="command-inner">
       <i class="fa-solid fa-chevron-right file-icon"></i>
       <span class="command-name">{{ file.titleCase() }}</span>
-      <input
-        v-if="hasArgs"
-        class="command-input"
-        @keydown.enter.prevent="execute(file, data.commandInput.split(' '))"
-        v-model="data.commandInput"
-        type="text"
-        ref="commandInputBox"
-      />
+      <input v-if="hasArgs" class="command-input" @keydown.enter.prevent="execute(file, data.commandInput.split(' '))"
+        v-model="data.commandInput" type="text" ref="commandInputBox" />
     </div>
-    <VaunchTooltip
-      v-if="file.getDescription().length > 0"
-      :tip-for="'commands-' + file.getIdSafeName()"
-      :tip-file="file"
-    />
+    <VaunchTooltip v-if="file.getDescription().length > 0" :tip-for="'commands-' + file.getIdSafeName()"
+      :tip-file="file" />
   </div>
 </template>

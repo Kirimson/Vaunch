@@ -41,12 +41,7 @@ const emit = defineEmits(["closeWindow"]);
 </style>
 
 <template>
-  <VaunchWindow
-    :small="true"
-    title="About Vaunch"
-    icon="question-circle"
-    v-on:close-window="emit('closeWindow')"
-  >
+  <VaunchWindow :small="true" title="About Vaunch" icon="question-circle" v-on:close-window="emit('closeWindow')">
     <div id="about-container">
       <div id="about-text">
         <div id="build-info">
@@ -60,9 +55,7 @@ const emit = defineEmits(["closeWindow"]);
         </div>
         <span>
           View source code on
-          <a id="source-link" href="https://github.com/kirimson/Vaunch"
-            >Github</a
-          >
+          <a id="source-link" href="https://github.com/kirimson/Vaunch">Github</a>
         </span>
       </div>
       <div class="confirm-buttons">

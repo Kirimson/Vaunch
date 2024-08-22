@@ -5,8 +5,11 @@ import VaunchManualEntry from "./VaunchManualEntry.vue";
 import { useSessionStore } from "@/stores/sessionState";
 import VaunchWindow from "./VaunchWindow.vue";
 import { useConfigStore } from "@/stores/config";
+import type { VaunchCommand } from "@/models/VaunchCommand";
 
-defineProps(["commands"]);
+defineProps<{
+  commands: VaunchCommand[]
+}>();
 const sessionConfig = useSessionStore();
 
 const config = useConfigStore();

@@ -3,8 +3,12 @@ import { useConfigStore } from "@/stores/config";
 import { useFolderStore } from "@/stores/folder";
 import { ref, watch } from "vue";
 import VaunchGuiFile from "./VaunchGuiFile.vue";
+import type { FuzzyEntry } from "@/stores/fuzzy";
 
-const props = defineProps(["fuzzyMatches", "currentIndex"]);
+const props = defineProps<{
+  fuzzyMatches: FuzzyEntry[]
+  currentIndex: number
+}>();
 const config = useConfigStore();
 const files = ref();
 const folders = useFolderStore()
@@ -98,21 +102,15 @@ watch(getCurrentIndex, (newIndex: number) => {
 </style>
 
 <template>
-  <div id="fuzzy-container" :class="{'vaunch-window':true, 'vaunch-solid-bg':true, 'fuzzy-no-gui': !config.showGUI}">
+  <div id="fuzzy-container" :class="{ 'vaunch-window': true, 'vaunch-solid-bg': true, 'fuzzy-no-gui': !config.showGUI }">
     <span class="folder-title">
       <i class="fa-solid fa-magnifying-glass"></i>
       <span class="folder-name">Fuzzy Search</span>
     </span>
     <div class="file-container" id="fuzzy-file-container">
-      <VaunchGuiFile
-        ref="files"
-        :class="{ highlight: fuzzyEntry === fuzzyMatches[currentIndex] }"
-        v-for="fuzzyEntry in fuzzyMatches"
-        :key="fuzzyEntry.file.fileName"
-        :file="fuzzyEntry.file"
-        :parent-folder-name="folders.getFolderByName(fuzzyEntry.folder).titleCase()"
-        :is-fuzzy="true"
-      />
+      <VaunchGuiFile ref="files" :class="{ highlight: fuzzyEntry === fuzzyMatches[currentIndex] }"
+        v-for="fuzzyEntry in fuzzyMatches" :key="fuzzyEntry.file.fileName" :file="fuzzyEntry.file"
+        :parent-folder-name="folders.getFolderByName(fuzzyEntry.folder).titleCase()" :is-fuzzy="true" />
     </div>
   </div>
 </template>

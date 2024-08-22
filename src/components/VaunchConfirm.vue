@@ -2,7 +2,12 @@
 import VaunchWindow from "./VaunchWindow.vue";
 import VaunchButton from "./VaunchButton.vue";
 
-const props = defineProps(["askText", "askLines", "title", "icon"]);
+const props = defineProps<{
+  askText?: string
+  askLines?: string
+  title: string
+  icon: string
+}>();
 
 const emit = defineEmits(["closeWindow", "answerYes", "answerNo"]);
 </script>
@@ -31,12 +36,7 @@ const emit = defineEmits(["closeWindow", "answerYes", "answerNo"]);
 </style>
 
 <template>
-  <VaunchWindow
-    :small="true"
-    :title="title"
-    :icon="icon"
-    v-on:close-window="emit('closeWindow')"
-  >
+  <VaunchWindow :small="true" :title="title" :icon="icon" v-on:close-window="emit('closeWindow')">
     <div class="confirm-container">
       <div v-if="props.askText" class="confirm-text">
         {{ askText }}
