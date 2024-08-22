@@ -4,7 +4,7 @@ import VaunchButton from "./VaunchButton.vue";
 
 const props = defineProps<{
   askText?: string
-  askLines?: string
+  askLines?: string[]
   title: string
   icon: string
 }>();
@@ -14,11 +14,13 @@ const emit = defineEmits(["closeWindow", "answerYes", "answerNo"]);
 
 <style scoped>
 .confirm-text {
+  padding: 1em;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: left;
   flex-direction: column;
   flex: 1;
+  font-size: larger;
 }
 
 .confirm-container {
