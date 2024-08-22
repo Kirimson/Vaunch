@@ -5,15 +5,18 @@ import VaunchGuiFile from "./VaunchGuiFile.vue";
 import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
 import draggable from 'vuedraggable'
 import { computed, ref } from 'vue'
-import type { VaunchLink } from "@/models/VaunchLink";
+import type { VaunchFolder } from "@/models/VaunchFolder";
+import type { VaunchFile } from "@/models/VaunchFile";
+
+const props = defineProps<{
+  folder: VaunchFolder
+}>();
 
 const config = useConfigStore();
-
-const props = defineProps(["folder"]);
 const emit = defineEmits(["showFileOption", "showFolderOption"]);
 
-const files = computed<VaunchLink[]>({
-  get():VaunchLink[] {
+const files = computed<VaunchFile[]>({
+  get(): VaunchFile[] {
     return props.folder.getFiles();
   },
   set(value) {
@@ -81,10 +84,7 @@ const deleteFolder = () =>
 </style>
 
 <template>
-  <div
-    class="vaunch-folder vaunch-window"
-    @click.right.prevent.stop="toggleOptions($event)"
-  >
+  <div class="vaunch-folder vaunch-window" @click.right.prevent.stop="toggleOptions($event)">
     <span class="folder-title">
       <div class="folder-title-name">
         <i :class="['fa-' + folder.iconClass, 'fa-' + folder.icon]"></i>
@@ -98,22 +98,13 @@ const deleteFolder = () =>
       </div>
     </span>
     <TransitionGroup>
-      <draggable v-model="files" class="file-container"
-        delay="200"
-        :delayOnTouchOnly="true"
-        v-bind="dragOptions"
-        group="vaunch-folder"
-        :item-key="folder.name"
-      >
-      <template #item="{element: file}">
-        <VaunchGuiFile
-        v-on:show-file-option="passFileOption"
-        :file="file"
-        :key="file.fileName"
-        :parent-folder-name="folder.name"
-        />
-      </template>
-    </draggable>
-  </TransitionGroup>
+      <draggable v-model="files" class="file-container" delay="200" :delayOnTouchOnly="true" v-bind="dragOptions"
+        group="vaunch-folder" :item-key="folder.name">
+        <template #item="{ element: file }">
+          <VaunchGuiFile v-on:show-file-option="passFileOption" :file="file" :key="file.fileName"
+            :parent-folder-name="folder.name" />
+        </template>
+      </draggable>
+    </TransitionGroup>
   </div>
 </template>

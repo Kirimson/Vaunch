@@ -6,10 +6,16 @@ import { ResponseType, type VaunchResponse } from "@/models/VaunchResponse";
 import { useSessionStore } from "@/stores/sessionState";
 import { focusVaunchInput } from "@/utilities/inputUtils";
 
+const props = defineProps<{
+  file: VaunchUrlFile
+  isFuzzy?: boolean
+  parentFolderName: string
+}>();
+
+
 const config = useConfigStore();
 const sessionConfig = useSessionStore();
-const props = defineProps(["file", "isFuzzy", "parentFolderName"]);
-const safeParentName = props.parentFolderName.toLowerCase().replaceAll(' ','_')
+const safeParentName = props.parentFolderName.toLowerCase().replaceAll(' ', '_')
 const emit = defineEmits(["showFileOption"]);
 
 const execute = (file: VaunchUrlFile, args: string[]) => {
@@ -67,19 +73,12 @@ const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
 </style>
 
 <template>
-  <div
-    :key="file.fileName"
-    class="file vaunch-window"
-    @click.exact="execute(file, [])"
-    @click.ctrl="execute(file, ['_blank'])"
-    @click.middle.exact="execute(file, ['_blank'])"
-    @click.right.prevent.stop.exact="toggleOptions($event)"
-    :id="safeParentName + '-' + file.getIdSafeName()"
-  >
+  <div :key="file.fileName" class="file vaunch-window" @click.exact="execute(file, [])"
+    @click.ctrl="execute(file, ['_blank'])" @click.middle.exact="execute(file, ['_blank'])"
+    @click.right.prevent.stop.exact="toggleOptions($event)" :id="safeParentName + '-' + file.getIdSafeName()">
     <div :class="{ fuzzyInfo: isFuzzy, fileMain: true }">
       <i :class="['fa-' + file.iconClass, 'fa-' + file.icon, 'file-icon']"></i>
-      <span v-if="isFuzzy" class="filename"
-        >{{ props.parentFolderName }}:
+      <span v-if="isFuzzy" class="filename">{{ props.parentFolderName }}:
       </span>
       <span v-if="config.titleCase" :class="{ filename: !isFuzzy }">
         {{ file.titleCase() }}
@@ -94,10 +93,6 @@ const deleteFile = () => emit("showFileOption", props.file, 0, 0, "delete");
       <i class="fa-solid fa-pencil" @click.stop="editFile" />
       <i class="fa-solid fa-trash" @click.stop="deleteFile" />
     </div>
-    <VaunchTooltip
-      v-if="!isFuzzy"
-      :tip-for="safeParentName + '-' + file.getIdSafeName()"
-      :tip-file="file"
-    />
+    <VaunchTooltip v-if="!isFuzzy" :tip-for="safeParentName + '-' + file.getIdSafeName()" :tip-file="file" />
   </div>
 </template>

@@ -18,9 +18,11 @@ const config = useConfigStore();
   border: solid thin rgba(100, 100, 100, 0.25);
   border-radius: 5px;
 }
+
 .vaunch-button-text {
   font-size: 1rem;
 }
+
 .vaunch-button-icon {
   padding-right: 0.5rem;
 }
@@ -33,10 +35,7 @@ const config = useConfigStore();
 
 <template>
   <div class="vaunch-button">
-    <i
-      v-if="props.icon"
-      :class="['vaunch-button-icon', 'fa-solid', 'fa-' + props.icon]"
-    ></i>
+    <i v-if="props.icon" :class="['vaunch-button-icon', 'fa-solid', 'fa-' + props.icon]"></i>
     <span class="vaunch-button-text">{{ props.text }}</span>
   </div>
 </template>

@@ -14,13 +14,13 @@ import type { VaunchFolder } from "@/models/VaunchFolder";
 import { VaunchSed } from "@/models/commands/fs/VaunchSed";
 import BaseForm from "./form/BaseForm.vue";
 import FormSegment from "./form/FormSegment.vue";
-import type { VaunchLink } from "@/models/VaunchLink";
 import { VaunchQuery } from "@/models/VaunchQuery";
 import FormInput from "./form/FormInput.vue";
 import FormDropdown from "./form/FormDropdown.vue";
+import type { VaunchUrlFile } from "@/models/VaunchUrlFile";
 
 const props = defineProps<{
-  file: VaunchLink | VaunchQuery
+  file: VaunchUrlFile
   folderName: string
 }>();
 
@@ -127,7 +127,6 @@ const saveFile = () => {
 </script>
 
 <style scoped>
-
 .edit-buttons {
   display: flex;
   justify-content: center;

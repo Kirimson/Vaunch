@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { VaunchCommand } from "@/models/VaunchCommand";
 import type { VaunchManual } from "@/models/VaunchManual";
 import { reactive } from "vue";
 
-const props = defineProps(["command"]);
+const props = defineProps<{
+  command: VaunchCommand
+}>();
 // eslint-disable-next-line vue/no-setup-props-destructure
 const command = props.command;
 defineExpose({ command });
@@ -46,7 +49,7 @@ const manual: VaunchManual = reactive({ ...props.command.manual });
       Alias{{ command.aliases.length > 1 ? "es" : "" }}:
       <span v-for="(alias, index) in command.aliases" :key="alias">{{
         alias + (index != command.aliases.length - 1 ? ", " : "")
-      }}</span>
+        }}</span>
     </div>
     <!-- Print out the description, separating indices as new paragraphs -->
     <div class="description">
@@ -92,10 +95,7 @@ const manual: VaunchManual = reactive({ ...props.command.manual });
             </span>
           </code>
           <div class="description">
-            <p
-              v-for="descriptionLine in example.description"
-              :key="descriptionLine"
-            >
+            <p v-for="descriptionLine in example.description" :key="descriptionLine">
               {{ descriptionLine }}
             </p>
           </div>

@@ -9,6 +9,7 @@ const config = useConfigStore();
 .folder-title {
   background: v-bind("config.color.window");
 }
+
 .vaunch-command-folder {
   display: flex;
   flex-direction: column;
@@ -26,12 +27,7 @@ const config = useConfigStore();
       <span>Commands</span>
     </span>
     <div class="file-container commands-container">
-      <VaunchGuiCommand
-        v-for="file in commands"
-        :file="file"
-        :key="file.fileName"
-        :parent-folder-name="'commands'"
-      />
+      <VaunchGuiCommand v-for="file in commands" :file="file" :key="file.fileName" :parent-folder-name="'commands'" />
     </div>
   </div>
 </template>

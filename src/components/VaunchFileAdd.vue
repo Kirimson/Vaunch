@@ -5,7 +5,6 @@ import { ref } from "vue";
 import { ResponseType, type VaunchResponse } from "@/models/VaunchResponse";
 import { VaunchSetIcon } from "@/models/commands/fs/VaunchSetIcon";
 import { VaunchSetDescription } from "@/models/commands/fs/VaunchSetDescription";
-import { useConfigStore } from "@/stores/config";
 import { handleResponse } from "@/utilities/response";
 import { VaunchTouch } from "@/models/commands/fs/VaunchTouch";
 import { VaunchSetPosition } from "@/models/commands/fs/VaunchSetPosition";
@@ -14,10 +13,13 @@ import FormSegment from "./form/FormSegment.vue";
 import FormDropdown from "./form/FormDropdown.vue";
 import FormInput from "./form/FormInput.vue";
 import { VaunchSed } from "@/models/commands/fs/VaunchSed";
-const props = defineProps(["folder"]);
+import type { VaunchFolder } from "@/models/VaunchFolder";
+
+const props = defineProps<{
+  folder: VaunchFolder
+}>();
 
 const emit = defineEmits(["closeAdd"]);
-const config = useConfigStore();
 
 const fileName = ref("");
 const filePrefix = ref("");
@@ -125,6 +127,7 @@ const createFile = () => {
 .edit-buttons div {
   margin: 0 0.5rem;
 }
+
 @media (max-width: 768px) {
   .create-file-container {
     flex-direction: column;

@@ -12,7 +12,11 @@ const sessionConfig = useSessionStore();
 const config = useConfigStore();
 const inputBox = ref();
 
-defineProps(["prefixName", "prefixClass"]);
+defineProps<{
+  prefixName: string
+  prefixClass: string
+}>();
+
 const emit = defineEmits([
   "command",
   "fuzzy",

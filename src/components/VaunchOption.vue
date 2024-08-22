@@ -3,7 +3,10 @@ import { useConfigStore } from "@/stores/config";
 import { useSessionStore } from "@/stores/sessionState";
 import { ref, onMounted, onUpdated } from "vue";
 
-const props = defineProps(["xPos", "yPos"]);
+const props = defineProps<{
+  xPos: number
+  yPos: number
+}>();
 const sessionConfig = useSessionStore();
 const option = ref();
 const optionContainer = ref();

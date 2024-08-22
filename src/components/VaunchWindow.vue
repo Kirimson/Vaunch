@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-const props = defineProps(["title", "icon", "iconClass", "small"]);
+const props = defineProps<{
+  title: string
+  icon: string
+  iconClass?: string
+  small?: boolean
+}>();
 
 const emit = defineEmits(["closeWindow"]);
 
@@ -43,9 +48,11 @@ const closeWindow = () => {
   display: flex;
   flex-direction: row;
 }
+
 .window-title-text {
   flex: 1;
 }
+
 .window-close:hover {
   cursor: pointer;
 }
@@ -59,27 +66,17 @@ const closeWindow = () => {
 </style>
 
 <template>
-  <div
-    :class="{
-      'popup-window': true,
-      'vaunch-window': true,
-      'vaunch-solid-bg': true,
-      'popup-window-small': props.small,
-    }"
-    ref="vaunchWindow"
-    v-click-away="closeWindow"
-    tabindex="0"
-    @keydown.esc="closeWindow"
-  >
+  <div :class="{
+    'popup-window': true,
+    'vaunch-window': true,
+    'vaunch-solid-bg': true,
+    'popup-window-small': props.small,
+  }" ref="vaunchWindow" v-click-away="closeWindow" tabindex="0" @keydown.esc="closeWindow">
     <span ref="titlebar" class="window-title folder-title greyscale-title">
-      <span
-        ><i
-          :class="[
-            'fa-' + (props.iconClass ? props.iconClass : 'solid'),
-            'fa-' + props.icon,
-          ]"
-        ></i
-      ></span>
+      <span><i :class="[
+        'fa-' + (props.iconClass ? props.iconClass : 'solid'),
+        'fa-' + props.icon,
+      ]"></i></span>
       <span class="window-title-text">{{ props.title }}</span>
       <span v-on:click="closeWindow" class="window-close">
         <i class="fa-solid fa-close"></i>
