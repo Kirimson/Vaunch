@@ -67,14 +67,11 @@ const shortenTitle = (title: string, maxLength = 12) => {
   <VaunchOption :x-pos="props.xPos" :y-pos="props.yPos" ref="optionContainer">
     <template v-slot:options>
       <div class="option-title">
-        <i
-          :class="[
-            'fa-' + folder.iconClass,
-            'fa-' + folder.icon,
-            'option-icon',
-          ]"
-        ></i
-        >{{ shortenTitle(folder.titleCase()) }}
+        <i :class="[
+          'fa-' + folder.iconClass,
+          'fa-' + folder.icon,
+          'option-icon',
+        ]"></i>{{ shortenTitle(folder.titleCase()) }}
       </div>
 
       <div class="options-segment">
@@ -91,32 +88,12 @@ const shortenTitle = (title: string, maxLength = 12) => {
     </template>
 
     <template v-slot:windows>
-      <VaunchFolderEdit
-        v-if="state.showEdit"
-        :folder="folder"
-        v-on:close-edit="setWindow('edit', false)"
-      />
-      <VaunchFileAdd
-        v-if="state.showAdd"
-        :folder="folder"
-        v-on:close-add="setWindow('add', false)"
-      />
-      <VaunchConfirm
-        v-if="state.showDelete"
-        v-on:close-window="setWindow('delete', false)"
-        v-on:answer-yes="deleteFolder()"
-        v-on:answer-no="setWindow('delete', false)"
-        title="Are You Sure?"
-        icon="trash"
-        :ask-lines="[
-          'Are you sure you want to delete ' + folder.titleCase() + '?',
-          folder.getFiles().length > 0
-            ? `This will delete ${folder.getFiles().length} file${
-                folder.getFiles().length > 1 ? 's' : ''
-              }.`
-            : '',
-        ]"
-      />
+      <VaunchFolderEdit v-if="state.showEdit" :folder="folder" v-on:close-edit="setWindow('edit', false)" />
+      <VaunchFileAdd v-if="state.showAdd" :folder="folder" v-on:close-add="setWindow('add', false)" />
+      <VaunchConfirm v-if="state.showDelete" v-on:close-window="setWindow('delete', false)"
+        v-on:answer-yes="deleteFolder()" v-on:answer-no="setWindow('delete', false)" title="Delete Folder" icon="trash"
+        :ask-text="'Delete the ' + folder.titleCase() + ' folder?'" :ask-lines="['This action will permanently delete this folder and all files inside.',
+          'This folder contains ' + folder.files.length + ' file' + (folder.files.length != 1 ? 's.' : '.')]" />
     </template>
   </VaunchOption>
 </template>
